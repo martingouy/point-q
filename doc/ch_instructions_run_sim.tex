@@ -1,0 +1,28 @@
+%%!TEX root = rapport_netw_model.tex
+
+\section{Brief instructions for an implementation}
+
+\begin{enumerate}
+\item Fill and save the Dsu\_1 file (in folder cc). If more than one sims are desired, fill and save the corresponding number of Dsu\_x files, x$=1,2,3,$ etc.
+\item Indicate the name of the Dsu\_x files defined in file f\_d.py (in folder cc) and save the file.
+\item Fill and save  file ``fi\_node\_id\_ctrl\_type\_category.txt" located in folder ``Control\_Param\_Files''  (in folder cc).
+If the last column of this fie values $1$ (it implies that turn ratios will be estimated during the implementation) the fill and save files ``fi\_id\_node\_estim\_turn\_ratio\_param\_dur\_turn\_ratios.txt" and ``fi\_estim\_mrp.txt" and add them in  folder ``Control\_Param\_Files''.
+\item Fill  and save the corresponding to the control algorithm, parameter file and add it also in folder ``Control\_Param\_Files'' (in folder cc).
+\item 
+In a terminal  move to the cc file (by employing the cd command, 
+e.g.  cd /Users/jennie/Desktop/sim\_x/sim\_y/cc
+\item Write python3.x Simulation.py or time python3.x Simulation.py, with x=is the corresponding version of python3 you have.
+e.g. if you have python3.3 you do python3.3 Simulation.py, if you have python3.4 you write python3.4 Simulation.py.
+The simulation code runs only under a version of python3.
+\end{enumerate}
+
+\section{Brief instructions for a stat analysis}
+For doing a statistical analysis included in this code :
+\begin{enumerate}
+
+\item copy the produced folder Series\_  by the simulation in file ``Cl\_Stat\_Analysis\_new.py'', in variable  ``val\_name\_fol\_FRes='' (located at the end of this file, line 2465) and save the file.
+
+\item In a terminal, again placed in the cc folder (with the cd command, as when running a simulation) write
+
+time python3.x Cl\_Stat\_Analysis\_new.py or just python3.x Cl\_Stat\_Analysis\_new.py
+\end{enumerate}

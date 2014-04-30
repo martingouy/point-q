@@ -1,0 +1,55 @@
+%%!TEX root = rapport_netw_model.tex
+
+\section{Database}
+
+This is the signification if each column of any line recored by the ``.Q''.
+
+\begin{enumerate}
+\item the event time
+\item the event type
+\item the id of the intersection node
+\item the type of the intersection node, (signalised or not)
+\item the list with the $[t\_start,t\_duration]$ for each intersection control matrix for the next cycle
+\item margin time to computs the intersection control matrix for the next cycle. If the current cycle finishes at t\_fin, then the new network control matrix, should be calculated at t\_fin- margin\_dt.
+\item the time at which the current  intersection control starts
+\item the duration of the current intersection control
+\item the current intersection control matrix
+\item the current network intersection matrix for the associated link 
+\item the duration of the current cycle
+\item the vehicle id
+\item the time at which the vehicle appeared in the the network
+\item the id of the entry link at which the associated vehicle appeared
+\item the id of the link where the vehicle is currently located
+\item the time at which the vehicle arrived at the current link
+\item the time at which the vehile started its departure from the current link
+\item the time at which the vehile left the current link
+\item the current queue location of th evehicle (in the form of (l,m))
+\item the type of the queue (right turn or other)
+\item the time at which the vehicle arrived at the current queue
+\item the time at which a vehicle started its departure from the current queue
+\item the time at which the vehicle left the current queue
+\item the id of the destination link of the vehicle when leaving the current link
+\item the time at which the vehicle left the network
+\item the id of the link associated with the current event
+\item the answer $1$ or $0$ indicating if the vehicle can leave the queue by its arrrival or not
+\item the time at which the vehicle will arrive at the next link or queue (this is for verifying the calculations)
+\item the currently achieved service rate of the queue where the vehicle is, including the vehicle (case when the vehicle can leave the queue)
+\item the current value of the service rate of the queue where the vehicle is located
+\item a list with the ids of the vehicles in the associated queue with this event
+\item the list of the network control matrices decided during the event Ev\_end\_decision\_network\_control, for the next cycle 
+\item the ncm chosen by mp control 
+\item the number of departing vehicle within an end veh hold at que event or with the ev end veh dep
+\item matrix OD
+\item the nb of vehicles in the arrival  link
+\item the nb of veh in the depart. link
+\item the id of the veh final destination (when the model  decides it by the veh appearance) (exit link)
+\item variable returning the type of control , $0$ if the ctrl is RC, $1$ sinon
+\item variable indicating the current values od the turn ratios of the intersection
+\item variable indicating the new estimated values of the  turn ratios
+\item variable indicating the cum values of the new estim turn ratios
+\item variable indicating the current estimated values of the turn ratios (before replaced by the new estimated ones)
+\item variable indicating the  time at which finishes the current intersection control
+\item the id of the actuated staged  by a new control
+\item variable indicating the current cummulative values (not empoyed at all and saoul dbe deleted this variable as well some others).
+\item
+\end{enumerate}

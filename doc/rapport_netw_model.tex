@@ -1,0 +1,920 @@
+
+%% bare_conf.tex
+%% V1.3
+%% 2007/01/11
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.7 or later) with an IEEE conference paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%
+%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
+%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
+%%*************************************************************************
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. IEEE's font choices can trigger bugs that do  ***
+% *** not appear when using other class files.                            ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+% Note that the a4paper option is mainly intended so that authors in
+% countries using A4 can easily print to A4 and see how their papers will
+% look in print - the typesetting of the document will not typically be
+% affected with changes in paper size (but the bottom and side margins will).
+% Use the testflow package mentioned above to verify correct handling of
+% both paper sizes by the user's LaTeX system.
+%
+% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
+% should be used if it is desired that the figures are to be displayed in
+% draft mode.
+%
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath,color}
+\usepackage{hyperref}
+\usepackage{url}
+% Add the compsocconf option for Computer Society conferences.
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[conference]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite output to follow that of IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
+% not currently provide for hyperlinked citations.
+% The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at: 
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
+% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics. If using
+% it, be sure to load this package with the cmex10 option to ensure that
+% only type 1 fonts will utilized at all point sizes. Without this option,
+% it is possible that some math symbols, particularly those within
+% footnotes, will be rendered in bitmap form which will result in a
+% document that can not be IEEE Xplore compliant!
+%
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
+% There is also a support site at:
+% http://algorithms.berlios.de/index.html
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/tools/
+
+
+%\usepackage{mdwmath}
+%\usepackage{mdwtab}
+% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
+% especially mdwmath.sty and mdwtab.sty which are used to format equations
+% and tables, respectively. The MDWtools set is already installed on most
+% LaTeX systems. The lastest version and documentation is available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+%\usepackage{eqparbox}
+% Also of notable interest is Scott Pakin's eqparbox package for creating
+% (automatically sized) equal width boxes - aka "natural width parboxes".
+% Available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
+
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\usepackage[tight,footnotesize]{subfigure}
+% subfigure.sty was written by Steven Douglas Cochran. This package makes it
+% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
+% work, it is a good idea to load it with the tight package option to reduce
+% the amount of white space around the subfigures. subfigure.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at:
+% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
+% subfigure.sty has been superceeded by subfig.sty.
+
+
+
+%\usepackage[caption=false]{caption}
+%\usepackage[font=footnotesize]{subfig}
+% subfig.sty, also written by Steven Douglas Cochran, is the modern
+% replacement for subfigure.sty. However, subfig.sty requires and
+% automatically loads Axel Sommerfeldt's caption.sty which will override
+% IEEEtran.cls handling of captions and this will result in nonIEEE style
+% figure/table captions. To prevent this problem, be sure and preload
+% caption.sty with its "caption=false" package option. This is will preserve
+% IEEEtran.cls handing of captions. Version 1.3 (2005/06/28) and later 
+% (recommended due to many improvements over 1.2) of subfig.sty supports
+% the caption=false option directly:
+%\usepackage[caption=false,font=footnotesize]{subfig}
+%
+% The latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
+% The latest version and documentation of caption.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure. The latest version and documentation can be found at:
+% http://www.ctan.org/tex-archive/macros/latex/base/
+
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
+% Documentation is contained in the stfloats.sty comments as well as in the
+% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
+% does not allow \baselineskip to stretch. Authors submitting work to the
+% IEEE should note that IEEE rarely uses double column equations and
+% that authors should try to avoid such use. Do not be tempted to use the
+% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
+% not format its papers in such ways.
+
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
+% Read the url.sty source comments for usage information. Basically,
+% \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+\title{Explanations ``.Q'' model} 
+
+
+%% author names and affiliations
+%% use a multiple column layout for up to two different
+%% affiliations
+%
+%\author{\IEEEauthorblockN{Jennie Lioris}
+%%\IEEEauthorblockA{Imara Team (also with CERMICS-ENPC)\\
+%%INRIA\\
+%%Le Chesnay, France\\
+%%jennie.lioris@inria.fr}
+%\and
+%\IEEEauthorblockN{Alexandre Kurzhanskiy}
+%%\IEEEauthorblockA{CERMICS\\
+%%\'{E}cole des Ponts-ParisTech\\
+%%Marne la Vall\'{e}e, France\\
+%%guy.cohen@mail.enpc.fr}
+%\and
+%\IEEEauthorblockN{Pravin Varaiya}
+%%\IEEEauthorblockA{CAOR (also with Imara Team-INRIA)\\
+%%\'{E}cole des Mines-ParisTech\\
+%Paris, France\\
+%arnaud.de\_la\_fortelle@mines-paristech.fr}
+%}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
+%Homer Simpson\IEEEauthorrefmark{2},
+%James Kirk\IEEEauthorrefmark{3}, 
+%Montgomery Scott\IEEEauthorrefmark{3} and
+%Eldon Tyrell\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
+%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+
+%\begin{abstract}
+%A VOIR
+%\end{abstract}
+%
+%\begin{IEEEkeywords}
+%Traffic-responsive signal control, stabilizing policy, fixed-time control,  max-pressure control, semi-actuated, fully actuated,
+%ACSLite controllers, store and forward queueing model, discrete-event simulation, Monte Carlo simulation, network performance evaluation.
+%
+%\end{IEEEkeywords}
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+
+
+
+
+
+
+
+%
+%
+%% An example of a double column floating figure using two subfigures.
+%% (The subfig.sty package must be loaded for this to work.)
+%% The subfigure \label commands are set within each subfloat command, the
+%% \label for the overall figure must come after \caption.
+%% \hfil must be used as a separator to get equal spacing.
+%% The subfigure.sty package works much the same way, except \subfigure is
+%% used instead of \subfloat.
+%%
+%%\begin{figure*}[!t]
+%%\centerline{\subfloat[Case I]\includegraphics[width=2.5in]{subfigcase1}%
+%%\label{fig_first_case}}
+%%\hfil
+%%\subfloat[Case II]{\includegraphics[width=2.5in]{subfigcase2}%
+%%\label{fig_second_case}}}
+%%\caption{Simulation results}
+%%\label{fig_sim}
+%%\end{figure*}
+%%
+%% Note that often IEEE papers with subfigures do not employ subfigure
+%% captions (using the optional argument to \subfloat), but instead will
+%% reference/describe all of them (a), (b), etc., within the main caption.
+%
+%
+%% An example of a floating table. Note that, for IEEE style tables, the 
+%% \caption command should come BEFORE the table. Table text will default to
+%% \footnotesize as IEEE normally uses this smaller font for tables.
+%% The \label must come after \caption as always.
+%%
+%%\begin{table}[!t]
+%%% increase table row spacing, adjust to taste
+%%\renewcommand{\arraystretch}{1.3}
+%% if using array.sty, it might be a good idea to tweak the value of
+%% \extrarowheight as needed to properly center the text within the cells
+%%\caption{An Example of a Table}
+%%\label{table_example}
+%%\centering
+%%% Some packages, such as MDW tools, offer better commands for making tables
+%%% than the plain LaTeX2e tabular which is used here.
+%%\begin{tabular}{|c||c|}
+%%\hline
+%%One & Two\\
+%%\hline
+%%Three & Four\\
+%%\hline
+%%\end{tabular}
+%%\end{table}
+%
+%
+%% Note that IEEE does not put floats in the very first column - or typically
+%% anywhere on the first page for that matter. Also, in-text middle ("here")
+%% positioning is not used. Most IEEE journals/conferences use top floats
+%% exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
+%% footnotes above bottom floats. This can be corrected via the \fnbelowfloat
+%% command of the stfloats package.
+%
+%
+%
+%
+%% conference papers do not normally have an appendix
+%
+%
+%% use section* for acknowledgement
+%\section*{Acknowledgment}
+%The authors are indebted to Dr.~Fr\'{e}d\'{e}ric Meunier of LVMT-ENPC for interesting discussions about routing algorithms, and in particular for pointing out the reference~\cite{tsitsi}.
+%
+%
+%% trigger a \newpage just before the given reference
+%% number - used to balance the columns on the last page
+%% adjust value as needed - may need to be readjusted if
+%% the document is modified later
+%%\IEEEtriggeratref{8}
+%% The "triggered" command can be changed if desired:
+%%\IEEEtriggercmd{\enlargethispage{-5in}}
+%
+%% references section
+%
+%% can use a bibliography generated by BibTeX as a .bbl file
+%% BibTeX documentation can be easily obtained at:
+%% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+%% The IEEEtran BibTeX style support page is at:
+%% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%%\bibliographystyle{IEEEtran}
+%% argument is your BibTeX string definitions and bibliography database(s)
+%%\bibliography{IEEEabrv,../bib/paper}
+%%
+%% <OR> manually copy in the resultant .bbl file
+%% set second argument of \begin to the number of references
+%% (used to reserve space for the reference number labels box)
+
+\section{Network model}\label{sect-nets-model}
+Hereafter a description of the files modelling the network as required by the  ``.Q'' is presented.
+All files are in a text format.
+
+\begin{enumerate}
+\item  File \emph{``fi\_demand\_param\_entry\_link''}
+
+This file describes the vehicle demand related to each entry link.
+
+
+Each line of this file corresponds to an entry link and consequently  the number of rows depends on the number of entry network links. 
+
+Two columns correspond to each row. The first column presents the link id and the second column 
+describes the parameter  for the defining the time of each vehicle appearance at the corresponding entry link.
+If a stochastic demand will be considered, this value is the parameter of the Poisson process  (mean number of vehicle appearance per time unit) associated with the entry link. 
+If a deterministic demand is desired, the value of the second column should  be the time (in secs) between two successive vehicle arrivals.
+
+e.g. Line $1 \	 0.6$ indicates that for  entry link $1$ the related Poisson parameter is $0.6$.
+
+\item File \emph{``fi\_id\_all\_network\_link\_id\_orig\_dest\_node\_length\_\
+link\_capacity\_link\_param\_travel\_duration''} 
+
+This file describes each network link. 
+
+The number of lines of this file depends upon the number of links. The number of columns of each row is fixed and the signification of each column is the following.
+
+The first column indicates the  link id.
+
+The second and third columns correspond to the id of the origin and destination node of the link. 
+For entry links the second column values $-1$ while for exit links the the third column values $-1$. 
+
+The fourth column indicates the link length. This value is not directly employed by the ``.Q". It is utilised for calculating the mean value of the link travel time. Any units can be utilised for expressing the  link length.
+However,  a possible conversion may required  when the mean travel time of links is computed since the latter value should be expressed in seconds. 
+
+The fifth column presents the link vehicle storage capacity (an integer number is required) and when finite link capacities are considered it takes strictly positive values for internal links. When infinite link capacities are considered it values $-1$.
+ For entry or exit links this column values  zero.
+
+The sixth column indicates the  mean value of the link travel time (measured in seconds). It takes a strictly positive value for internal links and equals zero for entry and exit links.
+
+e.g. Line $10	\ 9	\ 10	\ 1 \	  -1.00\	 60.00$ indicates:
+
+Link $10$ originates at node $9$,  heads towards node $10$, has a length of one unit, value $-1.00$ of the fifth column indicates that infinite link capacities are considered for the network, while the mean travel time of link $10$ is $60$ seconds. 
+
+\item  File \emph{``fi\_id\_all\_phases\_max\_queue\_size\_sat\_flow\_queue\_type''} describes all movements of each network link.
+
+A movement is described by a pair $(l,m)$ where $l$ is an incoming  link to a given node and $m$ is an outcoming link from the same node.
+
+The number of lines of this file depends upon the number of movements.
+The number of columns of each row is fixed.
+
+The first line of this file  provides some explanations  and will always be ignored.
+The explanation of the columns of any other row is the following:
+
+The first and second columns indicate and incoming and outcoming link of/from the given node, describing the phase id ($(l,m)$).
+
+The third column  indicates the maximum allowed size of the queue related to this movement. Although for the current  version this value is not utilised,  it wll employed when shared lanes and pockets will be modelled. 
+Consequently at present this value is always $-1$.
+
+The fourth column indicates  the saturation flow of the related movement measured in vehicles per time unit. 
+When a movement is not allowed (conventionally called \emph{phase} for this model), the saturation flow values zero, otherwise it takes a strictly positive value.
+ 
+The fifth column indicates the  type of movement. More precisely it values $1$ when a movement corresponds to right turn and zero otherwise.
+
+
+e.g. Line $1	\  2	\ -1	\ 0.150	\ 0 $ indicates  that
+
+movement $(1,2)$ has an infinite queue size (third column values $-1$), a saturation flow of $0.15$ vehicles per time unit and it is not a right turn (last column values zero).
+
+\item \emph{``fi\_id\_entry\_exit\_lk\_related\_path''} 
+
+This file  describes the path which should be employed when OD matrices are considered (case of a unique path). This file is not employed by the   current version of the ``.Q''.
+
+
+\item \emph{``fi\_id\_internal\_link\_id\_orig\_dest\_node"}
+
+This file refers to the internal network links. The number of lines equals to the number of internal links and the number of columns of each row is fixed.
+
+The first column of any row indicates the internal  link id.
+
+The second and third columns indicate the origin and destination node of this link.
+
+e.g. Line $2	\ 1	\ 2$ indicates that internal link $2$ is originated at node $1$ and heads towards node $2$.
+
+\item \emph{``fi\_id\_link\_id\_sublinks''}
+
+This files refers to the  sublinks of each link and it is not employed by the current network model. 
+
+\item \emph{``fi\_id\_node\_id\_entering\_links\_to\_node''}
+
+This file describes the incoming links for each network node.
+The number of lines equals to the number of intersections. 
+The number of columns of each row depends upon the number of incoming links to each node.
+
+The first column of any row indicates the node id. The next columns indicate the id of  incoming links to  the related node.
+
+e.g. Line $1	\ 1	\ 17	$ signifies that at node $1$, links $1$ and $17$ are incoming.
+
+\item \emph{``fi\_id\_node\_id\_entry\_links\_to\_network''} 
+
+This file indicates the entry links to each intersection.
+
+The number of lines depends  on the number of intersections with entry links. 
+The number of columns of each row may vary. It depends on the number of entry links associated with a node. 
+
+The first column indicates the node id with entry links. The next columns indicate the id of each entry link associated with the corresponding node.
+
+e.g. Line $1 \	1	\ 17$ indicates that with node $1$ two entry links are associated, links $1$ and $17$.
+
+
+\item \emph{``fi\_id\_node\_id\_exit\_links\_from\_network''}
+
+This file describes the exit links associated with an intersection. 
+
+The number of lines depends on the number of nodes with exit links. The number of columns of each row depends on the number of exit links associated with the related node. 
+
+The first column indicates the node id with exit links. The next columns indicate the id of each exit link associated with the corresponding node.
+
+e.g. Line $15	 \ 46	\ 16$ indicates that for intersection $15$ there exist two exit links $46$ and $16$.
+
+\item \emph{``fi\_id\_node\_id\_leaving\_links\_from\_node''}
+
+This  file presents for each node the related outcoming links.
+
+The number of lines depends on the number of intersections. 
+The number of columns of each row depends on the number of the  outcoming links from the node. 
+
+
+The first column indicates the node id. The next columns present the id of each outcoming link from the corresponding node.
+
+e.g. Line $1  \	2	\ 18	$ signifies that the outcoming links from node $1$ are inks $2$ and $18$.
+
+\item \emph{``fi\_id\_node\_type\_node''}
+ 
+This file specifies whether a node is signalised  or not.
+
+The number of lines equals to the number of intersections. 
+The number of columns of each row is fixed.
+
+The first column of each line indicates the node id. 
+
+The second column values $1$ of the node is signalised and zero otherwise.
+
+e.g. Line $11	\ 1$ indicates that intersection $11$ is signalised.
+
+\item \emph{``fi\_mod\_cum''}
+
+This file is employed when OD matrices are considered and indicates the cumulative probability  of each exit link when originated at an entry link.
+This file should remain empty when vehicles move according to turning ratios.
+
+The first line of this file is ignored by ``.Q'' , it explains what each column represents.
+Next lines correspond to each allowed entry and exit link. Consequently, the number of lines of this file depends on the allowed possibilities (entry, exit) links.
+The number of columns is fixed (it is previewed to have a varying number of columns whenever the values of the OD matrices vary. Not available for the current model). 
+
+The first and second column indicate the id of the entry and exit link respectively.
+
+The third column indicates the cumulative probability to select the corresponding exit link when originated at the indicated entry link. 
+
+e.g. Two  possible lines will be of the form:
+
+  $ 1 \ 78	\ 0.6$ 
+
+  $ 1 \ 77	\ 1$
+  
+ and signifies that when originated at entry link $1$ the probability of choosing exit link $78$ is $0.6$ while the probability of exiting at link $77$  is of $0.4$.
+Evidently, the only exiting possibilities from link $1$ should be either exit link $78$ or link $77$.
+  
+\item \emph{``fi\_mrp\_cum''}
+
+This  file indicates the cumulative probabilities of each \emph{phase} (allowed movement) defining the vehicle routing. If OD matrices are considered, this file should remain empty. 
+
+The first line of this file explains each column of the file and it is ignored by the ``.Q''.
+The rest number of lines depends upon the number of the network phases.
+
+The number of columns if each row is fixe.
+
+The first and second columns indicate the \emph{phase} id (input, output link forming the allowed movement).
+
+The third column indicates the corresponding cumulative probability value of the related phase.  
+
+The order at which phases and their cumulative probability values are written in this file is not important.
+
+
+e.g. Line $1 \	 2	\ 1.00	$  represents that the cumulative probability of \emph{phase} $(1,2)$ is one.
+
+\item \emph{``fi\_mrp''}
+
+This files describes the  turn ratios of the  \emph{phases}. 
+If OD matrices are considered, this file should remain empty. 
+
+The first line of this file explains each column of the file and it is ignored by the ``.Q''.
+The rest number of lines depends upon the number of the network phases.
+The number of columns if each row is fixe.
+
+The first and second columns indicate the \emph{phase} id (input, output link forming the allowed movement).
+
+The third column indicates the probability value of the related phase. 
+
+The order at which phases and their related probability values are written in this file is not important.
+However, the following equality should be respected:
+
+$\displaystyle\sum_{m}(l,m)=1$, for all incoming links $l$ of a  node.
+
+e.g. Line $1 \	 2	\ 1.00	$  represents that the  probability of \emph{phase} $(1,2)$ is one.
+
+\item \emph{``fi\_presence\_detector''}
+
+Currently not employed.
+
+
+\item \emph{``fi\_que\_size\_detector''}
+
+Currently not employed.
+
+
+
+
+
+\item \emph{``fi\_series\_cum\_val\_varying\_rp''}
+
+This file models the case of varying turning ratios. 
+If the turn ratios are fixed, this file should remain empty.
+
+The first line of this file explains the signification of each column  and it is ignored by the ``.Q''.
+The number of lines depend on the number of the network \emph{phases}.
+
+The number of columns of each row may also vary and depends upon the number of variations. 
+
+The first column of each  row indicates the node id.
+
+The second and third  columns indicate the \emph{phase} id (incoming, outcoming link of the corresponding node).
+
+The fourth column indicates the duration of the currently employed turn ratio values.
+
+The fifth column indicates the cumulative value of the turn ratio value to be employed at the first variation, for the related phase. 
+
+The sixth and seventh columns (if they exist) have the significancy of the fourth  and fifth column respectively and so forth. 
+
+e.g. Lines 
+
+$1	\  1	\ 2	\  1500	\  0.80	\ 1500	\  0.10	 $ 
+
+$1	\  1	\ 3	\  1500	\  1	\ 1500	\  1	 $ 
+
+represent the following scenario.
+
+Interpretation of the first line.
+
+At node $1$ (first column), the first variation of the turn ratio  of \emph{phase} $(1,2)$  (second and third columns) will be realised after $1500$ time units from the beginning of the simulation (fourth column) and the new cumulative turn ratio value for this  \emph{phase} will become $0.8$ (fifth column). The duration of this value will be 
+$1500$  time units (sixth column) and then the new cumulative turn ratio value will become $0.1$ (seventh column).
+In total three changes  of the turn ratio values will be applied for \emph{phase} $(1,2)$.
+ 
+Interpretation of the second line.
+
+At node $1$ (first column), the first variation of the turn ratio  of \emph{phase} $(1,3)$  (second and third columns) will take place after $1500$ time units from the beginning of the simulation (fourth column) and the new cumulative turn ratio value for this  \emph{phase} will become $1$ (fifth column). The duration of this value will be 
+$1500$  time units (sixth column) and then the new cumulative turn ratio value will become $1$ (seventh column).
+In total three changes  of the turn ratio values will be applied for \emph{phase} $(1,3)$.
+
+As previously, the possible destinations from link $1$ are links $2$ or $3$.
+
+
+\item \emph{``fi\_series\_varying\_rp''}
+
+This file describes the case of varying routing probabilities (otherwise this file should remain empty).
+
+The first line of this file explains the signification of each column  and it is ignored by the ``.Q''.
+The number of lines depend on the number of the network \emph{phases}.
+
+The number of columns of each row may also vary and depends upon the number of variations. 
+
+
+
+The first column of each  row indicates the node id.
+
+The second and third  columns indicate the \emph{phase} id (incoming, outcoming link of the corresponding node).
+
+The next columns indicate the  turn ratio values for the following periods. 
+
+e.g. Lines 
+
+$1	\  1	\ 2	\  0.80		\  0.10	 $ 
+
+$1	\  1	\ 3		\  0.2 	\  0.9	 $ 
+
+represent the following scenario.
+
+Interpretation of the first line.
+
+At node $1$ (first column), the second value of the (varying) turn ratio  of \emph{phase} $(1,2)$  (second and third columns) will be  $0.8$ (fourth column) then the new turn ratio value will become $0.1$ (fifth column).\footnote{the first value of the turn ratios is the one employed at the beginning of the simulation}
+In total three changes  of the turn ratio values will be applied for \emph{phase} $(1,2)$ (including the currently employed turn ratio value starting at the beginning of the simulation).
+
+Interpretation of the second line.
+
+At node $1$ (first column), the second value of the (varying) turn ratio  of \emph{phase} $(1,3)$  (second and third columns) will be  $0.2$ (fourth column) then the new turn ratio value will become $0.9$ (fifth column).
+In total three changes  of the turn ratio values will be applied for \emph{phase} $(1,3)$ (including the currently employed turn ratio value starting at the beginning of the simulation).
+
+
+\item \emph{``fi\_stages\_each\_non\_sign\_inters''}
+
+This file should remain empty  for the current version. It refers to the case of non-signalised intersections,  for which the vehicle departure priority is not yet completed.
+
+
+
+\item \emph{``fi\_stages\_each\_sign\_inters''}
+
+This file defines the \emph{stages} of each signalised intersection. 
+A \emph{stage} defines the simultaneously compatible \emph{phases}. 
+
+The first line of this file explains the signification of each column  and it is ignored by the ``.Q''.
+The number of lines depend on the number of the  \emph{stages} of each intersection.
+
+The number of columns depends upon the number of \emph{phases} actuated by each intersection \emph{stage}.
+
+The first column indicates the node id.
+
+The second and third columns indicate the \emph{phase} id actuated by the stage.
+
+The fourth and fifth columns (when defined) indicate  the id of another \emph{phase}  simultaneously actuated with the \emph{phase} defined by the second and third columns.
+
+Similarly for the next columns (if any).
+
+e.g. Line $1 \	1	\ 2$ signifies that at node $1$ (first column)  a stage actuates only \emph{phase} $(1,2)$ (second and third columns).
+
+\item \emph{``fi\_init\_state\_que''}
+
+This file describes the queue for which a particular initial state should be defined.
+If the initial state of all the network queues is empty then this file should also remain empty.
+
+Otherwise, the number of lines depends on the number of phases having a particular initial state.
+The number of columns of any row depends upon the number of vehicles to be added (when this is the case) and when the final destination of each vehicle is initially defined.
+When vehicles are moving according to turn ratios, the number of columns is  five.
+
+More precisely, the first  column denotes the node id.
+
+The second and third column indicate the phase id.
+
+The  fourth column represents the total  number of vehicles in the related queue. 
+
+The fifth column corresponds to the id of the vehicle final destination and makes sense when the current queue state is inferior to the desired state (number of vehicles indicated in the fourth column).
+If the current queue state is superior to the desired one,  the already defined state of the existing vehicles will be employed.  
+
+If vehicles move according to turn  ratios this column should value $-1$.
+If the final destination is predefined then the fifth column will represent the final destination of the first added vehicle (case when current queue state is inferior to the desired one).
+Consequently the number of columns indicating the vehicle final destination  equals to the desired queue state  minus the current queue state. There is no need to redefine the vehicle final destination for the existing vehicles. 
+
+e.g. Line $1	\ 17	\ 18	\ 4	\ -1$	 describes that at node $1$, queue $(17,18)$ should have four vehicles in total of which the final destination will dynamically defined (last column values $-1$).
+
+Another possibility would be $1\	1	\ 2	\ 2	\ 16 $ which describes the following scenario:
+At node $1$, queue $(1,2)$ should have $2$ vehicles by the beginning of the simulation. The final destination of the second vehicle will be link $16$.
+This implies that currently at queue $(1,2)$ there exist one vehicle of which the final destination is already determined. 
+
+
+
+\item \emph{``fi\_phase\_interference''}
+
+File indicating the phase interaction  when this is the case.
+When  there exists no phase interference this file should remain empty.
+The first line of this file is comments and it is ignored when reading this file. 
+The signification of any other line is the following:
+
+
+The first column indicates the node id. 
+
+The second and the third column indicate the id of the affected phase.
+
+The  fourth and fifth column indicate the id of the affecting phase. 
+
+The sixth column indicate the corresponding parameter for defining the saturation flow of the affected phase. 
+ 
+\end{enumerate}
+
+\input{ch_database}
+\input{ch_name_files}
+\input{ch_instructions_run_sim}
+
+\bibliographystyle{IEEEtran}
+\bibliography{ifacconf-PV}
+% that's all folks
+\end{document}
+
+

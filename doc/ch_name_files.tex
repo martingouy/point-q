@@ -1,0 +1,65 @@
+%%!TEX root = rapport_netw_model.tex
+
+
+\section{Names of  Files}
+
+Hereafter the name of the employed files are indicated. However, there is the possibility to employ different names by  modifying the corresponding variable in files  ``File\_names\_network\_model'', ``File\_Sim\_Name\_Module\_Files'' included in the folder with the simulator code.\footnote{in most cases changing the  value of the variable directly in these files should work,  in few case the explicit file name is employed}
+
+\subsection{Names of network files}
+
+These files are also explained in section \ref{sect-nets-model}. They are text files (``.txt'')
+\begin{enumerate}
+\item  File \emph{``fi\_demand\_param\_entry\_link''}
+\item File \emph{``fi\_id\_all\_network\_link\_id\_orig\_dest\_node\_length\_\
+link\_capacity\_link\_param\_travel\_duration''} 
+\item  File \emph{``fi\_id\_all\_phases\_max\_queue\_size\_sat\_flow\_queue\_type''}
+\item \emph{``fi\_id\_entry\_exit\_lk\_related\_path''} 
+\item \emph{``fi\_id\_internal\_link\_id\_orig\_dest\_node"}
+\item \emph{``fi\_id\_link\_id\_sublinks''}
+\item \emph{``fi\_id\_node\_id\_entering\_links\_to\_node''}
+\item \emph{``fi\_id\_node\_id\_entry\_links\_to\_network''} 
+\item \emph{``fi\_id\_node\_id\_exit\_links\_from\_network''}
+\item \emph{``fi\_id\_node\_id\_leaving\_links\_from\_node''}
+\item \emph{``fi\_id\_node\_type\_node''}
+\item \emph{``fi\_mod\_cum''}
+\item \emph{``fi\_mrp\_cum''}
+\item \emph{``fi\_mrp''}
+\item \emph{``fi\_presence\_detector''}
+\item \emph{``fi\_que\_size\_detector''}
+\item \emph{``fi\_series\_cum\_val\_varying\_rp''}
+\item \emph{``fi\_series\_varying\_rp''}
+\item \emph{``fi\_stages\_each\_non\_sign\_inters''}
+\item \emph{``fi\_stages\_each\_sign\_inters''}
+\item \emph{``fi\_init\_state\_que''}
+\item \emph{``fi\_phase\_interference''}
+\end{enumerate}
+
+\subsection{Names of the files  with  the  parameters of the corresponding algorithms }
+
+One or more of the following files should be included  in folder ``Control\_Param\_Files'' according to the employed control. The corresponding file with the control parameters should  be located directly in folder ``Control\_Param\_Files'' and not in any other folder included in ``Control\_Param\_Files'.
+\begin{enumerate}
+\item \emph{``File\_FT\_Control\_Alg\_Param.txt"}, the name of the file of the parameter of the FT control
+\item \emph{``File\_FT\_Offset\_Control\_Alg\_Param.txt"}, the name of the file with the FT with offsets control
+\item \emph{``File\_MP\_Control\_Alg\_Param.txt"}, the name of the file with the parameters of the MP control
+\item \emph{``File\_MP\_Qvalues\_phases.txt"}, the name of the file with the values of the parameters indicating the Q value of the corresponding phase. This file should remain empty if no phase has a Q value and a MP control is employed
+\item \emph{``File\_MP\_without\_rc\_Control\_Alg\_Param.txt"}, the name of the file with the parameters od MP without red clearance control
+
+\item \emph{``File\_MP\_without\_rc\_Qvalues\_phases.txt"}, the name of the file with the Q values  of the phases, when a MP without a red clearance control is employed. This file should remain empty  if no phase has a Q value. This file should remain empty if no phase has a Q value and a MP without red clearance control is employed.
+\item \emph{``File\_MP\_pract\_without\_rc\_Control\_Alg\_Param.txt"}, the name of the file with the parameters of MP Practical control, without red clearance
+\item \emph{``File\_MP\_pract\_without\_rc\_Qvalues\_phases.txt"}, the name of the file with the Q values of the phases, when a MP practical without red clearance control is employed. This file should remain empty if no phase has a Q value and a MP Practical without red clearance control is employed
+\item \emph{``File\_MP\_Practical\_Control\_Alg\_Param.txt"}, the name of the  file with the parameters of MP practical control
+\item \emph{``File\_MP\_pract\_Qvalues\_phases.txt"}, the name of the file with the Q values of the phases when a MP practical control is employed. This file should remain empty if no phase has a Q value and a MP is employed.
+\item \emph{``File\_FA\_no\_red\_clear\_Control\_Alg\_Param.txt"}, the name of the file with the parameters of a FA without red clearance control. This control  is not completed for the current version of the ``.Q''. It needs to be defined which sensor messages will be ignored
+\item \emph{``File\_FA\_with\_red\_clear\_Control\_Alg\_Param.txt"}, the name of the file with the parameters of a FA with red clearance control. This control  is not completed for the current version of the ``.Q''. It needs to be defined which sensor messages will be ignored
+\item \emph{``File\_FA\_MAX\_GREEN\_Control\_Alg\_Param.txt"}, the name of the file with the parameters of a FA with max green duration. This control  is not completed for the current version of the ``.Q''. It needs to be defined which sensor messages will be ignored
+\item \emph{``fi\_node\_id\_ctrl\_type\_category.txt"}, the name of the file indicating the type of control employed at each node and whether turn ratios will be or not estimated
+\item \emph{``fi\_id\_node\_estim\_turn\_ratio\_param\_dur\_turn\_ratios.txt"}, the name of the file employed when turn ratios are estimated (the first column indicates the node id, the second column indicates the  parameter ($\lambda$)  for the convex combination when turn ratios are estimated - the employed formula is
+ 
+$\lambda \times$ (new estimated value) $+ (1- \lambda) \times$ (current estimated value). 
+
+This file is required only when turn ratios are estimated. This file is required only when turn ratios are estimated, (in other words it is useless to exist even empty if turn ratios are not estimated)
+
+\item \emph{``fi\_estim\_mrp.txt"}, the name of the file with the initial values of the turn ratios when the later ones are estimated. This file is required only when turn ratios are estimated, (in other words it is useless to exist even empty if turn ratios are not estimated)
+
+\end{enumerate}
+
