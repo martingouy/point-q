@@ -1,0 +1,1 @@
+id node (1st colm), id input lk (2nd colm), id output lk (3nd colm), duree previous  rout prob value (4th colm),cum rout prob 2nd period (5th colm), duree previous (6th colm), cum rout prob (7th colm) etc.	 

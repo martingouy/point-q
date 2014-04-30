@@ -1,0 +1,1 @@
+id node (1st colm), id input lk (2nd colm), id output lk (3nd colm), rout prob next period (5th colm) etc.
