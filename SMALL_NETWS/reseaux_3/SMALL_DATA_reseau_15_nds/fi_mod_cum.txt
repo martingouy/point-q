@@ -1,1 +1,0 @@
-id phase (1-2 columns), cum rout prob (next colm)

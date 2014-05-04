@@ -1,1 +1,0 @@
-for each line, 1st column: id inters, next columns phases to actuate	

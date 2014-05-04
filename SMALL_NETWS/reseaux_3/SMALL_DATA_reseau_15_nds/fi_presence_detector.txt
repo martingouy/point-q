@@ -1,1 +1,0 @@
- id origin-dest lk(1,2,colmsn), initial position sensor in que, (1st position corresponds to 1)  (3 col), final  position sensor in que (4 col)	 
