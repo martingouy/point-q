@@ -1,0 +1,1 @@
+"id node (1st clmn), id phase (2nd, 3rd clmn), nb veh (3rd clmn), id veh final dest (>0 when OD, -1 otherwise, next columns) IF YOU REMOVE VEH FROM QUEUE THE REMAINING VEH WILL KEEP THEIR FINAL DEST	 

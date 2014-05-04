@@ -1,0 +1,3 @@
+node id (1st col), param estime turn ratio (and col), duration turn ratio values	 
+37593	 0.3	 900	   
+48493	 0.3	 900	 

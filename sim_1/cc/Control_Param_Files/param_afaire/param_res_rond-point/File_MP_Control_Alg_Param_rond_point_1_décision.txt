@@ -1,0 +1,7 @@
+ id node (1st cllm), stage actuation duration idle time L (next colms),  cycle duration T  (last col)
+1	 82	 8	 90
+2	 82	 8	 90	 
+3	 82	 8	 90
+4	 82	8	90
+5	 82	 8	 90
+6	 82	 8	 90

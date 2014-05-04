@@ -1,0 +1,5 @@
+id node (1st clmn), id phase (2nd, 3rd clmn), nb veh (3rd clmn), id veh final dest (>0 when OD, -1 otherwise, next columns)	 
+1	1	2	2	-1	
+1	17	18	4	-1	
+15	15	16	1	-1	
+15	45	46	2	-1	

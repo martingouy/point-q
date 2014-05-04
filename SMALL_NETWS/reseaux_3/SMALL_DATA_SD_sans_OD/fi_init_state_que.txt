@@ -1,0 +1,1 @@
+id node (1st clmn), id phase (2nd, 3rd clmn), nb veh (3rd clmn)	

@@ -1,0 +1,14 @@
+ id node (1st cllm), type control ,(2nd colm)1: "type_control_FT", 2:"type_control_FT_Offset", 3:"type_control_MP , 10: ``type_control_FA _no red clear‘’,11:"type_control_FA_Max_Green ,12: ``type_control_FA _with_red lrear‘’,13:"type_control_MP_Practical ‘’,(3rd col): control category indicates if the ctrl is updated accroding to flows or not, sensor_requirement for controls requiring sensor monitoring (FA,FAmax green) , without_sensor_requirement for controls not requiring sensors (FT, MP, etc).
+37593	 3	 without_sensor_requirement 
+37605	 3	 without_sensor_requirement 
+37607	 3	 without_sensor_requirement 
+37606	 3	 without_sensor_requirement 
+37610	 3	 without_sensor_requirement 
+37612	 3	 without_sensor_requirement 
+49394	 3	 without_sensor_requirement 	
+49395	 3	 without_sensor_requirement 
+37872	 3	 without_sensor_requirement 
+48494	 3	 without_sensor_requirement 	
+48492	 3	 without_sensor_requirement 
+49954	 3	 without_sensor_requirement 
+48493	 3	 without_sensor_requirement 

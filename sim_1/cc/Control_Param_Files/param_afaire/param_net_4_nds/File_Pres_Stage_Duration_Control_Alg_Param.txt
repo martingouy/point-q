@@ -1,0 +1,5 @@
+ id node (1st colm), cycle duration (1st cllm)  idle time L (and colms)
+1	 62	 10
+2	 62	 10
+3	 62	 10
+4	 62	 10

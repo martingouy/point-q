@@ -1,0 +1,1 @@
+id node (1 colm), id phase  affected (2-3 colm), id affecting phase (4-5 colm), param affected phase (6 colm)	 

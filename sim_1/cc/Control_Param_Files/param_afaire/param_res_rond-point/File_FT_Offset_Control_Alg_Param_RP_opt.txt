@@ -1,0 +1,27 @@
+['1st line: id master node, numérotation starting from 1, 2nd line:offset value, the number of column corresponds to the node id, next lines :id nd (1st colm),id stage (2nd colm, if id=0 it is rd cleat), actuat durat (3rd colm), t end cycle(5th colm, for a given inersection stages will be actuated according to their order in this file, within the cycle']
+5
+0	 22	 4	 0	 0	 37	 
+5	 1	 11	 90 
+5	 0	 4	 90
+5	 2	 71	 90 
+5	 0	 4	 90 
+3	 1	 27	 90 
+3	 0	 4	 90 
+3	 2	55	 90 
+3	 0	 4	 90 
+2	 1	 41	 90 
+2	 0	 4	 90
+2	 2	 41	 90
+2	 0	 4	 90
+6	 1	 63	 90 
+6	 0	 4	 90 
+6	 2	 19	 90 
+6	 0	4	 90 
+4	 1	 41	 90 
+4	 0	 4	 90 
+4	 1	 41	 90 
+4	 0	 4	 90 
+1	 1	 41	 90 
+1	 0	 4	 90 
+1	 1	 41	 90 
+1	 0	 4	 90 

@@ -1,0 +1,1 @@
+Id phase (1-2 columns), prob of the phase (3rd column)	

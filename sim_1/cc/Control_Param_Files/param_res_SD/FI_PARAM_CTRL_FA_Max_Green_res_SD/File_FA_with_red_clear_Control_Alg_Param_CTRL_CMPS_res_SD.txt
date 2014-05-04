@@ -1,0 +1,3 @@
+ id node (1st cllm), admissible flow (2nd colm), red clear (3rd column), t first control (4th cllm)	
+49954	 1.1	 2.0	 0	
+49394	 1.1	 2.0	 0

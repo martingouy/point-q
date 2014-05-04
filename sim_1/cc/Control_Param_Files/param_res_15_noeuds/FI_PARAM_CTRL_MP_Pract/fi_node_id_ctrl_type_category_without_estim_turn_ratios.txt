@@ -1,0 +1,16 @@
+ id node (1st collm), type control (2nd colm),1: type_control_FT", 2:"type_control_FT_Offset", 3:"type_control_MP",4:"type_control_MIXED",5:"type_control_MP_pro »,6: type_control_MP_pro_wasteful",9:"type_control_MP_No_output_que",10:"type_control_FA_no_red_clear",11:"type_control_FA_Max_Green",12:"type_control_FA_with_red_clear",13:"type_control_MP_Practical",14:"type_control_MP_without_red_clear",15:"type_control_MP_Practical_without_rec_clear ».These will be the employed values at least for the first cotnrol decision. The contrôler will  decided for the values of the next décision,(3rd colm): control category indicates if the ctrl is updated according to flows or not, sensor_requirement for controls requiring sensor monitoring (FA,FAmax green) , without_sensor_requirement for controls not requiring sensors (FT, MP, etc),(4th column): 1 if turn ratios are going to be estimated with the employed control, 0 otherwise. 
+1	 13	 without_sensor_requirement	0 
+2	 13	 without_sensor_requirement	 0
+3	 13	 without_sensor_requirement	 0
+4	 13	 without_sensor_requirement	 0
+5	 13	 without_sensor_requirement	 0
+6	 13	 without_sensor_requirement	 0
+7	 13	 without_sensor_requirement	 0	
+8	 13	 without_sensor_requirement	 0
+9	 13	 without_sensor_requirement	 0
+10	 13	 without_sensor_requirement	 0
+11	 13	 without_sensor_requirement	 0
+12	 13	 without_sensor_requirement	 0
+13	 13	 without_sensor_requirement	 0
+14	 13	 without_sensor_requirement	 0
+15	 13	 without_sensor_requirement	 0

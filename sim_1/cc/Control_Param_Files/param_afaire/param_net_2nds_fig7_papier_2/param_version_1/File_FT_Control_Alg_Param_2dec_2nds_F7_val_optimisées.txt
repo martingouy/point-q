@@ -1,0 +1,10 @@
+['id nd (1st colm), id stage (2nd colm, if id=0 it is rd cleat), actuat durat (3rd colm),t end cycle(5th colm)']	 
+['for a given inersection the order of stage id is related to  their priority within the cycle']	 
+1	 1	 20	 74 
+1	 0	 2	 74
+1	 2	 50	 74 
+1	 0	 2	74
+2	 1	 51	 74 
+2	 0	 2	 74
+2	 2	19	 74 
+2	 0	 2	74

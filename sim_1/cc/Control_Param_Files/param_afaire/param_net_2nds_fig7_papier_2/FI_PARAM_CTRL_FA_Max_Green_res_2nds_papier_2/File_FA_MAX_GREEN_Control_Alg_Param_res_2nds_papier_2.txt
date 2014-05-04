@@ -1,0 +1,3 @@
+  id node (1st cllm), admissible flow (2nd colm),  idle time L(3rd colm), t first control (4th cllm), max green duration(5th colmn)	
+1	 1.1	 2.0	 0	 300		 
+2	 1.1	 2.0	 0	 300	
