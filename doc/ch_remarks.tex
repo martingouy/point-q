@@ -1,0 +1,15 @@
+%%!TEX root = rapport_netw_model.tex
+
+\section{Remarks}
+
+\begin{enumerate}
+\item Within the latest version of ``.Q'' model, when a previously completed simulation is wished to be continued, the two implementations must have the same control type.  
+
+One reason for this is due to the fact that various future tasks (amongst them control decisions) are planned during the previous simulation. Thus, the new simulation should be aware of what is  decided in the past and has available all the extra required information.
+The appropriate way of doing so, is to model a variation of the control during the implementation. 
+
+This holds true for any other variations. They should happen during the simulation. 
+The present version of ``.Q'' is planned for  dealing with variations during a run instead of  interrupting the implementation and plan a new configuration. 
+However in the case of the control, the same type of control with different parameters can be employed.
+
+\end{enumerate}
