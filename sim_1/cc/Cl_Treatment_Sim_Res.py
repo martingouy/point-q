@@ -193,7 +193,7 @@ class Treatment_Sim_Res:
 	#dict[i]= [...,[record_database_obj_of_type_i_1,record_database_obj_of_type_i_2, ...  ]  ...]
 	def fct_creation_dictionary_from_the_db_file(self):
 		
-		file=open(self._db_file_sim_res_to_treat,"r")
+		file=open(self._db_file_sim_res_to_treat,"r",encoding="utf8")
 		fc=csv.reader(file,delimiter=',',quotechar='"')
 		
 		dict={}
