@@ -1962,7 +1962,7 @@ class Stat_Analysis:
 		#dict_db_key_id_event_type_val_record_obj=va_dict_db_key_id_event_type_val_record_obj)
 		
 		for i in di_rep:
-			file=open(self._folder_link_evol+"/"+File_Stats_Anal_Folders_And_Files.name_file_evolution_lk+str(i)+".txt","w")
+			file=open(self._folder_link_evol+"/"+File_Stats_Anal_Folders_And_Files.name_file_evolution_lk+str(i)+".txt","w",encoding="utf8")
 			cap=va_netw.get_di_entry_internal_links()[i].get_capacity_link()
 			#if the link is an entry link
 			if i  in va_netw.get_di_entry_links_to_network():
