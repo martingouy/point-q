@@ -1043,7 +1043,7 @@ def fct_read_file_compatible_phases_nsi(name_file_read,nb_comment_lines):
 #dict2, key=id node with estim turn ratios, value=1
 def fct_reading_fi_id_node_type_control(val_name_file_to_read,nb_comment_lines):
 	#we open the file
-	file=open(val_name_file_to_read,"r")
+	file=open(val_name_file_to_read,"r",encoding="utf8")
 	di_rep={}
 	
 	di_rep_with_turn_ratios_estim={}
