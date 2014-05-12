@@ -435,7 +435,7 @@ class Record_and_Treat_Sim_File_Names:
 		self._file_recording_sim_text=open(self._file_recording_sim_text_before_open,self._open_mode_file_recording_sim_text)
 	
 		#creation of the self._file_recording_event_db_before_open, open state, 
-		self._file_recording_event_db_csv=open(self._file_recording_event_db_before_open,self._open_mode_file_recording_sim_db)
+		self._file_recording_event_db_csv=open(self._file_recording_event_db_before_open,self._open_mode_file_recording_sim_db,newline="\n")
 		
 		#(we pass it to cvs)
 		self._file_recording_event_db=csv.writer(self._file_recording_event_db_csv)
