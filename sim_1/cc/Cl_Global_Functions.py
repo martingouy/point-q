@@ -333,7 +333,7 @@ class Global_Functions:
 	def fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap(self,\
 	va_t_end_current_control,va_t_cur,va_t_unit,va_netw,va_queue,va_min_veh_hold_time_in_que,va_t_round_prec):
 	 
-		
+
 		nb_avail_places_dest_lk=\
 		va_netw.get_di_entry_internal_links()[va_queue.get_id_associated_output_link()].get_capacity_link() - \
 		va_netw.get_di_entry_internal_links()[va_queue.get_id_associated_output_link()].get_current_nb_veh_link()
@@ -372,6 +372,10 @@ class Global_Functions:
 						
 							t_req_dep=va_queue.fct_defining_t_req_for_single_veh_depart(val_t_unit=va_t_unit,\
 							val_sat_flow=va_queue.get_queue_veh()[0].get_veh_sat_flow_when_current_que_locat_affected(),val_dec_digits=10)
+							
+							print("t_req_dep",t_req_dep)
+							import sys
+							sys.exit()
 						
 						#if no que sat flow corresponds to the vehicle 
 						else:
@@ -566,7 +570,7 @@ class Global_Functions:
 #*****************************************************************************************************************************************************************************************
 	#method returning the nb of vehicles that can leave from a queue in case where prior-minor phases are not considered,
 	#in case of infinite capacity of the destination link
-	def fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link(self,\
+	def fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link_1(self,\
 	 va_t_end_current_control,va_t_cur,va_t_unit,\
 	 va_queue,va_min_veh_hold_time_in_que,va_t_round_prec):
 		
@@ -673,6 +677,108 @@ class Global_Functions:
 			#sys.exit()
 		return [nb_veh_leave,t_ev_end_veh_dep,va_queue.get_nb_veh_cal_leave_simult_que_from_sat_flow(),state_destin_link]
 		
+#*****************************************************************************************************************************************************************************************
+	#method returning the nb of vehicles that can leave from a queue in case where prior-minor phases are not considered,
+	#in case of infinite capacity of the destination link
+	def fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link(self,\
+	 va_t_end_current_control,va_t_cur,va_t_unit,\
+	 va_queue,va_min_veh_hold_time_in_que,va_t_round_prec):
+		
+	 
+		#the potential number of vehicles that can leave que from the service rate
+		total_potential_nb_dep_veh= va_queue.get_current_queue_service_rate() - va_queue.get_current_reached_service_rate()
+		
+		#if vehicles can leave from the service rate
+		if total_potential_nb_dep_veh>List_Explicit_Values.initialisation_value_to_zero:
+		
+			#if the first veh has satisfied the hold constraint
+			if va_queue.fct_calcul_first_veh_remained_in_que_for_min_t_hold_without_planned_dep_for_mi(\
+			t_current=va_t_cur,min_hold_time=va_min_veh_hold_time_in_que,li_vehicles=va_queue.get_queue_veh(),val_t_precision=va_t_round_prec)>\
+			List_Explicit_Values.initialisation_value_to_zero:
+			
+				#the time left until the end of the current control +t_unit (t_end_current_control= the first moment, time unit, at which the new control is applied)
+				#va_t_end_current_control=time at which the new control is going to start
+				t_left=round(va_t_end_current_control - va_t_cur,va_t_round_prec) 
+				
+				if t_left<0:
+						print("PROBLEM IN CL_GL_FCT, fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link, t_left",\
+						t_left,"t_req",va_queue.get_required_depart_time_que(),"va_t_end_current_control",va_t_end_current_control,"va_t_cur,",va_t_cur)
+						print("que",va_queue.get_id_associated_link(),va_queue.get_id_associated_output_link())
+						import sys
+						sys.exit()
+						
+				else:
+					#calcul of the required depart time
+				
+					#if a que sat flow corresponds to the vehicle
+					if va_queue.get_queue_veh()[0].get_veh_sat_flow_when_current_que_locat_affected()!=None:
+				
+						t_req_dep=va_queue.fct_defining_t_req_for_single_veh_depart(val_t_unit=va_t_unit,\
+						val_sat_flow=va_queue.get_queue_veh()[0].get_veh_sat_flow_when_current_que_locat_affected(),val_dec_digits=10)
+						
+						
+				
+					#if no que sat flow corresponds to the vehicle 
+					else:
+						t_req_dep=va_queue.get_required_depart_time_que()
+					
+					#If the required time > t_left
+					if t_req_dep> t_left:
+						nb_veh_leave=List_Explicit_Values.initialisation_value_to_one
+					
+						t_ev_end_veh_dep=self._decision_obj.fct_def_time_end_veh_depart(\
+						val_t_current=va_t_cur, val_duration=t_left,val_t_round=va_t_round_prec,val_decimal_digit_prec=10,val_probab=0,a=0,b=1)
+					
+						if t_ev_end_veh_dep==va_t_cur:
+							print("ATTENTION IN CL_GLOB_FCT,\
+							fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link",\
+							"t_cur",va_t_cur,"duree traj",t_left,"t_ev_end_veh_dep",t_ev_end_veh_dep,"t_veh_dur=t_left=",t_left)
+						
+						state_destin_link=List_Explicit_Values.initialisation_value_to_zero
+					
+						return [nb_veh_leave,t_ev_end_veh_dep,total_potential_nb_dep_veh,state_destin_link]
+				
+					#If the required time <= t_left
+					else:
+				
+						nb_veh_leave=List_Explicit_Values.initialisation_value_to_one
+					
+						t_ev_end_veh_dep=self._decision_obj.fct_def_time_end_veh_depart(\
+						val_t_current=va_t_cur, val_duration=t_req_dep,\
+						val_t_round=va_t_round_prec,val_decimal_digit_prec=10,val_probab=0,a=0,b=1)
+					
+						if t_ev_end_veh_dep==va_t_cur:
+							print("ATTENTION IN CL_GLOB_FCT,\
+							fct_calcul_nb_veh_they_can_leave_at_t_current_and_assoc_end_dep_time_mi_without_permis_prior_mv_finite_lk_cap_exit_dest_link",\
+							"t_cur",va_t_cur,"duree traj",va_queue.get_required_depart_time_que(),"t_ev_end_veh_dep",t_ev_end_veh_dep,"t_veh_dur=t_left=",t_left)
+						
+						state_destin_link=List_Explicit_Values.initialisation_value_to_zero
+						
+						return [nb_veh_leave,t_ev_end_veh_dep,total_potential_nb_dep_veh,state_destin_link]
+			
+			#if the first veh has not satisfied the hold constraint
+			else:
+				nb_veh_leave=List_Explicit_Values.initialisation_value_to_zero
+				t_ev_end_veh_dep=None
+				state_destin_link=List_Explicit_Values.initialisation_value_to_zero
+					
+				return [nb_veh_leave,t_ev_end_veh_dep,total_potential_nb_dep_veh,state_destin_link]
+		
+		
+		
+		#if vehicles cannot leave from the service rate
+		else:
+			nb_veh_leave=List_Explicit_Values.initialisation_value_to_zero
+				
+			#time at which the veh departure will be completed= value non defined
+			t_ev_end_veh_dep=None
+			
+			#we indicate that the dest lk is not saturated
+			state_destin_link=List_Explicit_Values.initialisation_value_to_zero
+			
+			return [nb_veh_leave,t_ev_end_veh_dep,total_potential_nb_dep_veh,state_destin_link]
+			
+				
 #*****************************************************************************************************************************************************************************************
 	#method returning [the number of vehicles that can depart from a que, the associated end dep time, \
 	#the total potential number of vehicles in the que, the state of the dest link, whether  it is/not saturated], 
