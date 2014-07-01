@@ -1087,6 +1087,7 @@ def fct_reading_file_parameters_FT_control(name_file_to_read,nb_comment_lines):
 			#if the node id is  in the dictionary
 			else:
 				di_rep[id_nd].append( [eval(a[1]),eval(a[2]),eval(a[3])])
+	
 				
 	return di_rep
 		
@@ -2519,6 +2520,19 @@ li_phrases=["id phase (1-2 columns), cum rout prob (next colm)"]):
 	file_phase_cum_rp.close()	
 
 #*****************************************************************************************************************************************************************************************
+#methode qui lis les valeur rout prob, calcule les val cum et les ecrit
+def fct_calcul_and_write_cum_rp(val_name_file_rout_propab_to_read,val_name_file_to_write,val_nb_comment_lines=1,val_considered_one_in_cum_fctn=0.99):
+
+	di_cum_rp=fct_creat_dict_cum_rp_mat_from_text_file(val_name_file_rout_prop_to_read=val_name_file_rout_propab_to_read,\
+	nb_comment_lines=val_nb_comment_lines,val_considered_one_in_cum_fct=val_considered_one_in_cum_fctn)
+	
+	fct_write_file_cum_rout_prob(name_file_to_write=val_name_file_to_write,di_key_id_entry_intern_lk_value_lis_li_rout_prob_and_id_dest_lk=di_cum_rp,\
+	li_phrases=["id phase (1-2 columns), cum rout prob (next colm)"])
+	
+	
+
+#*****************************************************************************************************************************************************************************************
+
 #function write the two files "fi_stages_each_non_sign_inters.txt" and "fi_id_entry_exit_lk_related_path.txt"
 def fct_write_files_stages_si_and_nsi_prev(name_file_to_write_stages_nsi,name_file_to_write_stages_si,di_stages_nsi,di_stages_si,\
 li_phrases_nsi=["for each line, 1st column: id nsi inters, next columns phases to actuate"],\
@@ -2971,6 +2985,24 @@ def fct_write_fi_id_node_type_node_cas_nds_sign(name_file_to_write,list_phrases,
 	for i in list_valeurs:
 			
 			file.write("%d\t %d\t \n"%(i,1))
+	
+	file.close()
+
+
+#*****************************************************************************************************************************************************************************************
+#funct wtite file fi_id_node_type_ctrl_category
+def fct_write_fi_id_node_type_ctrl_categoryr(name_file_to_write,list_phrases=[" id node (1st collm), type control ,(2nd colm)1: \"type_control_FT\", 2:\"type_control_FT_Offset\", \
+3:\"type_control_MP\" , 10: \``type_control_FA _no red clear\‘’,11:\"type_control_FA_Max_Green\" ,12: \``type_control_FA _with_red lrear\",1\
+3:\"type_control_MP_Practical \‘’,(3rd colm): control category indicates if the ctrl is updated accroding to flows or not, sensor_requirement for controls requiring sensor monitoring (FA,FAmax green),\
+without_sensor_requirement for controls not requiring sensors (FT, MP, etc),(4th column): 1 if turn ratios are going to be estimated with the employed control, 0 otherwise"],list_valeurs=[]):
+
+	file=open(name_file_to_write,"w")
+	for i in list_phrases:
+		file.write("%s\t \n"%(i))
+		
+	for j in list_valeurs:
+			
+			file.write("%d\t %d\t  %s\t %d\n"%(j[0],j[1],j[2],j[3]))
 	
 	file.close()
 
@@ -4578,10 +4610,15 @@ lis_valeurs=[\
 #di_key_id_entry_intern_lk_value_lis_li_rout_prob_and_id_dest_lk=di_key_id_phase_value_cum_rp,\
 #li_phases=["id phase (1-2 columns), cum rout prob (next colm)"])
 #*********************************************************************************************************************************************************************************************************************************************************************
+#*********************************************************************************************************************************************************************************************************************************************************************
+#*********************************************************************************************************************************************************************************************************************************************************************
+
+
+#**************************************************************************Fichiers reseau **********************************************************************************************************************************
 
 #*********************************************************************************************************************************************************************************************************************************************************************
 #we write file fi_demand_param_entry_link
-val_list_valeurs=[
+val_list_valeurs_1=[
 [1,0.5],
 [17,0.5],
 [19,0.5],
@@ -4598,12 +4635,18 @@ val_list_valeurs=[
 [41,0.5],
 [43,0.5],
 [45,0.5]]
+
+val_list_valeurs_=[
+[1,0.9],
+[4,0.9],
+[6,0.9]
+]
 #fct_write_fi_demand_param_entry_link(name_file_to_write=File_names_network_model.val_file_name_demand_param_entry_link,list_valeurs=val_list_valeurs)
 
 
 #we write file fi_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration
 
-val_list_valeurs_1=[\
+val_list_valeurs_1_=[\
 [1,-1,1,1,0,0],\
 [2,1,2,1,-1,30],\
 [3,2,3,1,-1,30],\
@@ -4651,6 +4694,16 @@ val_list_valeurs_1=[\
 [45,-1,15,1,0,0],\
 [46,15,-1,1,-1,0]]
 
+val_list_valeurs_1=[
+[1,-1,1,10, 0,15],
+[2,1,2,10,80,15],
+[3,2,-1,10, 0,15],
+[4,-1,1,10,0,15],
+[5,1,-1,10,0,15],
+[6,-1,2,10, 0,15],
+[7,2,1,10,0,15]
+]
+
 #fct_write_fi_id_all_network_link_id_orig_destination_node_length_link_capacity_link_param_travel_duration(\
 #name_file_to_write=\
 #File_names_network_model.val_file_name_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration,\
@@ -4660,7 +4713,7 @@ val_list_valeurs_1=[\
 
 
 #we write file   fi_id_all_phases_max_queue_size_sat_flow_queue_type
-val_list_valeurs_2=[
+val_list_valeurs_2_=[
 [1,2,-1,0.15,0],
 [1,18,0,0,0],
 [2,3,-1,0.15,0],
@@ -4723,9 +4776,20 @@ val_list_valeurs_2=[
 [45,16,0,0,0],
 ]
 
-val_li_ph=["]IF QUE TYPE=1 PHASE=RT, OTHERWISE  QUE TYPE=0"]
+val_list_valeurs_2=[
+[1,2,0,1,0],
+[1,5,0,1,0],
+[4,2,0,1,0],
+[4,5,0,1,0],
+[2,3,30,1,0],
+[2,7,30,1,0],
+[6,3,0,1,0],
+[6,7,0,1,0],
+]
+
+#val_li_ph_=["IF QUE TYPE=1 PHASE=RT, OTHERWISE  QUE TYPE=0"]
 #fct_write_fi_id_phases_max_queue_size_sat_flow_queue_type(name_file_to_write=\
-File_names_network_model.val_file_name_id_all_phases_max_queue_size_and_sat_flow_queue_type,\
+#File_names_network_model.val_file_name_id_all_phases_max_queue_size_and_sat_flow_queue_type,\
 #li_phrases=val_li_ph,list_valeurs=val_list_valeurs_2)
 
 
@@ -4733,7 +4797,7 @@ File_names_network_model.val_file_name_id_all_phases_max_queue_size_and_sat_flow
 
 
 #we write file fi_id_internal_link_id_orig_dest_node
-val_list_valeurs_3=[
+val_list_valeurs_3_=[
 [2,1,2],
 [3,2,3],
 [4,3,4],
@@ -4750,11 +4814,15 @@ val_list_valeurs_3=[
 [15,14,15]
 ]
 
-#fct_write_fi_id_internal_link_id_orig_dest_node(name_file_to_write=File_names_network_model.val_file_name_id_internal_link_id_orig_dest_node,list_valeurs=val_list_valeurs_3)
+val_list_valeurs_3=[
+[2,1,2]
+]
+
+fct_write_fi_id_internal_link_id_orig_dest_node(name_file_to_write=File_names_network_model.val_file_name_id_internal_link_id_orig_dest_node,list_valeurs=val_list_valeurs_3)
 
 
 #we write file fi_id_node_id_entering_links_to_node
-val_list_valeurs_4=[
+val_list_valeurs_4_=[
 [1,1,17],
 [2,2,19],
 [3,3,21],
@@ -4772,9 +4840,15 @@ val_list_valeurs_4=[
 [15,15,45]
 ]
 
+
+val_list_valeurs_4=[
+[1,1,4],
+[2,2,6]
+]
+
 #fct_write_fi_id_node_id_entering_or_leaving_links_to_node(name_file_to_write=File_names_network_model.val_file_name_id_node_id_entering_links_to_node,list_valeurs=val_list_valeurs_4)
 
-val_list_valeurs_5=[
+val_list_valeurs_5_=[
 [1,2,18],
 [2,3,20],
 [3,4,22],
@@ -4793,10 +4867,14 @@ val_list_valeurs_5=[
 ]
 
 
+val_list_valeurs_5=[
+[1,2,5],
+[2,3,7]
+]
 #we write the file fi_id_node_id_leavings_links_from_node 
 #fct_write_fi_id_node_id_entering_or_leaving_links_to_node(name_file_to_write=File_names_network_model.val_file_name_id_node_id_leaving_links_from_node,list_valeurs=val_list_valeurs_5)
 
-val_list_valeurs_6=[
+val_list_valeurs_6_=[
 [1,1,17],
 [2,19],
 [3,21],
@@ -4814,11 +4892,16 @@ val_list_valeurs_6=[
 [15,45]
 ]
 
+
+val_list_valeurs_6=[
+[1,1,4],
+[2,6]
+]
 #we write the file fi_id_node_id_entry_links_to_network
 #fct_write_fi_id_node_id_entering_or_leaving_links_to_node(name_file_to_write=File_names_network_model.val_file_name_id_node_id_entry_links_to_network,list_valeurs=val_list_valeurs_6)
 
 #we write file fi_id_node_id_exit_links_from_network
-val_list_valeurs_7=[
+val_list_valeurs_7_=[
 [1,18],
 [2,20],
 [3,22],
@@ -4835,22 +4918,29 @@ val_list_valeurs_7=[
 [14,44],
 [15,46,16]
 ]
+
+
+val_list_valeurs_7=[
+[1,5],
+[2,3,7]
+]
 #fct_write_fi_id_node_id_entering_or_leaving_links_to_node(name_file_to_write=File_names_network_model.val_file_name_id_node_id_exit_links_from_network,\
 #list_valeurs=val_list_valeurs_7)
 
 
 #we write  file fi_id_node_type_node
-#val_list_phrases_8=["node id (1st col), type inters. (1:sign., 0: non sign., 2nd col)"]
+val_list_phrases_8=["node id (1st col), type inters. (1:sign., 0: non sign., 2nd col)"]
 #val_list_valeurs_8=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
+val_list_valeurs_8=[1,2]
 #fct_write_fi_id_node_type_node_cas_nds_sign(name_file_to_write=File_names_network_model.val_name_file_fi_id_node_type_node,list_phrases=val_list_phrases_8,\
 #list_valeurs=val_list_valeurs_8)
 
 
 #we write file fi_mrp
-val_li_phrases_9=["]Id phase (1-2 columns), prob of the phase (3rd column)"]
+val_li_phrases_9=["Id phase (1-2 columns), prob of the phase (3rd column)"]
 
-val_li_rout_prob_values_9=[
+val_li_rout_prob_values_9_=[
 [1,2,1],
 [2,3,1],
 [3,4,1],
@@ -4882,7 +4972,16 @@ val_li_rout_prob_values_9=[
 [43,44,1],
 [45,46,1]]
 
-
+val_li_rout_prob_values_9=[
+[1,2,0.5],
+[1,5,0.5],
+[4,2,0.5],
+[4,5,0.5],
+[2,3,0.5],
+[2,7,0.5],
+[6,3,0.5],
+[6,7,0.5]
+]
 
 #fct_write_file_rout_prob_each_phase(val_name_file_to_write=File_names_network_model.val_name_file_mat_rp_id_phase_prob_dest_lk,\
 #val_li_phrases=val_li_phrases_9,val_li_rout_prob_values=val_li_rout_prob_values_9)
@@ -4891,7 +4990,7 @@ val_li_rout_prob_values_9=[
 #we write file fi_stages_each_sign_inters
 val_list_phrases_10=["for each line, 1st column: id inters, next columns phases to actuate"]
 
-val_list_valeurs_10=[
+val_list_valeurs_10_=[
 [1,1,2],
 [1,17,18],
 [2,2,3],
@@ -4924,6 +5023,13 @@ val_list_valeurs_10=[
 [15,45,46]
 ]
 
+
+val_list_valeurs_10=[
+[1,1,2,1,5],
+[1,4,5,4,2],
+[2,2,3,2,7],
+[2,6,7,6,3]
+]
 
 #fct_write_file_intersection_stages(name_file_to_write=File_names_network_model.val_name_file_stages_each_signalised_inters,\
 #list_phrases=val_list_phrases_10,list_valeurs=val_list_valeurs_10)
@@ -5176,6 +5282,12 @@ val_li_rout_prob_values_12=[
 #File_names_network_model.val_name_file_series_cum_values_varying_rout_prob,\
 #val_li_phrases=val_li_phrases_12,val_li_rout_prob_values=val_li_rout_prob_values_12)
 
+#val_name_file_rout_prop_to_read=File_names_network_model.val_name_file_mat_rp_id_phase_prob_dest_lk
+#val_name_file_to_write_cum_rp=File_names_network_model.val_name_file_mat_rp_cum
+#fct_calcul_and_write_cum_rp(val_name_file_rout_propab_to_read=val_name_file_rout_prop_to_read,val_name_file_to_write=val_name_file_to_write_cum_rp,val_nb_comment_lines=1,\
+#val_considered_one_in_cum_fctn=0.99)
+
+
 #li_di=fct_read_file_fi_series_cum_val_varying_rp(name_file_to_read=File_names_network_model.val_name_file_series_cum_values_varying_rout_prob,\
 #nb_comment_lines=1)
 
@@ -5207,6 +5319,47 @@ val_li_valeurs=[[1,1,18,1,2,0.5],[1,1,2,1,18,0.75],[2,2,20,2,3,0.5],[2,2,3,2,20,
 
 #di_rep=fct_read_file_fi_init_state_que(name_file_to_read=File_names_network_model.name_file_phase_interference,nb_comment_lines=1)
 #print(di_rep)
+
+#*********************************************************************************************************************************************************************************************************************************************************************
+
+#*************************************************************************fcts ecrit param controles************************************************************************************************************************************************************
+
+#on ecrit  les param du FT ctrl
+li_val_ft=[\
+[1,1,50,100],
+[1,2,50,100],
+[2,1,50,100],
+[2,2,50,100],
+]
+ 
+li_phrases_ft=["'id nd (1st colm),id stage (2nd colm, if id=0 it is rd cleat), actuat durat (3rd colm),cycle duration (5th colm), 1st line","for a given inersection the order of stage id is related to  their priority within the cycle'"]
+
+#fct_write_file_parameters_ft_control(name_file_to_write=File_Sim_Name_Module_Files.val_name_file_values_ft_control,li_valeurs=li_val_ft, li_phrases=li_phrases_ft)
+
+
+#on ecrit fi_id_nd_type_ctrl_category
+list_valeurs_fi_id_nd_type_ctrl_cat=[
+[1,1, "without_sensor_requirement",0],
+[2,1, "without_sensor_requirement",0],
+]
+
+
+#fct_write_fi_id_node_type_ctrl_categoryr(name_file_to_write=File_Sim_Name_Module_Files.val_name_file_node_id_control_type_category,\
+#list_phrases=[" id node (1st collm), type control ,(2nd colm)1: \"type_control_FT\", 2:\"type_control_FT_Offset\", \
+#3:\"type_control_MP\" , 10: \``type_control_FA _no red clear\‘’,11:\"type_control_FA_Max_Green\" ,12: \``type_control_FA _with_red lrear\",1\
+#3:\"type_control_MP_Practical \‘’,(3rd colm): control category indicates if the ctrl is updated accroding to flows or not, sensor_requirement for controls requiring sensor monitoring (FA,FAmax green),\
+#without_sensor_requirement for controls not requiring sensors (FT, MP, etc),(4th column): 1 if turn ratios are going to be estimated with the employed control, 0 otherwise"],list_valeurs=list_valeurs_fi_id_nd_type_ctrl_cat)
+
+#*********************************************************************************************************************************************************************************************************************************************************************
+
+
+
+
+#*********************************************************************************************************************************************************************************************************************************************************************
+
+
+#*********************************************************************************************************************************************************************************************************************************************************************
+
 
 #*********************************************************************************************************************************************************************************************************************************************************************
 #va_name_file_to_read="/Users/jennie/Desktop/travail_vsim_int/PARSER_FI_XML/test_parser_3/scenario_example_5.xml"

@@ -705,7 +705,7 @@ class Stat_Analysis:
 	#method creating a dictionary, key=the movement [l,m]
 	#the value=dict, key=time, value= [   [nb of vehicles in the queue,ev type,veh id     ]  ]
 	
-	def fct_creat_dict_queue_lengths_during_sim(self,val_network,dict_db_file):
+	def fct_creat_dict_queue_lengths_during_sim_sans_rt(self,val_network,dict_db_file):
 	
 		#print("dict_db_file",dict_db_file.keys())
 		
@@ -763,6 +763,73 @@ class Stat_Analysis:
 						j.get_ev_type())
 						import sys
 						sys.exit()
+					
+			
+		
+		return dict_id_queue
+
+#*****************************************************************************************************************************************************************************************
+	#method creating a dictionary, key=the movement [l,m]
+	#the value=dict, key=time, value= [   [nb of vehicles in the queue,ev type,veh id     ]  ]
+	
+	def fct_creat_dict_queue_lengths_during_sim(self,val_network,dict_db_file):
+	
+		#print("dict_db_file",dict_db_file.keys())
+		
+		
+		#for each movement we associate of this event type we exctract the time, the queue id in the form of a movement [l,m], the number of vehicles in the queue at this time
+		#dictionary, key = the movement id (l,m), value =[ time, number of vehicles in the queue]
+		dict_id_queue={}
+		
+		#for each movement, dict_db_file=dict, key=movement,value=record object
+		for i in dict_db_file:
+			#print("val_network.get_di_all_links()[i[0]]",val_network.get_di_all_links()[i[0]])
+		
+			#if the movement is not a right turn we create the movement and calculate the queue length
+			#if val_network.get_di_all_links()[i[0]].get_set_veh_queue().get_di_obj_veh_queue_at_link()[i[0],i[1]].get_type_veh_queue()!=\
+			#Cl_Vehicle_Queue.TYPE_VEHICLE_QUEUE["right_turn"]:
+			
+			#we create the associated element of the dictionary to return 
+			dict_id_queue[i]={}
+			for j in dict_db_file[i]:
+				#if the event we wish to add is of type veh arrival
+				if j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_veh_arrived_at_que"] or  \
+				j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_veh_appearance"] or\
+				j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_veh_arrived_at_que_nsi"] or \
+				j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_veh_appearance_nsi"]:
+						
+					#if the time is not already in the dictionary, then we add
+					if j.get_ev_time() not in dict_id_queue[i]:
+						dict_id_queue[i][j.get_ev_time()]=[[ len(j.get_li_id_vehicles_in_queue()),j.get_ev_type(),j.get_vehicle_id() ]]
+					
+					#if the time is  already in the dictionary, if the existing event is of the same type then we use the new value of the que
+					else:
+						dict_id_queue[i][j.get_ev_time()].append([ len(j.get_li_id_vehicles_in_queue()),j.get_ev_type(),j.get_vehicle_id() ])
+																	
+				#if the event we wish to add is veh end departure
+				elif j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_end_veh_departure_from_que"] or \
+				j.get_ev_type()==Cl_Event.TYPE_EV["type_ev_end_veh_departure_from_que_nsi"]:
+					#if the time is not already in the dictionary, then we add
+					if j.get_ev_time() not in dict_id_queue[i]:
+						dict_id_queue[i][j.get_ev_time()]=[[ len(j.get_li_id_vehicles_in_queue()),j.get_ev_type(),j.get_vehicle_id() ]]
+					#if the event time is already in the dictionary, we add the event only if the value of the queue length is different
+					else:
+						
+						if dict_id_queue[i][j.get_ev_time()][len (dict_id_queue[i][j.get_ev_time()])-1][0] != len(j.get_li_id_vehicles_in_queue()):
+								
+							dict_id_queue[i][j.get_ev_time()].append([ len(j.get_li_id_vehicles_in_queue()),j.get_ev_type(),j.get_vehicle_id() ])
+								
+				#if the event we wish to add is end  veh hold at que
+				elif j.get_ev_type()==Cl_Event.TYPE_EV["ty_ev_end_veh_hold_at_que"] or\
+				j.get_ev_type()==Cl_Event.TYPE_EV["ty_ev_end_veh_hold_at_que_nsi"]:
+					pass
+							
+				#if the event we wish to add is of any other type
+				else:
+					print("PROB, CL_STAT, FCT fct_creat_dict_queue_lengths_during_sim, EVENT TYPE TO ADD ",\
+					j.get_ev_type())
+					import sys
+					sys.exit()
 					
 			
 		
@@ -879,7 +946,7 @@ class Stat_Analysis:
 				li_1=list(val_di_que_evol[i[0],i[1]])
 				li_rep=list(set(li_1)|set(li_rep))
 			else:
-				print("ATTENTION, NO OBSERVATION FOR QUE",i,)
+				print("ATTENTION, NO OBSERVATION FOR QUE",i)
 		li_rep.sort()
 		
 		
@@ -2036,7 +2103,7 @@ class Stat_Analysis:
 		
 		li_some_sum_ques=self.fct_sum_some_queues(val_di_que_evol_t_unique=val_dict_que_evol_t_unique,li_t=li_t_instances)
 		
-		self.fct_write_file_sum_que_t_sim(li=li_some_sum_ques,val_name_file_write=self._file_sum_desired_queue_evol)
+		#self.fct_write_file_sum_que_t_sim(li=li_some_sum_ques,val_name_file_write=self._file_sum_desired_queue_evol)
 		#*********************
 		#we write the file with the average sum of the desired list of queues per period
 		
