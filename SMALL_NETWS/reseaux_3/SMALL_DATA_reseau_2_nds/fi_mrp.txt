@@ -1,0 +1,9 @@
+Id phase (1-2 columns), prob of the phase (3rd column)	 
+1	 2	 0.50	 
+1	 5	 0.50	 
+4	 2	 0.50	 
+4	 5	 0.50	 
+2	 3	 0.50	 
+2	 7	 0.50	 
+6	 3	 0.50	 
+6	 7	 0.50	 
