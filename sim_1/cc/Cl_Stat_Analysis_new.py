@@ -958,8 +958,8 @@ class Stat_Analysis:
         else:
 
           #if the  observ time does not belong to the list
-          #if val_dict_que_evol[i][0][j][0] != di_rep[i][-1][0]:
-          di_rep[i].append([val_dict_que_evol[i][0][j][0], val_dict_que_evol[i][0][j][1]])
+          if val_dict_que_evol[i][0][j][0] != di_rep[i][-1][0]:
+          	di_rep[i].append([val_dict_que_evol[i][0][j][0], val_dict_que_evol[i][0][j][1]])
 
     return di_rep
 
@@ -2567,7 +2567,7 @@ module_Dsu = __import__("Dsu_1")
 module_file_stat_anal_folders_and_files = __import__(
   File_Sim_Name_Module_Files.val_name_file_stat_anal_folders_and_files)
 
-val_name_fol_FRes = "Series_Sim-Wed-02-Jul-2014_11-16-33"
+val_name_fol_FRes = "Series_Sim-Wed-02-Jul-2014_23-06-21"
 
 
 
