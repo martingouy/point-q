@@ -362,6 +362,10 @@ class Ev_end_veh_departure_from_que(Cl_Event.Event):
 		
 		#the number of departed veh
 		nb_veh_departed=len(li_veh_dep)
+
+		#we update the nb of vehicles in the previous vehicle link location (its origin link) 
+		va_netwrk.get_di_all_links()[self._id_queue_obj[0]].set_current_nb_veh_link(\
+		va_netwrk.get_di_all_links()[self._id_queue_obj[0]].get_current_nb_veh_link()-nb_veh_departed)
 		
 		#if the veh origin link location is not an entry link
 		if va_netwrk.get_di_entry_internal_links()[self._id_queue_obj[0]].get_type_network_link()!=\
@@ -371,10 +375,6 @@ class Ev_end_veh_departure_from_que(Cl_Event.Event):
 			
 			#the number of vehicles in the link from which the  vehicle has departed (its origin link) avant la mise a jour
 			nb_veh_depart_lk_before_update=va_netwrk.get_di_all_links()[self._id_queue_obj[0]].get_current_nb_veh_link()
-		
-			#we update the nb of vehicles in the previous vehicle link location (its origin link) 
-			va_netwrk.get_di_all_links()[self._id_queue_obj[0]].set_current_nb_veh_link(\
-			va_netwrk.get_di_all_links()[self._id_queue_obj[0]].get_current_nb_veh_link()-nb_veh_departed)
 			
 			
 			#if the veh origin link was saturated before the veh departure and now there exist available places on this link
@@ -391,14 +391,14 @@ class Ev_end_veh_departure_from_que(Cl_Event.Event):
 					val_ti_unit=va_time_unit,val_fct_calcul_nb_and_t_dep_veh=va_fct_calcul_nb_and_t_dep_veh,\
 					va_round_prec=va_round_prec,val_ev_list=va_ev_list)
 	
+		#we update the nb of vehicles in the new vehicle location (its destination link) 
+		va_netwrk.get_di_all_links()[self._id_queue_obj[1]].set_current_nb_veh_link(\
+		va_netwrk.get_di_all_links()[self._id_queue_obj[1]].get_current_nb_veh_link()+nb_veh_departed)
+
 		#if the vehicle has not arrived at an exit link
 		if va_netwrk.get_di_all_links()[li_veh_dep[0].get_current_id_link_veh_location()].get_type_network_link() !=\
 		Cl_Network_Link.TYPE_NETWORK_LINK["exit"]:
 		
-							
-			#we update the nb of vehicles in the new vehicle location (its destination link) 
-			va_netwrk.get_di_all_links()[self._id_queue_obj[1]].set_current_nb_veh_link(\
-			va_netwrk.get_di_all_links()[self._id_queue_obj[1]].get_current_nb_veh_link()+nb_veh_departed)
 			
 			#calcul travel time for the departed veh, from the beginning of the link until the end of the chosen queue
 			li_parameter_fct_calculating_travel_time=[self._event_time,li_veh_dep[0].get_current_id_link_veh_location(),\

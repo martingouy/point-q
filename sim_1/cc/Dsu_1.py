@@ -156,8 +156,8 @@ cycle_duration=60
 #*****************************************************************************************************************************************************************************************
 #variable indicating if  internal links have (not) finite capacity (it is employed by the stat analysis. Thsi value is also indicated in the network data model)
 #also employed by the event end veh depart
-#val_finite_capacity_internal_links=1 if internal  lks have finite capacity, 0 otherwise
-val_finite_capacity_internal_links=0
+val_finite_capacity_internal_links=1 #if internal  lks have finite capacity, 0 otherwise
+#val_finite_capacity_internal_links=0
 #val_finite_capacity_internal_links=1
 #*****************************************************************************************************************************************************************************************
 

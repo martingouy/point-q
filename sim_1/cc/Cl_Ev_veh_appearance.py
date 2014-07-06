@@ -240,8 +240,9 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+	
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 		
 		#if v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].\
 		#get_id_head_intersection_node()==37605:
@@ -384,8 +385,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 		
 		
 		#param for the chosen queue
@@ -581,8 +582,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[self._id_entry_link,self._id_entry_link,\
@@ -730,8 +731,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[self._id_entry_link,self._id_entry_link,\
@@ -926,8 +927,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[\
@@ -1078,8 +1079,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 				
 		
 		#we decide the que chosen by the vehicle
@@ -1267,8 +1268,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a next destination for the vehicle 
 			if len(v_val_dict_veh_info_prev_sim[self._vehicle.get_id_veh()][1])>List_Explicit_Values.initialisation_value_to_one:
@@ -1425,8 +1426,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a next destination for the vehicle 
 			if len(v_val_dict_veh_info_prev_sim[self._vehicle.get_id_veh()][1])>List_Explicit_Values.initialisation_value_to_one:
@@ -1626,8 +1627,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -1798,8 +1799,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -2015,8 +2016,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -2189,8 +2190,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:

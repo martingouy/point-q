@@ -958,8 +958,8 @@ class Stat_Analysis:
         else:
 
           #if the  observ time does not belong to the list
-          if val_dict_que_evol[i][0][j][0] != di_rep[i][-1][0]:
-          	di_rep[i].append([val_dict_que_evol[i][0][j][0], val_dict_que_evol[i][0][j][1]])
+          #if val_dict_que_evol[i][0][j][0] != di_rep[i][-1][0]:
+          di_rep[i].append([val_dict_que_evol[i][0][j][0], val_dict_que_evol[i][0][j][1]])
 
     return di_rep
 
@@ -1965,15 +1965,15 @@ class Stat_Analysis:
         di_rep[i.get_veh_current_queue_location()[0]].append([i.get_ev_time(), i.get_nb_veh_in_dep_lk()])
 
       #si le veh n'est pas arrive a un arc de sortie, on ecrit le nb des veh trouves a sa nouvelle position
-      if i.get_veh_current_queue_location()[1] not in v_netw.get_di_exit_links_from_network():
+      #if i.get_veh_current_queue_location()[1] not in v_netw.get_di_exit_links_from_network():
 
-        #if the current veh location is not in the dict
-        if i.get_veh_current_queue_location()[1] not in di_rep:
-          di_rep[i.get_veh_current_queue_location()[1]] = [[i.get_ev_time(), i.get_nb_veh_in_ar_lk()]]
+      #if the current veh location is not in the dict
+      if i.get_veh_current_queue_location()[1] not in di_rep:
+        di_rep[i.get_veh_current_queue_location()[1]] = [[i.get_ev_time(), i.get_nb_veh_in_ar_lk()]]
 
-        #if the current veh location is in the dict
-        else:
-          di_rep[i.get_veh_current_queue_location()[1]].append([i.get_ev_time(), i.get_nb_veh_in_ar_lk()])
+      #if the current veh location is in the dict
+      else:
+        di_rep[i.get_veh_current_queue_location()[1]].append([i.get_ev_time(), i.get_nb_veh_in_ar_lk()])
 
     if Cl_Event.TYPE_EV["type_ev_end_veh_departure_from_que_nsi"] in dict_db_key_id_event_type_val_record_obj:
 
@@ -2045,12 +2045,16 @@ class Stat_Analysis:
       file = open(
         self._folder_link_evol + "/" + File_Stats_Anal_Folders_And_Files.name_file_evolution_lk + str(i) + ".txt", "w",
         encoding="utf8")
-      cap = va_netw.get_di_entry_internal_links()[i].get_capacity_link()
+      
       #if the link is an entry link
       if i in va_netw.get_di_entry_links_to_network():
         file.write("%s\t %s \n" % ("LINK", str(i)))
+      #if the link is an exit link
+      elif not i in va_netw.get_di_entry_internal_links():
+        file.write("%s\t %s \n" % ("LINK", str(i)))
       ##if the link is not an entry link
       else:
+        cap = va_netw.get_di_entry_internal_links()[i].get_capacity_link()
         file.write("%s\t %s\t %s\t %s \n" % ("LINK", str(i), "CAPACITÉ", cap))
       for j in di_rep[i]:
         if j[1] < 0:
@@ -2567,7 +2571,7 @@ module_Dsu = __import__("Dsu_1")
 module_file_stat_anal_folders_and_files = __import__(
   File_Sim_Name_Module_Files.val_name_file_stat_anal_folders_and_files)
 
-val_name_fol_FRes = "Series_Sim-Wed-02-Jul-2014_23-06-21"
+val_name_fol_FRes = "Series_Sim-Sun-06-Jul-2014_01-45-27"
 
 
 

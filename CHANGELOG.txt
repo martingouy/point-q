@@ -1,0 +1,21 @@
+CHANGELOG
+
+**********************************************************************************************************************************************************************************
+06/07/2014 01:36 am
+**********************************************************************************************************************************************************************************
+	- Cl_Ev_veh_appearance.py:
+
+	Uncomment the code that allowed to update the number of vehicules in the entry link
+
+	- Dsu_1.py
+
+	Changed option to finite link capacity: allows to see the link evolution in Stat Analysis
+
+	- Cl_Ev_end_veh_departure_from_que.py
+
+	Allowed to update the number of vehicule in the links even if it's an entry or an output link
+
+	- Cl_Stat_Analysis_new.py
+
+	Allowed to write the txt file of the link evolution even if it's an output link
+
