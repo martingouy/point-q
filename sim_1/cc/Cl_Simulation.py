@@ -15,6 +15,8 @@ import Cl_Ev_veh_flow_changes
 import Cl_Decisions
 import List_Explicit_Values
 import pickle
+import os.path
+import hashlib
 
 
 
@@ -626,7 +628,17 @@ class Simulation:
 		
 			self.initialisation_event_list_sim_veh_flow_changes_var_tr_events_network(t_start_sim=v_t_start_sim,t_un=v_t_unit,v_round_precis=1)
 			
-		
+#*****************************************************************************************************************************************************************************************
+	#method returning the md5 checksum of a file
+	def md5Checksum(self, filePath):
+		with open(filePath, 'rb') as fh:
+			m = hashlib.md5()
+			while True:
+				data = fh.read(8192)
+				if not data:
+					break
+				m.update(data)
+			return m.hexdigest()	
 
 #*****************************************************************************************************************************************************************************************
 	#method doing a new simulation
@@ -671,9 +683,37 @@ class Simulation:
 				self._t_current=self._heap_even[List_Explicit_Values.val_first_element_of_list].get_event_time()
 				print("CURRENT TIME IN SIM:",self._t_current)
 				
+				# we create a global variable to keep track of files md5checksum
+				ctm_state_md5 = ''
+				time_stop = 5
+
+				if os.path.isfile('exchange_zone/ctm_state.tsv'):
+					ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+
 				#while the simulation time is inferior to the limit simulation time 
 				while(self._t_current<t_end_simulation and len(self._heap_even)>0):
-				
+					
+					# if self._t_current > time_stop:
+					# 	# Step 1: extract queue size from entry link A / exit link B
+					# 	que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
+					# 	# Step 2: write the extracted value
+					# 	file_pointq_state = open('exchange_zone/pointq_state.tsv', 'w')
+					# 	file_pointq_state.write(str(self._t_current))
+					# 	file_pointq_state.write('\t')
+					# 	file_pointq_state.write(str(que_link_a))
+					# 	file_pointq_state.close()
+
+					# 	# Step 3: we read the new configuration files
+					# 	if not os.path.isfile('exchange_zone/ctm_state.tsv'):
+					# 		while not os.path.isfile('exchange_zone/ctm_state.tsv'):
+					# 			print('Freezed at :', self._t_current)
+					# 		ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+					# 	else:
+					# 		while self.md5Checksum('exchange_zone/ctm_state.tsv') == ctm_state_md5:
+					# 			print('Freezed at :', self._t_current)
+					# 		ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+					# 	time_stop += 5
+					
 					#if wished we print the type of the event to be treated  
 					if(val_print_messages_on_terminal)==List_Explicit_Values.initialisation_value_to_one:
 					
