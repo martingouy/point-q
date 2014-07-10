@@ -241,7 +241,7 @@
                   <marker id="1" name="" postmile="0"/>
                </roadway_markers>
                <outputs>
-                  <output link_id="-1"/>
+                  <output link_id="100069"/>
                </outputs>
                <inputs>
                   <input link_id="100035"/>
@@ -854,6 +854,21 @@
                </inputs>
                <position>
                   <point elevation="0" lat="34.1476200780595" lng="-118.050654530525"/>
+               </position>
+               <node_type id="10004" name="simple"/>
+            </node>
+            <node id="100062" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="-1"/>
+               </outputs>
+               <inputs>
+                  <input link_id="100069"/>
+               </inputs>
+               <position>
+                  <point lat="34.14902452925277" lng="-118.06742906570435" elevation="0"/>
                </position>
                <node_type id="10004" name="simple"/>
             </node>
@@ -1657,6 +1672,55 @@
                   <point elevation="0" lat="34.14836" lng="-118.05067"/>
                </position>
                <shape>smloEtwooUeC?M?</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>
+            <link id="100069" in_sync="true" lane_offset="-1" lanes="1" length="156.53823262974225">
+               <begin node_id="100015"/>
+               <end node_id="100062"/>
+               <position>
+             	<point lat="34.14912" lng="-118.06772000000001" elevation="0"/>
+	            <point lat="34.14923" lng="-118.06772000000001" elevation="0"/>
+	            <point lat="34.14927" lng="-118.06772000000001" elevation="0"/>
+	            <point lat="34.14941" lng="-118.06754000000001" elevation="0"/>
+	            <point lat="34.149440000000006" lng="-118.06749" elevation="0"/>
+	            <point lat="34.149460000000005" lng="-118.06746000000001" elevation="0"/>
+	            <point lat="34.14947" lng="-118.06744" elevation="0"/>
+	            <point lat="34.149480000000004" lng="-118.0674" elevation="0"/>
+	            <point lat="34.14949" lng="-118.06733000000001" elevation="0"/>
+	            <point lat="34.1495" lng="-118.06731" elevation="0"/>
+	            <point lat="34.14949" lng="-118.06726" elevation="0"/>
+	            <point lat="34.14949" lng="-118.06724000000001" elevation="0"/>
+	            <point lat="34.14949" lng="-118.06722" elevation="0"/>
+	            <point lat="34.149480000000004" lng="-118.06720000000001" elevation="0"/>
+	            <point lat="34.149480000000004" lng="-118.06718000000001" elevation="0"/>
+	            <point lat="34.149460000000005" lng="-118.06715000000001" elevation="0"/>
+	            <point lat="34.149440000000006" lng="-118.06712" elevation="0"/>
+	            <point lat="34.14941" lng="-118.06709000000001" elevation="0"/>
+	            <point lat="34.149390000000004" lng="-118.06707000000002" elevation="0"/>
+	            <point lat="34.14936" lng="-118.06705000000001" elevation="0"/>
+	            <point lat="34.149330000000006" lng="-118.06704" elevation="0"/>
+	            <point lat="34.14931" lng="-118.06703" elevation="0"/>
+	            <point lat="34.14929" lng="-118.06703" elevation="0"/>
+	            <point lat="34.14927" lng="-118.06703" elevation="0"/>
+	            <point lat="34.149240000000006" lng="-118.06703" elevation="0"/>
+	            <point lat="34.14922" lng="-118.06703" elevation="0"/>
+	            <point lat="34.1492" lng="-118.06704" elevation="0"/>
+	            <point lat="34.149190000000004" lng="-118.06704" elevation="0"/>
+	            <point lat="34.14918" lng="-118.06705000000001" elevation="0"/>
+	            <point lat="34.149150000000006" lng="-118.06706000000001" elevation="0"/>
+	            <point lat="34.14914" lng="-118.06707000000002" elevation="0"/>
+	            <point lat="34.14912" lng="-118.06708" elevation="0"/>
+	            <point lat="34.14911" lng="-118.06709000000001" elevation="0"/>
+	            <point lat="34.149100000000004" lng="-118.06711000000001" elevation="0"/>
+	            <point lat="34.149080000000005" lng="-118.06713" elevation="0"/>
+	            <point lat="34.14907" lng="-118.06716000000002" elevation="0"/>
+	            <point lat="34.14905" lng="-118.06720000000001" elevation="0"/>
+	            <point lat="34.14905" lng="-118.06723000000001" elevation="0"/>
+	            <point lat="34.14904" lng="-118.06725000000002" elevation="0"/>
+	            <point lat="34.14904" lng="-118.06731" elevation="0"/>
+	            <point lat="34.14903" lng="-118.06742000000001" elevation="0"/>
+               </position>
+               <shape>_wloEfbsoUU?G?[c@EICEACAGAMAC@I?C?C@C?CBEBEDEBCDCDABAB?B?D?B?B@@?@@D@@@B@@@@BBB@DBF?D@B?J@T</shape>
                <link_type id="1" name="Freeway"/>
             </link>
          <link id="20002" in_sync="true" lane_offset="0" lanes="2" length="157.6016675994293">

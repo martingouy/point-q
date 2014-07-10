@@ -2571,7 +2571,7 @@ module_Dsu = __import__("Dsu_1")
 module_file_stat_anal_folders_and_files = __import__(
   File_Sim_Name_Module_Files.val_name_file_stat_anal_folders_and_files)
 
-val_name_fol_FRes = "Series_Sim-Sun-06-Jul-2014_22-35-52"
+val_name_fol_FRes = "Series_Sim-Sun-06-Jul-2014_22-51-55"
 
 
 
