@@ -1,0 +1,42 @@
+html {
+  width: 100%;
+}
+
+body {
+    margin-top: 125px; /* adjust this if the height of the menu bar changes */
+    width: 100%;
+}
+
+.navbar-fixed-top .nav {
+    padding: 15px 0;
+}
+
+.navbar-fixed-top .navbar-brand {
+	padding: 0 15px;
+}
+
+@media(min-width:768px) {
+    .navbar-fixed-top .nav {
+        padding: 15px 0;
+    }
+
+    .navbar-fixed-top .navbar-brand {
+        padding: 15px 0;
+    }
+}
+
+#left_tree {
+  display: inline-block;
+  height: 400px;
+  width: 28%;
+  overflow: auto;
+}
+#map-canvas {
+  display: inline-block;
+  height : 400px;
+  width: 70%;
+}
+
+li {
+  list-style-type:none;
+}

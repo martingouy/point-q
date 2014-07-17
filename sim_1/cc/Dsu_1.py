@@ -46,6 +46,12 @@ val_precision_round=2
 #variable indicating the time unit considered
 #val_t_unit=1
 val_t_unit=0.1
+
+#*****************************************************************************************************************************************************************************************
+#variable indicating if we want to connect point-q simulator with the CTM simulator (1 -> yes, 0 -> no)
+val_ctm_connect = 1
+#val_ctm_connect = 0
+
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating whether a stochastic or deterministic (1, 0)  demand is been employed
@@ -156,8 +162,8 @@ cycle_duration=60
 #*****************************************************************************************************************************************************************************************
 #variable indicating if  internal links have (not) finite capacity (it is employed by the stat analysis. Thsi value is also indicated in the network data model)
 #also employed by the event end veh depart
-val_finite_capacity_internal_links=1 #if internal  lks have finite capacity, 0 otherwise
-#val_finite_capacity_internal_links=0
+#val_finite_capacity_internal_links=1 #if internal  lks have finite capacity, 0 otherwise
+val_finite_capacity_internal_links=0
 #val_finite_capacity_internal_links=1
 #*****************************************************************************************************************************************************************************************
 

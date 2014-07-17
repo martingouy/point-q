@@ -52,6 +52,8 @@ class Data_Sim:
 		#variable indicating the time unit considered
 		self._t_unit=self._module_name_importing_sim_user_data.val_t_unit
 		
+		#varibale indicating if we want to connect the simulator with the CTM simulator
+		self._ctm_connect=self._module_name_importing_sim_user_data.val_ctm_connect
 		
 		#variable indicating whether the demand will be deterministic (value 0) or stochstic (value 1)
 		self._val_indicating_stoch_demand=self._module_name_importing_sim_user_data.val_indicating_stoch_demand
@@ -351,6 +353,12 @@ class Data_Sim:
 	#method returning the variable indicating the time unit 
 	def get_t_unit(self):
 		return self._t_unit
+
+#*****************************************************************************************************************************************************************************************
+	#method returning the CTM connect option
+	def get_ctm_connect(self):
+		return self._ctm_connect
+
 
 #*****************************************************************************************************************************************************************************************
 	#method returning the variable indicating whether stochastic ordeterministic demand will be employed

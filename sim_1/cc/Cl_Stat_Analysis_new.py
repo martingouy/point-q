@@ -2571,9 +2571,13 @@ module_Dsu = __import__("Dsu_1")
 module_file_stat_anal_folders_and_files = __import__(
   File_Sim_Name_Module_Files.val_name_file_stat_anal_folders_and_files)
 
+<<<<<<< HEAD
+=======
 val_name_fol_FRes = "Series_Sim-Sun-06-Jul-2014_22-51-55"
 
+>>>>>>> FETCH_HEAD
 
+val_name_fol_FRes = "Series_Sim-Mon-14-Jul-2014_15-53-50"
 
 
 #anal stat classique, on appelle fcts, fct_sa_one_or_series_sim,fct_write_file_wm_sd_and_mean_trav_time_series_sims,\

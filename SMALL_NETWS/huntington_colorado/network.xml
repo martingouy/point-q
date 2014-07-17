@@ -230,7 +230,8 @@
                <output link_id="200033"/></outputs>
                <inputs>
                   <input link_id="100033"/>
-               <input link_id="200034"/></inputs>
+                  <input link_id="200034"/>
+               </inputs>
                <position>
                   <point elevation="0" lat="34.148238506752" lng="-118.066798746586"/>
                </position>
@@ -350,11 +351,15 @@
                   <marker id="1" name="" postmile="0"/>
                </roadway_markers>
                <outputs>
-                  <output link_id="-1"/>
-               <output link_id="200034"/></outputs>
+                  <output link_id="200034"/>
+                  <output link_id="100073"/>
+                  <output link_id="100072"/>
+               </outputs>
                <inputs>
                   <input link_id="100034"/>
-                  <input link_id="-1"/>
+                  <input link_id="100074"/>
+                  <input link_id="100070"/>
+                  <input link_id="100071"/>
                </inputs>
                <position>
                   <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
@@ -868,13 +873,101 @@
                   <input link_id="100069"/>
                </inputs>
                <position>
+<<<<<<< HEAD
+<<<<<<< HEAD
+                  <point elevation="0" lat="34.14902452925277" lng="-118.06742906570435"/>
+               </position>
+               <node_type id="10004" name="simple"/>
+            </node>
+            <node id="100065" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="100071"/>
+               </outputs>
+               <inputs>
+                  <input link_id="-1"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.147320279779734" lng="-118.06864142417908"/>
+               </position>
+               <node_type id="10003" name="Simple"/>
+            </node>
+            <node id="100066" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="100070"/>
+               </outputs>
+               <inputs>
+                  <input link_id="-1"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.14710681019892" lng="-118.06769460439682"/>
+               </position>
+               <node_type id="10003" name="Simple"/>
+            </node>
+            <node id="100067" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="-1"/>
+               </outputs>
+               <inputs>
+                  <input link_id="100073"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.14747724236258" lng="-118.06880235671997"/>
+               </position>
+               <node_type id="10003" name="Simple"/>
+            </node>
+            <node id="100068" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="-1"/>
+               </outputs>
+               <inputs>
+                  <input link_id="100072"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.147094253148005" lng="-118.06783676147461"/>
+               </position>
+               <node_type id="10003" name="Simple"/>
+            </node>
+            <node id="100070" in_sync="false">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="100074"/>
+               </outputs>
+               <inputs>
+                  <input link_id="-1"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.149115914311125" lng="-118.06789040565491"/>
+               </position>
+               <node_type id="10003" name="Simple"/>
+            </node>
+=======
+=======
+>>>>>>> FETCH_HEAD
                   <point lat="34.14902452925277" lng="-118.06742906570435" elevation="0"/>
                </position>
                <node_type id="10004" name="simple"/>
             </node>
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
          </NodeList>
          <LinkList>
-		 <link id="10002" in_sync="true" lane_offset="0" lanes="2" length="157.6016675994293">
+		 <link id="10002" in_sync="true" lane_offset="0" lanes="2" length="68.8878280935">
                <begin node_id="100016"/>
                <end node_id="10002"/>
                <position>
@@ -886,7 +979,7 @@
                <shape>u_koEnpioU?b@@rC</shape>
                <link_type id="1" name="Freeway"/>
             </link>		   
-		 <link id="10003" in_sync="true" lane_offset="0" lanes="2" length="157.6016675994293">
+		 <link id="10003" in_sync="true" lane_offset="0" lanes="2" length="157.41972088">
                <begin node_id="10002"/>
                <end node_id="10003"/>
                <position>
@@ -899,7 +992,7 @@
                <shape>u_koEnpioU?b@@rC</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-		 <link id="10004" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+		 <link id="10004" in_sync="true" lane_offset="-1" lanes="1" length="74.5320450018">
                <begin node_id="10003"/>
                <end node_id="100030"/>
                <position>
@@ -913,7 +1006,7 @@
                <shape>s_koEfvioU?N?DBbC}A?U@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="10005" in_sync="true" lane_offset="0" lanes="1" length="101.715129049294">
+            <link id="10005" in_sync="true" lane_offset="0" lanes="1" length="103.289070868">
                <begin node_id="100017"/>
                <end node_id="10002"/>
                <position>
@@ -927,7 +1020,7 @@
                <shape>cekoEbpioUJARAH?bC@?L</shape>
                <link_type id="1" name="Freeway"/>
             </link>            
-            <link id="10008" in_sync="true" lane_offset="0" lanes="2" length="214.4295084110695">
+            <link id="10008" in_sync="true" lane_offset="0" lanes="2" length="213.829476699">
                <begin node_id="10003"/>
                <end node_id="10004"/>
                <position>
@@ -945,7 +1038,7 @@
                <shape>o_koEd{ioU?vBJ\?fCCR</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100011" in_sync="true" lane_offset="0" lanes="2" length="209.8942609766616">
+            <link id="100011" in_sync="true" lane_offset="0" lanes="2" length="209.662209179">
                <begin node_id="10004"/>
                <end node_id="10005"/>
                <position>
@@ -964,7 +1057,7 @@
                <shape>__koEdijoUI?@jBFZ@|BEPAF</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100014" in_sync="true" lane_offset="0" lanes="2" length="140.1429394938112">
+            <link id="100014" in_sync="true" lane_offset="0" lanes="2" length="330.711680537">
                <begin node_id="10005"/>
                <end node_id="10006"/>
                <position>
@@ -981,7 +1074,7 @@
                <shape>y~joEpvjoUI?DfJ?zA@zA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100017" in_sync="true" lane_offset="0" lanes="2" length="140.1429394938112">
+            <link id="100017" in_sync="true" lane_offset="0" lanes="2" length="292.91847188">
                <begin node_id="10006"/>
                <end node_id="10007"/>
                <position>
@@ -996,7 +1089,7 @@
                <shape>o~joEdlkoUK?DlM</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100020" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100020" in_sync="true" lane_offset="0" lanes="2" length="352.59800522">
                <begin node_id="10007"/>
                <end node_id="10008"/>
                <position>
@@ -1011,7 +1104,7 @@
                <shape>u~joEr_loU?H@rCBrFBjI@R?J</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100021" in_sync="true" lane_offset="0" lanes="2" length="143.22414024051">
+            <link id="100021" in_sync="true" lane_offset="0" lanes="2" length="109.987106706">
                <begin node_id="10008"/>
                <end node_id="10009"/>
                <position>
@@ -1024,7 +1117,7 @@
                <shape>i~joEpwloU?lB?xA?Z?XCb@CR</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100022" in_sync="true" lane_offset="1" lanes="2" length="28.51778868204559">
+            <link id="100022" in_sync="true" lane_offset="1" lanes="2" length="33.5966348785">
                <begin node_id="10009"/>
                <end node_id="100010"/>
                <position>
@@ -1034,7 +1127,7 @@
                <shape>i~joEpwloU?lB?xA?ZTbA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100023" in_sync="true" lane_offset="0" lanes="2" length="695.879377018951">
+            <link id="100023" in_sync="true" lane_offset="0" lanes="2" length="797.463292898">
                <begin node_id="10009"/>
                <end node_id="100011"/>
                <position>
@@ -1066,7 +1159,7 @@
                <shape>q~joEfamoUALG^GXIZCJADA`@Q`@QXW\WZ[X[ToBlAq@b@iQzKm@b@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100024" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100024" in_sync="true" lane_offset="0" lanes="2" length="67.4645252852">
                <begin node_id="100011"/>
                <end node_id="100025"/>
                <position>
@@ -1078,7 +1171,7 @@
                <shape>a}koEv|moUEAA@C@{A|@q@`@IF</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100025" in_sync="true" lane_offset="-1" lanes="1" length="57.912">
+            <link id="100025" in_sync="true" lane_offset="-1" lanes="1" length="18.8391304633">
                <begin node_id="100011"/>
                <end node_id="100024"/>
                <position>
@@ -1091,7 +1184,7 @@
                <shape>a}koEv|moUEAA@C@{A|@OCC?GCEC</shape>
                <link_type id="1" name="Freeway"/>
             </link>            
-            <link id="100027" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100027" in_sync="true" lane_offset="-1" lanes="1" length="42.7143102925">
                <begin node_id="100026"/>
                <end node_id="100025"/>
                <position>
@@ -1104,7 +1197,7 @@
                <shape>kbloEz~moUILKRKNKV_Al@e@XCB</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100028" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100028" in_sync="true" lane_offset="0" lanes="2" length="856.766516998">
                <begin node_id="100025"/>
                <end node_id="100012"/>
                <position>
@@ -1142,7 +1235,7 @@
                <shape>cgloEpcnoUKFeCvASL[T[VWZQVU\S`@Qd@ENIZCNCNETE^CRAVAT?ZBbBFb@@tLEXAlC</shape>
                <link_type id="1" name="Freeway"/>
             </link>           
-            <link id="100032" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100032" in_sync="true" lane_offset="0" lanes="2" length="79.5448079415">
                <begin node_id="100012"/>
                <end node_id="100013"/>
                <position>
@@ -1158,7 +1251,7 @@
                <shape>mrloElrooU?~@?B?N?L?H@z@B?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100033" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100033" in_sync="true" lane_offset="0" lanes="2" length="1487.60877044">
                <begin node_id="100013"/>
                <end node_id="100014"/>
                <position>
@@ -1188,7 +1281,7 @@
                <shape>grloEtwooUC?BtCF^B|J?tG@nA?fABfQ?nA?hA@pE?dF@jA?vABdR@z@IP?dA?z@@z@B?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100034" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100034" in_sync="true" lane_offset="0" lanes="2" length="119.958367539">
                <begin node_id="100014"/>
                <end node_id="100028"/>
                <position>
@@ -1205,7 +1298,7 @@
                <shape>sqloEn|roUFj@Fp@DVF^H`@JXVBCI</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100035" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100035" in_sync="true" lane_offset="-1" lanes="1" length="183.118212545">
                <begin node_id="100014"/>
                <end node_id="100015"/>
                <position>
@@ -1234,7 +1327,7 @@
                <shape>sqloEn|roUFj@Fp@Cp@AB?BA@?@A@A@A@A@A@A@ILE?c@?A?gA@W?Y?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100037" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100037" in_sync="true" lane_offset="0" lanes="2" length="155.089346742">
                <begin node_id="100029"/>
                <end node_id="10001"/>
                <position>
@@ -1248,7 +1341,7 @@
                <shape>_`koEluhoU?jB?x@?bC?TLA</shape>
                <link_type id="1" name="Freeway"/>
             </link>   
-            <link id="100038" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100038" in_sync="true" lane_offset="-1" lanes="1" length="68.9715340004">
                <begin node_id="100031"/>
                <end node_id="10003"/>
                <position>
@@ -1260,7 +1353,7 @@
                <shape>eckoEb{ioUVA|A?D?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100039" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100039" in_sync="true" lane_offset="-1" lanes="1" length="60.0533288061">
                <begin node_id="100032"/>
                <end node_id="10003"/>
                <position>
@@ -1271,7 +1364,7 @@
                <shape>}{joE~zioU}A@M?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100040" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100040" in_sync="true" lane_offset="-1" lanes="1" length="60.0533288061">
                <begin node_id="10003"/>
                <end node_id="100033"/>
                <position>
@@ -1282,7 +1375,7 @@
                <shape>i_koE`{ioUL?|AA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100041" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100041" in_sync="true" lane_offset="-1" lanes="1" length="41.5782479407">
                <begin node_id="10004"/>
                <end node_id="100034"/>
                <position>
@@ -1294,7 +1387,7 @@
                <shape>__koEdijoUF?b@F\B</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100042" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100042" in_sync="true" lane_offset="-1" lanes="1" length="68.9493005327">
                <begin node_id="100035"/>
                <end node_id="10004"/>
                <position>
@@ -1306,7 +1399,7 @@
                <shape>{bkoEfijoUbBAL?H?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100043" in_sync="true" lane_offset="-1" lanes="2" length="70.0714697469056">
+            <link id="100043" in_sync="true" lane_offset="-1" lanes="2" length="74.0026149307">
                <begin node_id="10005"/>
                <end node_id="100036"/>
                <position>
@@ -1323,7 +1416,7 @@
                <shape>y~joEpvjoUF?V?X@Z@F?J@NDH@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100044" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100044" in_sync="true" lane_offset="-1" lanes="1" length="82.8475228259">
                <begin node_id="100037"/>
                <end node_id="10005"/>
                <position>
@@ -1339,7 +1432,7 @@
                <shape>kckoEjwjoURITGFAHAJ?~@CH?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100045" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100045" in_sync="true" lane_offset="-1" lanes="1" length="51.1576272245">
                <begin node_id="10006"/>
                <end node_id="100038"/>
                <position>
@@ -1350,7 +1443,7 @@
                <shape>o~joEdlkoUD?tAA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100046" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100046" in_sync="true" lane_offset="-1" lanes="1" length="72.302041911">
                <begin node_id="100039"/>
                <end node_id="10006"/>
                <position>
@@ -1361,7 +1454,7 @@
                <shape>qbkoEhlkoUtBCJ?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100047" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            <link id="100047" in_sync="true" lane_offset="0" lanes="2" length="75.6261109684">
                <begin node_id="10007"/>
                <end node_id="100040"/>
                <position>
@@ -1374,7 +1467,7 @@
                <shape>k~joE|_loUH?t@?t@AP?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100048" in_sync="true" lane_offset="0" lanes="1" length="70.0714697469056">
+            <link id="100048" in_sync="true" lane_offset="0" lanes="1" length="89.0020413463">
                <begin node_id="100041"/>
                <end node_id="10007"/>
                <position>
@@ -1386,7 +1479,7 @@
                <shape>kckoEb`loUr@A`BCH?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100049" in_sync="true" lane_offset="-1" lanes="2" length="70.0714697469056">
+            <link id="100049" in_sync="true" lane_offset="-1" lanes="2" length="74.5347290576">
                <begin node_id="100042"/>
                <end node_id="10008"/>
                <position>
@@ -1399,7 +1492,7 @@
                <shape>kakoEhtloUXXt@p@PN?J</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100050" in_sync="true" lane_offset="-1" lanes="2" length="70.0714697469056">
+            <link id="100050" in_sync="true" lane_offset="-1" lanes="2" length="74.2490020371">
                <begin node_id="10008"/>
                <end node_id="100043"/>
                <position>
@@ -1412,7 +1505,7 @@
                <shape>a~joEjwloUGEQOu@q@YY</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100051" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100051" in_sync="true" lane_offset="-1" lanes="1" length="90.0679215931">
                <begin node_id="100012"/>
                <end node_id="100044"/>
                <position>
@@ -1424,7 +1517,7 @@
                <shape>irloElrooUN?nB?`@?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100052" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100052" in_sync="true" lane_offset="-1" lanes="1" length="75.6125315673">
                <begin node_id="100013"/>
                <end node_id="100045"/>
                <position>
@@ -1435,7 +1528,7 @@
                <shape>grloEtwooUL?xB?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100053" in_sync="true" lane_offset="0" lanes="2" length="124.907945075713">
+            <link id="100053" in_sync="true" lane_offset="0" lanes="2" length="124.767654248">
                <begin node_id="100046"/>
                <end node_id="10001"/>
                <position>
@@ -1451,7 +1544,7 @@
                <shape>qfkoEt_ioUF?TCf@?vAAX?XALA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="200053" in_sync="true" lane_offset="0" lanes="2" length="124.907945075713">
+            <link id="200053" in_sync="true" lane_offset="0" lanes="2" length="118.300580969">
                <begin node_id="10001"/>
                <end node_id="100047"/>
                <position>
@@ -1461,7 +1554,7 @@
                <shape>qfkoEt_ioUF?TCf@?vAAX?XALA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100054" in_sync="true" lane_offset="0" lanes="2" length="263.74317582421907">
+            <link id="100054" in_sync="true" lane_offset="0" lanes="2" length="199.26424985">
                <begin node_id="10001"/>
                <end node_id="100016"/>
                <position>
@@ -1481,7 +1574,7 @@
                <shape>s_koEt~hoUK@?T?`@?l@@n@?L?@?D</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100056" in_sync="true" lane_offset="-1" lanes="1" length="127.970995811764">
+            <link id="100056" in_sync="true" lane_offset="-1" lanes="1" length="127.869202514">
                <begin node_id="100016"/>
                <end node_id="100048"/>
                <position> 
@@ -1509,7 +1602,7 @@
                <shape>}_koEbdioU@jBBdDSf@KRGFIFKFEBI@K@KAGAGCICEEECEEACEGCG</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100057" in_sync="true" lane_offset="0" lanes="1" length="61.5336974231366">
+            <link id="100057" in_sync="true" lane_offset="0" lanes="1" length="61.4651700345">
                <begin node_id="100050"/>
                <end node_id="10002"/>
                <position>
@@ -1522,7 +1615,7 @@
                <shape>a}joEloioU}@?U??RH?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100058" in_sync="true" lane_offset="0" lanes="2" length="44.5390090392688">
+            <link id="100058" in_sync="true" lane_offset="0" lanes="2" length="44.4901682697">
                <begin node_id="10002"/>
                <end node_id="100049"/>
                <position>
@@ -1533,7 +1626,7 @@
                <shape>k_koE`pioUJ?bA@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100036" in_sync="true" lane_offset="-1" lanes="1" length="66.9030369508371">
+            <link id="100036" in_sync="true" lane_offset="-1" lanes="1" length="66.7256180053">
                <begin node_id="10004"/>
                <end node_id="100051"/>
                <position>
@@ -1545,7 +1638,7 @@
                <shape>__koEdijoUI?M?_B@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100059" in_sync="true" lane_offset="-1" lanes="1" length="46.0724807455402">
+            <link id="100059" in_sync="true" lane_offset="-1" lanes="1" length="46.0186028838">
                <begin node_id="100052"/>
                <end node_id="10004"/>
                <position>
@@ -1558,7 +1651,7 @@
                <shape>m|joEpijoUE?_@Cc@GG?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100060" in_sync="true" lane_offset="-1" lanes="2" length="84.9750377833036">
+            <link id="100060" in_sync="true" lane_offset="-1" lanes="2" length="82.8475228259">
                <begin node_id="10005"/>
                <end node_id="100053"/>
                <position>
@@ -1574,7 +1667,7 @@
                <shape>y~joEpvjoUI?_ABK?I@G@UFSH</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100061" in_sync="true" lane_offset="-1" lanes="1" length="76.8739759322145">
+            <link id="100061" in_sync="true" lane_offset="-1" lanes="1" length="75.2874597177">
                <begin node_id="100054"/>
                <end node_id="10005"/>
                <position>
@@ -1591,7 +1684,7 @@
                <shape>szjoE`wjoUKCOEKAG?[AYAW?G?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100062" in_sync="true" lane_offset="-1" lanes="1" length="71.4417628113836">
+            <link id="100062" in_sync="true" lane_offset="-1" lanes="1" length="71.1904637907">
                <begin node_id="10006"/>
                <end node_id="100055"/>
                <position>
@@ -1602,7 +1695,7 @@
                <shape>o~joEdlkoUK?sBB</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100063" in_sync="true" lane_offset="-1" lanes="1" length="53.3315412542039">
+            <link id="100063" in_sync="true" lane_offset="-1" lanes="1" length="53.3810408452">
                <begin node_id="100056"/>
                <end node_id="10006"/>
                <position>
@@ -1613,7 +1706,7 @@
                <shape>o{joEblkoUyA@E?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100064" in_sync="true" lane_offset="0" lanes="1" length="96.7518103230041">
+            <link id="100064" in_sync="true" lane_offset="0" lanes="1" length="92.4149043635">
                <begin node_id="100057"/>
                <end node_id="10007"/>
                <position>
@@ -1626,7 +1719,7 @@
                <shape>azjoEz~koUS?kB@S??T</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100065" in_sync="true" lane_offset="0" lanes="2" length="104.99356194308">
+            <link id="100065" in_sync="true" lane_offset="0" lanes="2" length="104.875985021">
                <begin node_id="10007"/>
                <end node_id="100058"/>
                <position>
@@ -1639,7 +1732,7 @@
                <shape>a~joEp_loU?SS?aBBu@@</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100066" in_sync="true" lane_offset="0" lanes="1" length="91.7668352028178">
+            <link id="100066" in_sync="true" lane_offset="0" lanes="1" length="91.8637961769">
                <begin node_id="100059"/>
                <end node_id="10008"/>
                <position>
@@ -1651,7 +1744,7 @@
                <shape>}yjoEb{loUi@c@oAiAII</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100067" in_sync="true" lane_offset="-1" lanes="1" length="90.1687875401709">
+            <link id="100067" in_sync="true" lane_offset="-1" lanes="1" length="90.0679215931">
                <begin node_id="100060"/>
                <end node_id="100012"/>
                <position>
@@ -1663,7 +1756,7 @@
                <shape>gmloElrooUa@?oB?O?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100068" in_sync="true" lane_offset="-1" lanes="1" length="82.3764231840662">
+            <link id="100068" in_sync="true" lane_offset="-1" lanes="1" length="82.2841591172">
                <begin node_id="100061"/>
                <end node_id="100013"/>
                <position>
@@ -1674,6 +1767,56 @@
                <shape>smloEtwooUeC?M?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
+<<<<<<< HEAD
+<<<<<<< HEAD
+            <link id="100069" in_sync="true" lane_offset="-1" lanes="1" length="156.344189716">
+               <begin node_id="100015"/>
+               <end node_id="100062"/>
+               <position>
+             	<point elevation="0" lat="34.14912" lng="-118.06772000000001"/>
+	            <point elevation="0" lat="34.14923" lng="-118.06772000000001"/>
+	            <point elevation="0" lat="34.14927" lng="-118.06772000000001"/>
+	            <point elevation="0" lat="34.14941" lng="-118.06754000000001"/>
+	            <point elevation="0" lat="34.149440000000006" lng="-118.06749"/>
+	            <point elevation="0" lat="34.149460000000005" lng="-118.06746000000001"/>
+	            <point elevation="0" lat="34.14947" lng="-118.06744"/>
+	            <point elevation="0" lat="34.149480000000004" lng="-118.0674"/>
+	            <point elevation="0" lat="34.14949" lng="-118.06733000000001"/>
+	            <point elevation="0" lat="34.1495" lng="-118.06731"/>
+	            <point elevation="0" lat="34.14949" lng="-118.06726"/>
+	            <point elevation="0" lat="34.14949" lng="-118.06724000000001"/>
+	            <point elevation="0" lat="34.14949" lng="-118.06722"/>
+	            <point elevation="0" lat="34.149480000000004" lng="-118.06720000000001"/>
+	            <point elevation="0" lat="34.149480000000004" lng="-118.06718000000001"/>
+	            <point elevation="0" lat="34.149460000000005" lng="-118.06715000000001"/>
+	            <point elevation="0" lat="34.149440000000006" lng="-118.06712"/>
+	            <point elevation="0" lat="34.14941" lng="-118.06709000000001"/>
+	            <point elevation="0" lat="34.149390000000004" lng="-118.06707000000002"/>
+	            <point elevation="0" lat="34.14936" lng="-118.06705000000001"/>
+	            <point elevation="0" lat="34.149330000000006" lng="-118.06704"/>
+	            <point elevation="0" lat="34.14931" lng="-118.06703"/>
+	            <point elevation="0" lat="34.14929" lng="-118.06703"/>
+	            <point elevation="0" lat="34.14927" lng="-118.06703"/>
+	            <point elevation="0" lat="34.149240000000006" lng="-118.06703"/>
+	            <point elevation="0" lat="34.14922" lng="-118.06703"/>
+	            <point elevation="0" lat="34.1492" lng="-118.06704"/>
+	            <point elevation="0" lat="34.149190000000004" lng="-118.06704"/>
+	            <point elevation="0" lat="34.14918" lng="-118.06705000000001"/>
+	            <point elevation="0" lat="34.149150000000006" lng="-118.06706000000001"/>
+	            <point elevation="0" lat="34.14914" lng="-118.06707000000002"/>
+	            <point elevation="0" lat="34.14912" lng="-118.06708"/>
+	            <point elevation="0" lat="34.14911" lng="-118.06709000000001"/>
+	            <point elevation="0" lat="34.149100000000004" lng="-118.06711000000001"/>
+	            <point elevation="0" lat="34.149080000000005" lng="-118.06713"/>
+	            <point elevation="0" lat="34.14907" lng="-118.06716000000002"/>
+	            <point elevation="0" lat="34.14905" lng="-118.06720000000001"/>
+	            <point elevation="0" lat="34.14905" lng="-118.06723000000001"/>
+	            <point elevation="0" lat="34.14904" lng="-118.06725000000002"/>
+	            <point elevation="0" lat="34.14904" lng="-118.06731"/>
+	            <point elevation="0" lat="34.14903" lng="-118.06742000000001"/>
+=======
+=======
+>>>>>>> FETCH_HEAD
             <link id="100069" in_sync="true" lane_offset="-1" lanes="1" length="156.53823262974225">
                <begin node_id="100015"/>
                <end node_id="100062"/>
@@ -1719,11 +1862,22 @@
 	            <point lat="34.14904" lng="-118.06725000000002" elevation="0"/>
 	            <point lat="34.14904" lng="-118.06731" elevation="0"/>
 	            <point lat="34.14903" lng="-118.06742000000001" elevation="0"/>
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
                </position>
                <shape>_wloEfbsoUU?G?[c@EICEACAGAMAC@I?C?C@C?CBEBEDEBCDCDABAB?B?D?B?B@@?@@D@@@B@@@@BBB@DBF?D@B?J@T</shape>
                <link_type id="1" name="Freeway"/>
             </link>
+<<<<<<< HEAD
+<<<<<<< HEAD
+         <link id="20002" in_sync="true" lane_offset="0" lanes="2" length="68.8878280935">
+=======
+=======
+>>>>>>> FETCH_HEAD
          <link id="20002" in_sync="true" lane_offset="0" lanes="2" length="157.6016675994293">
+>>>>>>> FETCH_HEAD
                <begin node_id="10002"/>
                <end node_id="100016"/>
                <position>
@@ -1734,7 +1888,7 @@
 			      </position>
                <shape>u_koEnpioU?b@@rC</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="20003" in_sync="true" lane_offset="0" lanes="2" length="157.6016675994293">
+            </link><link id="20003" in_sync="true" lane_offset="0" lanes="2" length="157.41972088">
                <begin node_id="10003"/>
                <end node_id="10002"/>
                <position>
@@ -1746,7 +1900,7 @@
                   </position>
                <shape>u_koEnpioU?b@@rC</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200028" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200028" in_sync="true" lane_offset="0" lanes="2" length="856.766516998">
                <begin node_id="100012"/>
                <end node_id="100025"/>
                <position>
@@ -1783,7 +1937,7 @@
 			      </position>
                <shape>cgloEpcnoUKFeCvASL[T[VWZQVU\S`@Qd@ENIZCNCNETE^CRAVAT?ZBbBFb@@tLEXAlC</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="20008" in_sync="true" lane_offset="0" lanes="2" length="214.4295084110695">
+            </link><link id="20008" in_sync="true" lane_offset="0" lanes="2" length="213.829476699">
                <begin node_id="10004"/>
                <end node_id="10003"/>
                <position>
@@ -1800,7 +1954,7 @@
                   </position>
                <shape>o_koEd{ioU?vBJ\?fCCR</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200014" in_sync="true" lane_offset="0" lanes="2" length="140.1429394938112">
+            </link><link id="200014" in_sync="true" lane_offset="0" lanes="2" length="330.711680537">
                <begin node_id="10006"/>
                <end node_id="10005"/>
                <position>
@@ -1816,7 +1970,7 @@
                   </position>
                <shape>y~joEpvjoUI?DfJ?zA@zA</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200017" in_sync="true" lane_offset="0" lanes="2" length="140.1429394938112">
+            </link><link id="200017" in_sync="true" lane_offset="0" lanes="2" length="292.91847188">
                <begin node_id="10007"/>
                <end node_id="10006"/>
                <position>
@@ -1830,7 +1984,7 @@
                   </position>
                <shape>o~joEdlkoUK?DlM</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200032" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200032" in_sync="true" lane_offset="0" lanes="2" length="79.5448079415">
                <begin node_id="100013"/>
                <end node_id="100012"/>
                <position>
@@ -1845,7 +1999,7 @@
                   </position>
                <shape>mrloElrooU?~@?B?N?L?H@z@B?</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200033" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200033" in_sync="true" lane_offset="0" lanes="2" length="1487.60877044">
                <begin node_id="100014"/>
                <end node_id="100013"/>
                <position>
@@ -1874,7 +2028,7 @@
                   </position>
                <shape>grloEtwooUC?BtCF^B|J?tG@nA?fABfQ?nA?hA@pE?dF@jA?vABdR@z@IP?dA?z@@z@B?</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200021" in_sync="true" lane_offset="0" lanes="2" length="143.22414024051">
+            </link><link id="200021" in_sync="true" lane_offset="0" lanes="2" length="109.987106706">
                <begin node_id="10009"/>
                <end node_id="10008"/>
                <position>
@@ -1886,7 +2040,7 @@
                   </position>
                <shape>i~joEpwloU?lB?xA?Z?XCb@CR</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200011" in_sync="true" lane_offset="0" lanes="2" length="209.8942609766616">
+            </link><link id="200011" in_sync="true" lane_offset="0" lanes="2" length="209.662209179">
                <begin node_id="10005"/>
                <end node_id="10004"/>
                <position>
@@ -1904,7 +2058,7 @@
                   </position>
                <shape>__koEdijoUI?@jBFZ@|BEPAF</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200024" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200024" in_sync="true" lane_offset="0" lanes="2" length="67.4645252852">
                <begin node_id="100025"/>
                <end node_id="100011"/>
                <position>
@@ -1915,7 +2069,7 @@
 			      </position>
                <shape>a}koEv|moUEAA@C@{A|@q@`@IF</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200023" in_sync="true" lane_offset="0" lanes="2" length="695.879377018951">
+            </link><link id="200023" in_sync="true" lane_offset="0" lanes="2" length="797.463292898">
                <begin node_id="100011"/>
                <end node_id="10009"/>
                <position>                                 
@@ -1946,7 +2100,7 @@
 			      </position>
                <shape>q~joEfamoUALG^GXIZCJADA`@Q`@QXW\WZ[X[ToBlAq@b@iQzKm@b@</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200054" in_sync="true" lane_offset="0" lanes="2" length="263.74317582421907">
+            </link><link id="200054" in_sync="true" lane_offset="0" lanes="2" length="199.26424985">
                <begin node_id="100016"/>
                <end node_id="10001"/>
                <position>							  
@@ -1965,7 +2119,7 @@
                   </position>
                <shape>s_koEt~hoUK@?T?`@?l@@n@?L?@?D</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200020" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200020" in_sync="true" lane_offset="0" lanes="2" length="352.59800522">
                <begin node_id="10008"/>
                <end node_id="10007"/>
                <position>
@@ -1979,7 +2133,7 @@
                   </position>
                <shape>u~joEr_loU?H@rCBrFBjI@R?J</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200037" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200037" in_sync="true" lane_offset="0" lanes="2" length="155.089346742">
                <begin node_id="10001"/>
                <end node_id="100029"/>
                <position>
@@ -1992,7 +2146,7 @@
                   </position>
                <shape>_`koEluhoU?jB?x@?bC?TLA</shape>
                <link_type id="1" name="Freeway"/>
-            </link><link id="200034" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+            </link><link id="200034" in_sync="true" lane_offset="0" lanes="2" length="119.958367539">
                <begin node_id="100028"/>
                <end node_id="100014"/>
                <position>
@@ -2008,7 +2162,62 @@
                   </position>
                <shape>sqloEn|roUFj@Fp@DVF^H`@JXVBCI</shape>
                <link_type id="1" name="Freeway"/>
-            </link></LinkList>
+            </link>
+            <link id="100070" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+               <begin node_id="100066"/>
+               <end node_id="100028"/>
+               <position>
+               <point elevation="0" lat="34.14710681019892" lng="-118.06769460439682"/>
+              <point elevation="0" lat="34.147844533666785" lng="-118.06775629520416"/>
+                  <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
+               </position>
+               <shape>u_koEnpioU?b@@rC</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>  
+            <link id="100071" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+               <begin node_id="100065"/>
+               <end node_id="100028"/>
+               <position>
+                  <point elevation="0" lat="34.147320279779734" lng="-118.06864142417908"/>
+                  <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
+               </position>
+               <shape>u_koEnpioU?b@@rC</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>     
+            <link id="100072" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+               <begin node_id="100028"/>
+               <end node_id="100068"/>
+               <position>
+                  <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
+                  <point elevation="0" lat="34.147759774276786" lng="-118.06788504123688"/>
+                  <point elevation="0" lat="34.147094253148005" lng="-118.06783676147461"/>
+               </position>
+               <shape>u_koEnpioU?b@@rC</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>
+            <link id="100073" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+               <begin node_id="100028"/>
+               <end node_id="100067"/>
+               <position>
+                  <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
+                  <point elevation="0" lat="34.14794184989857" lng="-118.06796550750732"/>
+                  <point elevation="0" lat="34.14747724236258" lng="-118.06880235671997"/>
+               </position>
+               <shape>u_koEnpioU?b@@rC</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>  
+            <link id="100074" in_sync="true" lane_offset="0" lanes="2" length="70.0714697469056">
+               <begin node_id="100070"/>
+               <end node_id="100028"/>
+               <position>
+                  <point elevation="0" lat="34.149115914311125" lng="-118.06789040565491"/>
+                  <point elevation="0" lat="34.148014052191655" lng="-118.06784212589264"/>
+                  <point elevation="0" lat="34.1479010398795" lng="-118.067820668221"/>
+               </position>
+               <shape>u_koEnpioU?b@@rC</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>  
+         </LinkList>
          <position>
             <point elevation="0" lat="34.1393713132553" lng="-118.067820668221"/>
             <point lat="34.1491567239348" lng="-118.01447421296"/>

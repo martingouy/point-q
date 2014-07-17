@@ -27,7 +27,8 @@ CHANGELOG
 	Possibility to stop the simulation every 5sec to exchange data with the CTM simulator
 
 **********************************************************************************************************************************************************************************
-10/07/2014 12:20 pm
+17/07/2014 02:27 am
 **********************************************************************************************************************************************************************************
-	- Huntington_Colorado Network Files:
-	Added the modified exit link to connect with the freeway
+	- Possibility to choose in Dsu_1.py if we want to connect the point-q-simulator with CTM simulator (val_ctm_connect)
+	- Hungtington colorado configuration files changed (mistakes corrected)
+

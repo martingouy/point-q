@@ -652,7 +652,7 @@ class Simulation:
 	val_t_start_calcul_veh_appearance=List_Explicit_Values.initialisation_value_to_minus_one,\
 	val_t_round_prec=1,\
 	val_t_start_sim=None,val_li_additional_matrices_rp_id_lk=[],\
-	val_li_additional_rp_cum_matrices=[],val_li_duration_each_rp_mat=[],val_t_unit=None):
+	val_li_additional_rp_cum_matrices=[],val_li_duration_each_rp_mat=[],val_t_unit=None,val_ctm_connect = 0):
 		
 		#if the number of parameter lists equals the number of the event type
 		if len(self._dict_parameters_fcts_event_treat)==self._number_event_types:
@@ -692,27 +692,27 @@ class Simulation:
 
 				#while the simulation time is inferior to the limit simulation time 
 				while(self._t_current<t_end_simulation and len(self._heap_even)>0):
-					
-					# if self._t_current > time_stop:
-					# 	# Step 1: extract queue size from entry link A / exit link B
-					# 	que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
-					# 	# Step 2: write the extracted value
-					# 	file_pointq_state = open('exchange_zone/pointq_state.tsv', 'w')
-					# 	file_pointq_state.write(str(self._t_current))
-					# 	file_pointq_state.write('\t')
-					# 	file_pointq_state.write(str(que_link_a))
-					# 	file_pointq_state.close()
 
-					# 	# Step 3: we read the new configuration files
-					# 	if not os.path.isfile('exchange_zone/ctm_state.tsv'):
-					# 		while not os.path.isfile('exchange_zone/ctm_state.tsv'):
-					# 			print('Freezed at :', self._t_current)
-					# 		ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
-					# 	else:
-					# 		while self.md5Checksum('exchange_zone/ctm_state.tsv') == ctm_state_md5:
-					# 			print('Freezed at :', self._t_current)
-					# 		ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
-					# 	time_stop += 5
+					if self._t_current > time_stop and val_ctm_connect ==1:
+						# Step 1: extract queue size from entry link A / exit link B
+						que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
+						# Step 2: write the extracted value
+						file_pointq_state = open('exchange_zone/pointq_state.tsv', 'w')
+						file_pointq_state.write(str(self._t_current))
+						file_pointq_state.write('\t')
+						file_pointq_state.write(str(que_link_a))
+						file_pointq_state.close()
+
+						# Step 3: we read the new configuration files
+						if not os.path.isfile('exchange_zone/ctm_state.tsv'):
+							while not os.path.isfile('exchange_zone/ctm_state.tsv'):
+								print('Freezed at :', self._t_current)
+							ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+						else:
+							while self.md5Checksum('exchange_zone/ctm_state.tsv') == ctm_state_md5:
+								print('Freezed at :', self._t_current)
+							ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+						time_stop += 5
 					
 					#if wished we print the type of the event to be treated  
 					if(val_print_messages_on_terminal)==List_Explicit_Values.initialisation_value_to_one:

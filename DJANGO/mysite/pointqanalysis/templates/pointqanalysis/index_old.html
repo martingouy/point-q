@@ -1,0 +1,104 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Custom Navbar Template with Logo for Bootstrap 3</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'pointqanalysis/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{% static 'pointqanalysis/css/logo-nav.css' %}" rel="stylesheet">
+    <link href="{% static 'pointqanalysis/css/zoombox.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'pointqanalysis/images/logo.gif' %}" alt="">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">Queues</a>
+                    </li>
+                    <li>
+                        <a href="#">Flows</a>
+                    </li>
+                    <li>
+                        <a href="#">Travel Time</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Choose the queue you want to analyze</h1>
+                <p>
+                	{% if list_queues %}
+		    <ul>
+		    {% for queue in list_queues %}
+		        <li><a href="/pointqanalysis/{{ queue.0 }}/{{ queue.1 }}" class="zoombox">({{ queue.0 }}, {{ queue.1 }})</a></li>
+		    {% endfor %}
+		    </ul>
+		{% else %}
+		    <p>No queue available.</p>
+		{% endif %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'pointqanalysis/js/zoombox.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.js' %}"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            $('a.zoombox').zoombox({width:960,height:460,});
+
+            /**
+            * Or You can also use specific options
+            $('a.zoombox').zoombox({
+                theme       : 'zoombox',        //available themes : zoombox,lightbox, prettyphoto, darkprettyphoto, simple
+                opacity     : 0.8,              // Black overlay opacity
+                duration    : 800,              // Animation duration
+                animation   : true,             // Do we have to animate the box ?
+                width       : 600,              // Default width
+                height      : 400,              // Default height
+                gallery     : true,             // Allow gallery thumb view
+                autoplay : false                // Autoplay for video
+            });
+            */
+        });
+        </script>
+</body>
+
+</html>
