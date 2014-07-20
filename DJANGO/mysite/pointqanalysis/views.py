@@ -4,6 +4,15 @@ from django.template import RequestContext, loader
 import os
 import pygal
 from pygal.style import DarkSolarizedStyle
+from django.db import connections
+
+
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
 
 def index(request):
 	# First step : create a list of the available links:
@@ -15,6 +24,18 @@ def index(request):
 	    		list_links.append([int(line_split[0]), int(line_split[1])])
 	template = loader.get_template('pointqanalysis/index.html')
     	context = RequestContext(request, {'list_queues': list_links})
+    	return HttpResponse(template.render(context))
+
+def avail_databases(request):
+	cursor = connections['pointq_db'].cursor()
+
+	list_sim = []
+	cursor.execute("SELECT * FROM simul1 WHERE veh_id = 1")
+	for line in dictfetchall(cursor):
+		list_sim.append(line['ev_time'])
+
+	template = loader.get_template('pointqanalysis/avail_db.html')
+    	context = RequestContext(request, {'list_db': list_sim})
     	return HttpResponse(template.render(context))
 
 def detail(request, link1, link2):
