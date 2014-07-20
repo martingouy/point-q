@@ -685,25 +685,30 @@ class Simulation:
 				
 				# we create a global variable to keep track of files md5checksum
 				ctm_state_md5 = ''
-				time_stop = 5
+				time_stop = 0
 
-				if os.path.isfile('exchange_zone/ctm_state.tsv'):
-					ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+				# global variable queue / flow
+				demand_a = 0
+				flow_b = 0
 
 				#while the simulation time is inferior to the limit simulation time 
 				while(self._t_current<t_end_simulation and len(self._heap_even)>0):
-
+				
 					if self._t_current > time_stop and val_ctm_connect ==1:
 						# Step 1: extract queue size from entry link A / exit link B
 						que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
+						que_link_b = len(self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].get_queue_veh())
+						
 						# Step 2: write the extracted value
 						file_pointq_state = open('exchange_zone/pointq_state.tsv', 'w')
 						file_pointq_state.write(str(self._t_current))
 						file_pointq_state.write('\t')
 						file_pointq_state.write(str(que_link_a))
+						file_pointq_state.write('\t')
+						file_pointq_state.write(str(que_link_b))
 						file_pointq_state.close()
 
-						# Step 3: we read the new configuration files
+						# Step 3a: we wait until the ctm file is created or updated
 						if not os.path.isfile('exchange_zone/ctm_state.tsv'):
 							while not os.path.isfile('exchange_zone/ctm_state.tsv'):
 								print('Freezed at :', self._t_current)
@@ -712,6 +717,22 @@ class Simulation:
 							while self.md5Checksum('exchange_zone/ctm_state.tsv') == ctm_state_md5:
 								print('Freezed at :', self._t_current)
 							ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+
+						# Step 3b: we extract CTM data 
+						with open('exchange_zone/ctm_state.tsv', 'rU') as f_ctm:
+							for line in f_ctm:
+								line_split = line.split('\t')
+								demand_a = float(line_split[1])
+								flow_b = float(line_split[2])
+
+						
+						# Step 4: we update entry link A demand
+						self._simul_system.get_network().get_di_entry_links_to_network()[100053].set_lis_parameters_fct_creating_demand_entry_link([demand_a])
+						#print get_lis_parameters_fct_creating_demand_entry_link(self):
+
+						# Step5 : we update flow intersection B
+						self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].set_sat_flow_queue(flow_b)
+
 						time_stop += 5
 					
 					#if wished we print the type of the event to be treated  
