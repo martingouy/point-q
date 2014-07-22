@@ -37,6 +37,23 @@ body {
   width: 70%;
 }
 
-li {
-  list-style-type:none;
+#status {
+  background-color: #B5E655;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+}
+
+#status p {
+  line-height: 40px;
+}
+
+.error_red {
+  background-color: #DF5A49;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
 }

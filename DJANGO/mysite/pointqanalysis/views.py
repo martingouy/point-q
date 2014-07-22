@@ -1,10 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
+from django.shortcuts import render_to_response
+from forms import Form_upload_fil
 import os
 import pygal
 from pygal.style import DarkSolarizedStyle
 from django.db import connections
+from django.conf import settings
 
 
 def dictfetchall(cursor):
@@ -25,6 +28,30 @@ def index(request):
 	template = loader.get_template('pointqanalysis/index.html')
     	context = RequestContext(request, {'list_queues': list_links})
     	return HttpResponse(template.render(context))
+
+def upload(request):
+	if request.method == 'POST':
+	    form = Form_upload_fil(request.POST, request.FILES)
+	    if form.is_valid() and form.is_multipart():
+	        save_file(request.FILES['simul_txt_db'], '/txt_db')
+	        status = 'Thanks for uploading the text database'
+	    else:
+	        status = ''
+	else:
+	    form = Form_upload_fil()
+	    status =''
+
+	template = loader.get_template('pointqanalysis/upload.html')
+    	context = RequestContext(request, {'form': form, 'status':status})
+	return HttpResponse(template.render(context))
+ 
+def save_file(file, path=''):
+	filename = file._get_name()
+	fd = open('%s/%s' % (settings.MEDIA_ROOT + str(path), str(filename)), 'wb')
+	for chunk in file.chunks():
+	    fd.write(chunk)
+	fd.close()
+
 
 def avail_databases(request):
 	cursor = connections['pointq_db'].cursor()
