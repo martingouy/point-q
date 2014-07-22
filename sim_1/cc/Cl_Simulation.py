@@ -652,7 +652,10 @@ class Simulation:
 	val_t_start_calcul_veh_appearance=List_Explicit_Values.initialisation_value_to_minus_one,\
 	val_t_round_prec=1,\
 	val_t_start_sim=None,val_li_additional_matrices_rp_id_lk=[],\
-	val_li_additional_rp_cum_matrices=[],val_li_duration_each_rp_mat=[],val_t_unit=None,val_ctm_connect = 0):
+	val_li_additional_rp_cum_matrices=[],val_li_duration_each_rp_mat=[],\
+    val_t_unit=None,\
+    val_ctm_connect = 0,\
+    val_fol_ctm_connect = ''):
 		
 		#if the number of parameter lists equals the number of the event type
 		if len(self._dict_parameters_fcts_event_treat)==self._number_event_types:
@@ -695,12 +698,16 @@ class Simulation:
 				while(self._t_current<t_end_simulation and len(self._heap_even)>0):
 				
 					if self._t_current > time_stop and val_ctm_connect ==1:
+                        # Step 0: create the exchange zone directory if it dosen't exist
+						if not os.path.exists(val_fol_ctm_connect):
+							os.makedirs(val_fol_ctm_connect)
+                          
 						# Step 1: extract queue size from entry link A / exit link B
 						que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
 						que_link_b = len(self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].get_queue_veh())
 						
 						# Step 2: write the extracted value
-						file_pointq_state = open('exchange_zone/pointq_state.tsv', 'w')
+						file_pointq_state = open(val_fol_ctm_connect + '/pointq_state.tsv', 'w')
 						file_pointq_state.write(str(self._t_current))
 						file_pointq_state.write('\t')
 						file_pointq_state.write(str(que_link_a))
@@ -709,17 +716,17 @@ class Simulation:
 						file_pointq_state.close()
 
 						# Step 3a: we wait until the ctm file is created or updated
-						if not os.path.isfile('exchange_zone/ctm_state.tsv'):
-							while not os.path.isfile('exchange_zone/ctm_state.tsv'):
+						if not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
+							while not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
 								print('Freezed at :', self._t_current)
-							ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+							ctm_state_md5 = self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv')
 						else:
-							while self.md5Checksum('exchange_zone/ctm_state.tsv') == ctm_state_md5:
+							while self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv') == ctm_state_md5:
 								print('Freezed at :', self._t_current)
-							ctm_state_md5 = self.md5Checksum('exchange_zone/ctm_state.tsv')
+							ctm_state_md5 = self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv')
 
 						# Step 3b: we extract CTM data 
-						with open('exchange_zone/ctm_state.tsv', 'rU') as f_ctm:
+						with open(val_fol_ctm_connect + '/ctm_state.tsv', 'rU') as f_ctm:
 							for line in f_ctm:
 								line_split = line.split('\t')
 								demand_a = float(line_split[1])

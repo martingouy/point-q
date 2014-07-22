@@ -53,6 +53,10 @@ val_ctm_connect = 1
 #val_ctm_connect = 0
 
 #*****************************************************************************************************************************************************************************************
+#variable indicating the path of the folder in which state infos exchanged with CTM will be
+val_fol_ctm_connect = 'exchange_zone'
+
+#*****************************************************************************************************************************************************************************************
 
 #variable indicating whether a stochastic or deterministic (1, 0)  demand is been employed
 #val_indicating_stoch_demand=0
