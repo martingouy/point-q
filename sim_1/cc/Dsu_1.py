@@ -49,8 +49,8 @@ val_t_unit=0.1
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating if we want to connect point-q simulator with the CTM simulator (1 -> yes, 0 -> no)
-val_ctm_connect = 1
-#val_ctm_connect = 0
+#val_ctm_connect = 1
+val_ctm_connect = 0
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating the path of the folder in which state infos exchanged with CTM will be
@@ -59,8 +59,8 @@ val_fol_ctm_connect = 'exchange_zone'
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating whether a stochastic or deterministic (1, 0)  demand is been employed
-#val_indicating_stoch_demand=0
-val_indicating_stoch_demand=1
+val_indicating_stoch_demand=0
+#val_indicating_stoch_demand=1
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating if we wish to create a new demand or not. If its value = 1, new vehicles will be generated to each entry link, 
