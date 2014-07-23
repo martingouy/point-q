@@ -5,5 +5,5 @@ def validate_file_extension(value):
         raise forms.ValidationError(u'Error: Wrong file extension')
         
 class Form_upload_fil (forms.Form):
-    name = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name', 'class': 'form-control'}))
     simul_txt_db = forms.FileField(validators=[validate_file_extension])

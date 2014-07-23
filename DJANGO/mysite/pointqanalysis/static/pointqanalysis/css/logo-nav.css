@@ -1,10 +1,13 @@
 html {
   width: 100%;
+  min-width: 900px;
 }
 
 body {
     margin-top: 125px; /* adjust this if the height of the menu bar changes */
     width: 100%;
+    min-width: 1200px;
+    overflow: auto;
 }
 
 .navbar-fixed-top .nav {
@@ -29,8 +32,20 @@ body {
   display: inline-block;
   height: 400px;
   width: 28%;
+  min-width: 318px;
   overflow: auto;
+  vertical-align: top;
 }
+
+#right_tree {
+  vertical-align: top;
+  display: inline-block;
+  height : 400px;
+  width: 50%;
+  min-width: 300px;
+  padding-left: 10%
+}
+
 #map-canvas {
   display: inline-block;
   height : 400px;
