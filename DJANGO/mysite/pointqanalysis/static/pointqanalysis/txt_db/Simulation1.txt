@@ -1,9 +1,0 @@
-TO DO:
-
-Phase 1: Lecture des fichiers texte
-Création d'un dictionnaire key= id node value dict key= entering/ leaving value = list of link
-Création list of list with link evoluation
-
-Phase 2: Création d'une fontion qui calcule le flow (id link, time, timestep )
-
-Phase 3: Vérification de la loi des noeuds

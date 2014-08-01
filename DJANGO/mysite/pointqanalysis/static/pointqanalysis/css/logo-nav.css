@@ -72,3 +72,23 @@ body {
   text-align: center;
   line-height: 40px;
 }
+
+.no_puce {
+  list-style-type:none;
+}
+
+#step2 {
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+#step2 div {
+  display: inline-block;
+  vertical-align: top;
+  width : 300px;
+}
+
+#generate {
+  padding-top: 40px;
+  padding-left: 70px;
+}

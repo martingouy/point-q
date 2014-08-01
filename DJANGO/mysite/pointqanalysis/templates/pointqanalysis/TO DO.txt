@@ -1,0 +1,12 @@
+TO DO
+
+Supprimer cookie name_sim lorsque l'on supprime une simulation
+Protéger les views en vérifiant qu'il s'agit de requete ajax
+404
+Gérer les url
+Revoir le CSS
+
+Calcul flow pour les links de sortie
+nom des simulations
+
+gesyion des cartes
