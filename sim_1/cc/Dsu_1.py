@@ -126,7 +126,7 @@ t_start_new_simulation=0
 #t_simulation_duration=930
 #t_simulation_duration=1000
 #each cycle is 24 sec, we sim for 50 cycles
-t_simulation_duration=1200
+t_simulation_duration=5000
 #t_simulation_duration=1280
 #t_simulation_duration=1800
 #t_simulation_duration=1802
