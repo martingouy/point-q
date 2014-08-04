@@ -49,8 +49,8 @@ val_t_unit=0.1
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating if we want to connect point-q simulator with the CTM simulator (1 -> yes, 0 -> no)
-#val_ctm_connect = 1
-val_ctm_connect = 0
+val_ctm_connect = 1
+#val_ctm_connect = 0
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating the path of the folder in which state infos exchanged with CTM will be
@@ -126,7 +126,7 @@ t_start_new_simulation=0
 #t_simulation_duration=930
 #t_simulation_duration=1000
 #each cycle is 24 sec, we sim for 50 cycles
-t_simulation_duration=5000
+#t_simulation_duration=1200
 #t_simulation_duration=1280
 #t_simulation_duration=1800
 #t_simulation_duration=1802
@@ -139,6 +139,7 @@ t_simulation_duration=5000
 #t_simulation_duration=6000
 #t_simulation_duration=10000
 #t_simulation_duration=10800
+t_simulation_duration=18000
 #t_simulation_duration=21600
 #t_simulation_duration=7200
 #t_simulation_duration=36000
