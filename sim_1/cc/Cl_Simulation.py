@@ -688,7 +688,7 @@ class Simulation:
 				
 				# we create a global variable to keep track of files md5checksum
 				ctm_state_md5 = ''
-				time_stop = 3600
+				time_stop = 3595
 
 				# global variable queue / flow
 				demand_a = 0
