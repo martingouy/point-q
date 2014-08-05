@@ -20,7 +20,7 @@ import Cl_Control_Actuate
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_2NDS_FIG_7_papier_2"
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_SD_sans_OD"
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_SD_avec_OD"
-val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_reseau_15_nds_version_1"
+val_name_folder_network_files="../SMALL_NETWS/huntington_colorado"
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_reseau_15_nds"
 #*****************************************************************************************************************************************************************************************
 
@@ -46,11 +46,21 @@ val_precision_round=2
 #variable indicating the time unit considered
 #val_t_unit=1
 val_t_unit=0.1
+
+#*****************************************************************************************************************************************************************************************
+#variable indicating if we want to connect point-q simulator with the CTM simulator (1 -> yes, 0 -> no)
+val_ctm_connect = 1
+#val_ctm_connect = 0
+
+#*****************************************************************************************************************************************************************************************
+#variable indicating the path of the folder in which state infos exchanged with CTM will be
+val_fol_ctm_connect = 'exchange_zone'
+
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating whether a stochastic or deterministic (1, 0)  demand is been employed
-#val_indicating_stoch_demand=0
-val_indicating_stoch_demand=1
+val_indicating_stoch_demand=0
+#val_indicating_stoch_demand=1
 
 #*****************************************************************************************************************************************************************************************
 #variable indicating if we wish to create a new demand or not. If its value = 1, new vehicles will be generated to each entry link, 
@@ -116,7 +126,7 @@ t_start_new_simulation=0
 #t_simulation_duration=930
 #t_simulation_duration=1000
 #each cycle is 24 sec, we sim for 50 cycles
-t_simulation_duration=1200
+#t_simulation_duration=1200
 #t_simulation_duration=1280
 #t_simulation_duration=1800
 #t_simulation_duration=1802
@@ -129,6 +139,7 @@ t_simulation_duration=1200
 #t_simulation_duration=6000
 #t_simulation_duration=10000
 #t_simulation_duration=10800
+t_simulation_duration=18000
 #t_simulation_duration=21600
 #t_simulation_duration=7200
 #t_simulation_duration=36000
@@ -156,7 +167,7 @@ cycle_duration=60
 #*****************************************************************************************************************************************************************************************
 #variable indicating if  internal links have (not) finite capacity (it is employed by the stat analysis. Thsi value is also indicated in the network data model)
 #also employed by the event end veh depart
-#val_finite_capacity_internal_links=1 if internal  lks have finite capacity, 0 otherwise
+#val_finite_capacity_internal_links=1 #if internal  lks have finite capacity, 0 otherwise
 val_finite_capacity_internal_links=0
 #val_finite_capacity_internal_links=1
 #*****************************************************************************************************************************************************************************************

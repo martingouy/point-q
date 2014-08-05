@@ -1,0 +1,94 @@
+html {
+  width: 100%;
+  min-width: 900px;
+}
+
+body {
+    margin-top: 125px; /* adjust this if the height of the menu bar changes */
+    width: 100%;
+    min-width: 1200px;
+    overflow: auto;
+}
+
+.navbar-fixed-top .nav {
+    padding: 15px 0;
+}
+
+.navbar-fixed-top .navbar-brand {
+	padding: 0 15px;
+}
+
+@media(min-width:768px) {
+    .navbar-fixed-top .nav {
+        padding: 15px 0;
+    }
+
+    .navbar-fixed-top .navbar-brand {
+        padding: 15px 0;
+    }
+}
+
+#left_tree {
+  display: inline-block;
+  height: 400px;
+  width: 28%;
+  min-width: 318px;
+  overflow: auto;
+  vertical-align: top;
+}
+
+#right_tree {
+  vertical-align: top;
+  display: inline-block;
+  height : 400px;
+  width: 50%;
+  min-width: 300px;
+  padding-left: 10%
+}
+
+#map-canvas {
+  display: inline-block;
+  height : 400px;
+  width: 70%;
+}
+
+#status {
+  background-color: #B5E655;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+}
+
+#status p {
+  line-height: 40px;
+}
+
+.error_red {
+  background-color: #DF5A49;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+}
+
+.no_puce {
+  list-style-type:none;
+}
+
+#step2 {
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+#step2 div {
+  display: inline-block;
+  vertical-align: top;
+  width : 300px;
+}
+
+#generate {
+  padding-top: 40px;
+  padding-left: 70px;
+}

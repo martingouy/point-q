@@ -17,7 +17,10 @@ def fct_calcul_demand_entry_link_stoch_case(param):
 #*****************************************************************************************************************************************************************************************
 #function defining the time between two successive vehicle appearances  at en entry link,	when deterministic demand is considered
 def fct_calcul_demand_entry_link_deterministic_case(param):
-	return param
+	if param == 0:
+		return 1000000000000
+	else:
+		return 1 / param
 #*****************************************************************************************************************************************************************************************
 #method reading a dictionary of which key=[x,y],  the  value= [ [a1,b1],[a2,b2],...] and returns for each key 
 #[the mean value of ai, mean value of bi].

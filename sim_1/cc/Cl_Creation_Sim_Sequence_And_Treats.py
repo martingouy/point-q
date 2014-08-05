@@ -372,7 +372,9 @@ class Creation_Sim_Sequence_And_Treats:
 				val_print_messages_on_terminal=obj_data_sim.get_print_messages_on_term(),\
 				val_t_start_calcul_veh_appearance=obj_data_sim.get_t_marge_start_calcul_veh_appearance(),\
 				val_t_start_sim=obj_data_sim.get_t_start_new_sim(),\
-				val_t_unit=obj_data_sim.get_t_unit())
+				val_t_unit=obj_data_sim.get_t_unit(),\
+				val_ctm_connect=obj_data_sim.get_ctm_connect(),\
+                val_fol_ctm_connect=obj_data_sim.get_fol_ctm_connect())
 				
 			
 			
