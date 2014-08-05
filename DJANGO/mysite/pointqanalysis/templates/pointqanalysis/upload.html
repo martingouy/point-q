@@ -1,0 +1,155 @@
+{% extends 'pointqanalysis/template_skeleton.html' %}
+{% load staticfiles %}
+{% block title %}Simulations{% endblock %}
+
+{% block container %} 
+	<div id = 'left_tree'>
+		<h2>Upload a simulation:</h2>
+		{% if status != '' %}
+			<div id='status'>
+				<p>{{ status}}</p>	
+			</div>
+		{% endif %}
+
+		{% if form.errors %}
+			<p class="error_red">
+				Please correct the error{{ form.errors|pluralize }} below:
+			</p>
+		{% endif %}
+
+		<form role="form" enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+			{{ form.non_field_errors }}
+			<div class="form-group">
+				<label for="id_name_simul">Name Simulation:</label>
+				{{ form.name_simul.errors }}
+				{{ form.name_simul }}
+			</div>
+			<div class="form-group">
+				<label for="id_simul_txt_db">Select Simulation:</label>
+				{{ form.simul_txt_db.errors }}
+				{{ form.simul_txt_db }}
+			</div>
+			<div class="form-group">
+				<label for="id_name_network">Network:</label><br />
+				{{ form.name_network.errors }}
+				{{ form.name_network}}
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+		<p>
+			<br /><br />
+			<a href= {{upload_xml}} class="zoombox" >Click here to upload /delete networks</a><br />
+		</p>
+	</div>
+	<div id = 'right_tree'>
+		<h2>Available simulations:</h2>
+		<ul class="no_puce">
+		</ul>
+	</div>
+{% endblock %}
+
+{% block javascript %} 
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.js' %}"></script>
+	<script type="text/javascript" src="{% static 'pointqanalysis/js/zoombox.js' %}"></script>
+	<script type="text/javascript">
+		jQuery(function($){
+			$('a.zoombox').zoombox({width: 900, height: 500});
+		});
+	</script>
+	{% if status != '' %}
+		<script type="text/javascript">
+			$( "#status" ).fadeOut(10000);
+		</script>
+	{% endif %}
+	<script type="text/javascript">
+		// function : create a request
+		$(function() {
+			function makeRequest(url, fct_treat) {
+
+				var httpRequest = new XMLHttpRequest();
+
+				if (httpRequest.overrideMimeType) {
+					httpRequest.overrideMimeType('text/xml');
+				}
+
+				if (!httpRequest) {
+					return false;
+				}
+
+				if (fct_treat == 'avail_simul') {
+					httpRequest.onreadystatechange = function() { 
+						// we wait until the answer is fully received
+						if (httpRequest.readyState == 4){
+							avail_simul(httpRequest);
+						}
+					};
+				}
+				else if (fct_treat == 'del_table') {
+					httpRequest.onreadystatechange = function() {
+						// we wait until the answer is fully received
+						if (httpRequest.readyState == 4){
+
+							$('#right_tree ul li').remove();
+							makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=listsim', 'avail_simul');
+						}
+					};
+				}
+
+				else if (fct_treat == 'redirect') {
+					httpRequest.onreadystatechange = function() {
+						// we wait until the answer is fully received
+						if (httpRequest.readyState == 4){
+
+							// we redirect to the correct location
+							window.location.replace(httpRequest.response);
+
+						}
+					};
+				}
+				
+				httpRequest.open('GET', url, true);
+				httpRequest.send(null);
+			}
+
+			// function: display the list of available simulations
+
+			function avail_simul(httpRequest) {
+				var xmldoc = httpRequest.responseXML;
+				var list_sim = xmldoc.getElementsByTagName('sim');
+
+				for (var i = 0; i < list_sim.length; i++) {
+					var sim_id = list_sim[i].firstChild.data;
+					var xml_li = '<li> <img src = " {% static 'pointqanalysis/images/choose.png' %} " sim = "' + sim_id+ '" alt = "choose"><img src = " {% static 'pointqanalysis/images/close.png' %} " sim = "' + sim_id+ '" alt = "close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + sim_id + '</li>';
+
+					$('#right_tree ul').append(xml_li);
+
+					$('img[sim = "' + sim_id + '"][alt = "close" ]').click(function(event){
+						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
+					});
+					$('img[sim = "' + sim_id + '"][alt = "choose" ]').click(function(event){
+						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
+						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
+					});
+
+				}
+			}
+
+			makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=listsim', 'avail_simul');
+		});
+	</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

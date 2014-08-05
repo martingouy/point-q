@@ -1,0 +1,34 @@
+CHANGELOG
+
+**********************************************************************************************************************************************************************************
+06/07/2014 01:36 am
+**********************************************************************************************************************************************************************************
+	- Cl_Ev_veh_appearance.py:
+
+	Uncomment the code that allowed to update the number of vehicules in the entry link
+
+	- Dsu_1.py
+
+	Changed option to finite link capacity: allows to see the link evolution in Stat Analysis
+
+	- Cl_Ev_end_veh_departure_from_que.py
+
+	Allowed to update the number of vehicule in the links even if it's an entry or an output link
+
+	- Cl_Stat_Analysis_new.py
+
+	Allowed to write the txt file of the link evolution even if it's an output link
+
+**********************************************************************************************************************************************************************************
+07/07/2014 10:46 pm
+**********************************************************************************************************************************************************************************
+	- Cl_Simulation.py:
+
+	Possibility to stop the simulation every 5sec to exchange data with the CTM simulator
+
+**********************************************************************************************************************************************************************************
+17/07/2014 02:27 am
+**********************************************************************************************************************************************************************************
+	- Possibility to choose in Dsu_1.py if we want to connect the point-q-simulator with CTM simulator (val_ctm_connect)
+	- Hungtington colorado configuration files changed (mistakes corrected)
+

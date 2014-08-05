@@ -1,0 +1,396 @@
+{% extends 'pointqanalysis/template_skeleton.html' %}
+{% load staticfiles %}
+{% block title %} Map Selector{% endblock %}
+
+{% block container %} 
+	<div id= "step1">
+		<div id='left_tree'>
+
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-primary active" analysis="flow">
+					<input type="radio" name="options"  checked> Flow
+				</label>
+				<label class="btn btn-primary" analysis="queue">
+					<input type="radio" name="options" > Queues
+				</label>
+			</div>
+			<div id="flow">
+				<h2>Selected links:</h2>
+				<ul id = "ul_flow" class="no_puce">
+				  
+				</ul>
+			</div>
+			<div id="queue">
+				<h2>Selected queues:</h2>
+				<ul id = "ul_queues" class="no_puce">
+
+				</ul>
+			</div>
+		</div>
+		<div id="map-canvas"/>
+	</div>
+	<div id="step2">
+		<h2>Parameters:</h2>
+
+		<div class="btn-group" data-toggle="buttons">
+			<h3>Type of Analysis:</h3>
+			<label class="btn btn-primary active">
+				<input id = "btn_analysis_flows" type="checkbox" checked> Flows
+			</label>
+			<label class="btn btn-primary">
+				<input id = "btn_analysis_queues" type="checkbox"> Queues
+			</label>
+			<label class="btn btn-primary">
+				<input type="checkbox"> Travel Time
+			</label>
+		</div>
+		<div>
+			<h3>Time selection:</h3>
+			<div id="slider-range"></div>
+			<p>
+				<label for="amount">Time interval:</label>
+				<input type="text" id="amount" readonly style="border:0; font-weight:bold;">
+			</p>
+
+		</div>
+		<div id = "generate">
+			<button type="button" class="btn btn-default btn-lg" data-loading-text="Generating...">Generate</button>
+		</div>
+	</div>
+	<div id = "rendercharts">
+		<div id="flowchart" ></div>
+		<div id="queuechart" ></div>
+	</div>
+{% endblock %}
+
+{% block javascript %} 
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.js' %}"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoJ26UXM3yhuReCvT9V03jcUTkREcpUVw"></script>
+  	<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	    var map;
+	    var indicator = 'flow';
+	   
+	    // variable for the link list
+	    var list_links = [];
+
+	    // variables for the queue list
+	    var list_queues = [];
+	    var list_queue_temp = ['link1', 'link2'];
+	    var count = 0;
+
+	    function in_array(string, array){
+	        var result = false;
+	        for(i=0; i<array.length; i++){
+	            if(array[i] == string){
+	                result = true;
+	            }
+	        }
+	        return result;
+	    }
+
+	    function index_array(link1, link2, array) {
+	    	var result = -1;
+	    	for (i = 0; i < array.length; i++) {
+	    		if(array[i][0] == link1 && array[i][1] == link2) {
+	    			return i;
+	    		}
+	    	}
+
+	    	return result;
+	    }
+	    
+	    function initialize() {
+	          // Create a simple map.
+	          map = new google.maps.Map(document.getElementById('map-canvas'), {
+	          zoom: 16,
+	          center: {lat: 34.149156, lng: -118.0677}
+	        });
+
+	      var geojson = JSON.parse('{{ geojson|safe}}');
+	      map.data.addGeoJson(geojson);
+	      zoom(map);
+	      map.data.setStyle({
+	        icon: '{% static 'pointqanalysis/images/marker.png' %}',
+	        strokeColor: '#0019ff',
+	        strokeOpacity: 0.6,
+	        strokeWeight: 9,
+	      });
+
+	      	/**
+		 * Update a map's viewport to fit each geometry in a dataset
+		 * @param {google.maps.Map} map The map to adjust
+		 */
+		function zoom(map) {
+		  var bounds = new google.maps.LatLngBounds();
+		  map.data.forEach(function(feature) {
+		    processPoints(feature.getGeometry(), bounds.extend, bounds);
+		  });
+		  map.fitBounds(bounds);
+		}
+
+		/**
+		 * Process each point in a Geometry, regardless of how deep the points may lie.
+		 * @param {google.maps.Data.Geometry} geometry The structure to process
+		 * @param {function(google.maps.LatLng)} callback A function to call on each
+		 *     LatLng point encountered (e.g. Array.push)
+		 * @param {Object} thisArg The value of 'this' as provided to 'callback' (e.g.
+		 *     myArray)
+		 */
+		function processPoints(geometry, callback, thisArg) {
+		  if (geometry instanceof google.maps.LatLng) {
+		    callback.call(thisArg, geometry);
+		  } else if (geometry instanceof google.maps.Data.Point) {
+		    callback.call(thisArg, geometry.get());
+		  } else {
+		    geometry.getArray().forEach(function(g) {
+		      processPoints(g, callback, thisArg);
+		    });
+		  }
+		}
+
+	      // Add infowindow when mouse on an element
+	      map.data.addListener('mouseover', function(event) {
+	        var infowindow = new google.maps.InfoWindow({
+	            content: event.feature.getProperty('id')
+	        });
+	        infowindow.setPosition({lat: event.latLng.lat() + 0.00005, lng: event.latLng.lng()});
+	        infowindow.open(map);
+	        map.data.addListener('mouseout', function(event) {
+	          infowindow.close();                    
+	        });
+	      });
+
+	      // Add the link to the list_links array
+	      map.data.addListener('click', function(event) {
+	        if (event.feature.getGeometry().getType() == 'LineString')
+	        {
+        		// id of the link we clicked on
+		var id_li = event.feature.getProperty('id');
+
+		// if we want to select queues
+		if (indicator == 'queues') {
+
+			// if count is even
+			if (count % 2 == 0) {
+
+				// we increment count
+				count = count + 1;
+
+				// we add the link id to list_queue_temp
+				list_queue_temp[0] = id_li;
+
+			}
+
+			// if count is uneven
+			else {
+				// we increment count
+				count = count + 1;
+
+				// we add the link id to list_queue_temp
+				list_queue_temp[1] = id_li;
+
+				// we add list_queue_temp to list_queues
+				list_queues.push([list_queue_temp[0], list_queue_temp[1]]);
+
+				// we create the html element
+				var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_queue" link1="'+ String(list_queue_temp[0]) + '" link2 = "' + String(list_queue_temp[1])  + '">[' + String(list_queue_temp[0]) +','+String(list_queue_temp[1]) + ']</li>';
+
+				// we append it to <ul>
+				$('#ul_queues').append(html_element);
+
+			}
+		}
+		// if we want to select flows
+		else {
+			// we add the link id to list_link
+			list_links.push(id_li);
+
+			// we create the html element
+			var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_flow" link="'+ String(id_li) + '">' + String(id_li) + '</li>';
+
+			// we append the html element to <ul>
+			$('#ul_flow').append(html_element);
+		}
+
+		// Delete queues
+		$('.img_delete_queue').click(function() {
+
+			// delete queue from list_queues
+			var link1 = $(this).attr('link1');
+			var link2 = $(this).attr('link2');
+			if (index_array(link1, link2, list_queues) != -1) {
+				list_queues.splice(index_array(link1, link2, list_queues), 1);
+			}
+
+			// delete queue from DOM
+			$(this).parent().remove();
+		});
+
+		// Delete links
+		$('.img_delete_flow').click(function() {
+
+			// delete queue from list_queues
+			var link = $(this).attr('link');
+
+			if (list_links.indexOf(link) != -1) {
+				list_links.splice(list_links.indexOf(link), 1);
+			}
+
+			// delete queue from DOM
+			$(this).parent().remove();
+		});
+
+	        }
+	      });
+	      
+	    }
+
+	    google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
+	<script type="text/javascript">
+		$(function() {
+
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Interface
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			// Slider
+			$( "#slider-range" ).slider({
+				range: true,
+				min: 0,
+				max: {{ maxtimesim }},
+				values: [ 0,  {{ maxtimesim }}],
+				slide: function( event, ui ) {
+					$( "#amount" ).val(  ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+				}
+			});
+			$( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) );
+
+			// Checkbox
+			$('.btn').click( function() {
+				$(this).button('toggle');
+			});
+
+
+			// Generate plots
+			$('#generate button').click(function() {
+
+				$('#generate button').button('loading');
+
+				// we delete previous plots
+				$('#flowchart').children().remove();
+				$('#queuechart').children().remove();
+
+				// we reset the heights of the plots divs
+				$('#flowchart').css({'height': '', 'margin-bottom' : ''});
+				$('#queuechart').css({'height': ''});
+
+				// we determine which is the last analysis to be made
+				var last_analysis = 'flow';
+				if ($('#btn_analysis_flows').prop('checked') && $('#btn_analysis_queues').prop('checked')) {
+					last_analysis = 'queue';
+				}
+				else if ($('#btn_analysis_queues').prop('checked')) {
+					last_analysis = 'queue';
+				}
+
+				// if we want a flow analysis
+				if ($('#btn_analysis_flows').prop('checked')) {
+
+					$('#flowchart').css({'height': '400px', 'margin-bottom': '50px'});
+
+					// generate flows plots
+					var links = list_links[0];
+
+					for (var i = 1; i < list_links.length; i++) {
+						links += '-' + list_links[i];
+					}
+					var t_start = $( "#slider-range" ).slider( "values", 0 );
+					var t_end = $( "#slider-range" ).slider( "values", 1 ); 
+					generate_json_plot(links, 'flow', t_start, t_end, last_analysis, 300);
+				}
+
+				// if we want a queue analysis
+				if ($('#btn_analysis_queues').prop('checked')) {
+
+					$('#queuechart').css({'height': '400px'});
+
+					// generate queues plots
+					var queues = list_queues[0][0] + '.' + list_queues[0][1];
+
+					for (var i = 1; i < list_queues.length; i++) {
+						queues += '-' + list_queues[i][0] + '.' + list_queues[i][1];
+					}
+					var t_start = $( "#slider-range" ).slider( "values", 0 );
+					var t_end = $( "#slider-range" ).slider( "values", 1 ); 
+					generate_json_plot(queues, 'queue', t_start, t_end, last_analysis, 0);
+				}
+			});
+
+			
+			// Hide queues
+			$('#queue').hide();
+
+			// Show/Hide flow or queue div
+			$('#left_tree label').click(function() {
+				if ($(this).attr('analysis') == 'flow') {
+					$('#queue').hide();
+					$('#flow').show();
+					indicator = 'flow';
+				}
+				else {
+					$('#flow').hide();
+					$('#queue').show();
+					indicator = 'queues';
+				}
+			});
+
+
+
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Function Generate Graph
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			function generate_json_plot(link_id, type, t_start, t_end, last_analysis, granul) {
+				// First case: type flow
+				if (type == 'flow') {
+					// on crée une requête ajax asynchrone
+					$.getJSON('http://127.0.0.1:8000/pointqanalysis/ajax?action=generate_json_plot', {'links': link_id, 'type': type, 't_start': t_start, 't_end': t_end, 'granul': granul}, function(data) {
+							var chart = new CanvasJS.Chart("flowchart", data);
+							chart.render();
+
+							if (last_analysis == 'flow') {
+								$('html, body').animate({
+									scrollTop: $("#generate").offset().top
+								}, 1000);
+								// we reset the generate button
+								$('#generate button').button('reset');
+							}
+					});
+				}
+				// Second cas: type queue
+				else if (type == 'queue') {
+					// on crée une requête ajax asynchrone
+					$.getJSON('http://127.0.0.1:8000/pointqanalysis/ajax?action=generate_json_plot', {'queues': link_id, 'type': type, 't_start': t_start, 't_end': t_end}, function(data) {
+							var chart = new CanvasJS.Chart("queuechart", data);
+							chart.render();
+
+							if (last_analysis == 'queue') {
+								$('html, body').animate({
+									scrollTop: $("#generate").offset().top
+								}, 1000);
+								// we reset the generate button
+								$('#generate button').button('reset');
+							}
+					});
+				}
+
+			}
+			
+		});
+  	</script>
+{% endblock %}
