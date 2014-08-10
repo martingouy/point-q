@@ -1,5 +1,5 @@
 from django import forms
-import tools
+import tools_data
 
 def validate_file_extension(value):
 	if not value.name.endswith('.txt'):
@@ -9,10 +9,10 @@ def get_my_choices():
 
 	# we create the table index_network if it's not created
 	query_1 = 'CREATE TABLE index_network (name text, geojson text)'
-	tools.query_sql([query_1], False, 'network_db')
+	tools_data.query_sql([query_1], False, 'network_db')
 
 	query_2 = 'SELECT name FROM index_network'
-	output = tools.query_sql([query_2], True, 'network_db')
+	output = tools_data.query_sql([query_2], True, 'network_db')
 	liste_name = []
 	for line in output:
 		liste_name.append((line['name'], line['name']))

@@ -11,12 +11,11 @@
     <title>{% block title %} {% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'pointqanalysis/css/bootstrap.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-
+    <link href="{% static 'pointqanalysis/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Add custom CSS here -->
     <link href="{% static 'pointqanalysis/css/logo-nav.css' %}" rel="stylesheet">
     <link href="{% static 'pointqanalysis/css/zoombox.css' %}" rel="stylesheet">
+    <link href="{% static 'pointqanalysis/css/slider.css' %}" rel="stylesheet">
 
 </head>
 
@@ -41,13 +40,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">Queues</a>
+                        <a href={% url 'pointqanalysis:simulations' %}>Simulations</a>
                     </li>
                     <li>
-                        <a href="#">Flows</a>
-                    </li>
-                    <li>
-                        <a href="#">Travel Time</a>
+                        <a href={% url 'pointqanalysis:analysis' %}>Analysis</a>
                     </li>
                 </ul>
             </div>
