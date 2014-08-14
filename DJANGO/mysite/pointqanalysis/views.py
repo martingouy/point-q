@@ -8,6 +8,7 @@ from django.db import connections
 from django.conf import settings
 import json
 import os
+import re
 import tools_data
 import tools_json
 import tools_sql
@@ -56,7 +57,7 @@ def ajax(request):
 			title = {'text': 'Flows'}
 			axisX = {'title': "Time interval (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			axisY = {'title': "Number of veh. (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			answer = {'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
+			answer = {'title': title, 'exportEnabled': 'true', 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 		# second case : queues
 		elif type_anal == 'queue':
@@ -75,7 +76,7 @@ def ajax(request):
 			title = {'text': 'Queues'}
 			axisX = {'title': "Seconds (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			axisY = {'title': "Queue length (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			answer = {'zoomEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
+			answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 
 
@@ -124,6 +125,7 @@ def simul_manag(request):
 	    if form.is_valid() and form.is_multipart():
 
 		name_simul = form.cleaned_data['name_simul']
+		name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul)
 		name_network = form.cleaned_data['name_network']
 
 		# we save the upload

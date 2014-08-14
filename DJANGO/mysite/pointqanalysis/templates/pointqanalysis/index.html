@@ -68,71 +68,95 @@
 
 {% block javascript %} 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoJ26UXM3yhuReCvT9V03jcUTkREcpUVw"></script>
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'pointqanalysis/js/ion.rangeSlider.min.js' %}"></script>
-	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoJ26UXM3yhuReCvT9V03jcUTkREcpUVw"></script>
-	<script type="text/javascript">
-	$(function() {
-	    var map;
-	    var indicator = 'flow';
-	   
-	    // variable for the link list
-	    var list_links = [];
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>	
+	<script type="text/javascript">	
 
-	    // variables for the queue list
-	    var list_queues = [];
-	    var list_queue_temp = ['link1', 'link2'];
-	    var count = 0;
+		var map;
+		var indicator = 'flow';
 
-	    function in_array(string, array){
-	        var result = false;
-	        for(i=0; i<array.length; i++){
-	            if(array[i] == string){
-	                result = true;
-	            }
-	        }
-	        return result;
-	    }
+		// variable for the link list
+		var list_links = [];
 
-	    function index_array(link1, link2, array) {
-	    	var result = -1;
-	    	for (i = 0; i < array.length; i++) {
-	    		if(array[i][0] == link1 && array[i][1] == link2) {
-	    			return i;
-	    		}
-	    	}
+		// variables for the queue list
+		var list_queues = [];
+		var list_queue_temp = ['link1', 'link2'];
+		var count = 0;
 
-	    	return result;
-	    }
-	    
-	    function initialize() {
-	          // Create a simple map.
-	          map = new google.maps.Map(document.getElementById('map-canvas'), {
-	          zoom: 16,
-	          center: {lat: 34.149156, lng: -118.0677}
-	        });
+		function in_array(string, array){
+			var result = false;
+			for(var i=0; i<array.length; i++){
+				if(array[i] == string){
+					result = true;
+				}
+			}
+			return result;
+		}
 
-	      var geojson = JSON.parse('{{ geojson|safe}}');
-	      map.data.addGeoJson(geojson);
-	      zoom(map);
-	      map.data.setStyle({
-	        icon: '{% static 'pointqanalysis/images/marker.png' %}',
-	        strokeColor: '#0019ff',
-	        strokeOpacity: 0.6,
-	        strokeWeight: 9,
-	      });
+		function index_array(link1, link2, array) {
+			var result = -1;
+			for (var i = 0; i < array.length; i++) {
+				if(array[i][0] == link1 && array[i][1] == link2) {
+					return i;
+				}
+			}
 
-	      	/**
+			return result;
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Function Generate Graph
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		function generate_json_plot(link_id, type, t_start, t_end, last_analysis, granul) {
+			// First case: type flow
+			if (type == 'flow') {
+				// on crée une requête ajax asynchrone
+				$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'links': link_id, 'type': type, 't_start': t_start, 't_end': t_end, 'granul': granul}, function(data) {
+						var chart = new CanvasJS.Chart("flowchart", data);
+						chart.render();
+
+						if (last_analysis == 'flow') {
+							$('html, body').animate({
+								scrollTop: $("#generate").offset().top
+							}, 1000);
+							// we reset the generate button
+							$('#generate button').button('reset');
+						}
+				});
+			}
+			// Second cas: type queue
+			else if (type == 'queue') {
+				// on crée une requête ajax asynchrone
+				$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'queues': link_id, 'type': type, 't_start': t_start, 't_end': t_end}, function(data) {
+						var chart = new CanvasJS.Chart("queuechart", data);
+						chart.render();
+
+						if (last_analysis == 'queue') {
+							$('html, body').animate({
+								scrollTop: $("#generate").offset().top
+							}, 1000);
+							// we reset the generate button
+							$('#generate button').button('reset');
+						}
+				});
+			}
+
+		}
+
+
+		/**
 		 * Update a map's viewport to fit each geometry in a dataset
 		 * @param {google.maps.Map} map The map to adjust
 		 */
 		function zoom(map) {
-		  var bounds = new google.maps.LatLngBounds();
-		  map.data.forEach(function(feature) {
-		    processPoints(feature.getGeometry(), bounds.extend, bounds);
-		  });
-		  map.fitBounds(bounds);
+			var bounds = new google.maps.LatLngBounds();
+			map.data.forEach(function(feature) {
+				processPoints(feature.getGeometry(), bounds.extend, bounds);
+			});
+			map.fitBounds(bounds);
 		}
 
 		/**
@@ -144,119 +168,137 @@
 		 *     myArray)
 		 */
 		function processPoints(geometry, callback, thisArg) {
-		  if (geometry instanceof google.maps.LatLng) {
-		    callback.call(thisArg, geometry);
-		  } else if (geometry instanceof google.maps.Data.Point) {
-		    callback.call(thisArg, geometry.get());
-		  } else {
-		    geometry.getArray().forEach(function(g) {
-		      processPoints(g, callback, thisArg);
-		    });
-		  }
-		}
-
-	      // Add infowindow when mouse on an element
-	      map.data.addListener('mouseover', function(event) {
-	        var infowindow = new google.maps.InfoWindow({
-	            content: event.feature.getProperty('id')
-	        });
-	        infowindow.setPosition({lat: event.latLng.lat() + 0.00005, lng: event.latLng.lng()});
-	        infowindow.open(map);
-	        map.data.addListener('mouseout', function(event) {
-	          infowindow.close();                    
-	        });
-	      });
-
-	      // Add the link to the list_links array
-	      map.data.addListener('click', function(event) {
-	        if (event.feature.getGeometry().getType() == 'LineString')
-	        {
-        		// id of the link we clicked on
-		var id_li = event.feature.getProperty('id');
-
-		// if we want to select queues
-		if (indicator == 'queues') {
-
-			// if count is even
-			if (count % 2 == 0) {
-
-				// we increment count
-				count = count + 1;
-
-				// we add the link id to list_queue_temp
-				list_queue_temp[0] = id_li;
-
-			}
-
-			// if count is uneven
-			else {
-				// we increment count
-				count = count + 1;
-
-				// we add the link id to list_queue_temp
-				list_queue_temp[1] = id_li;
-
-				// we add list_queue_temp to list_queues
-				list_queues.push([list_queue_temp[0], list_queue_temp[1]]);
-
-				// we create the html element
-				var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_queue" link1="'+ String(list_queue_temp[0]) + '" link2 = "' + String(list_queue_temp[1])  + '">[' + String(list_queue_temp[0]) +','+String(list_queue_temp[1]) + ']</li>';
-
-				// we append it to <ul>
-				$('#ul_queues').append(html_element);
-
+			if (geometry instanceof google.maps.LatLng) {
+				callback.call(thisArg, geometry);
+			} 
+			else if (geometry instanceof google.maps.Data.Point) {
+				callback.call(thisArg, geometry.get());
+			} else {
+				geometry.getArray().forEach(function(g) {
+					processPoints(g, callback, thisArg);
+				});
 			}
 		}
-		// if we want to select flows
-		else {
-			// we add the link id to list_link
-			list_links.push(id_li);
+	    
+		function initialize() {
 
-			// we create the html element
-			var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_flow" link="'+ String(id_li) + '">' + String(id_li) + '</li>';
+			// Create a simple map.
+			map = new google.maps.Map(document.getElementById('map-canvas'), {
+				zoom: 16,
+				center: {lat: 34.149156, lng: -118.0677},
+			});
 
-			// we append the html element to <ul>
-			$('#ul_flow').append(html_element);
+			var geojson = JSON.parse('{{ geojson|safe}}');
+			map.data.addGeoJson(geojson);
+			zoom(map);
+
+			map.data.setStyle({
+				icon: '{% static 'pointqanalysis/images/marker.png' %}',
+				strokeColor: '#0019ff',
+				strokeOpacity: 0.6,
+				strokeWeight: 9,
+			});
+
+			// Add infowindow when mouse on an element
+			map.data.addListener('mouseover', function(event) {
+				var infowindow = new google.maps.InfoWindow({
+					content: event.feature.getProperty('id')
+				});
+				infowindow.setPosition({lat: event.latLng.lat() + 0.00005, lng: event.latLng.lng()});
+				infowindow.open(map);
+				map.data.addListener('mouseout', function(event) {
+					infowindow.close();                    
+				});
+			});
+
+			// Add the link to the list_links array
+			map.data.addListener('click', function(event) {
+				if (event.feature.getGeometry().getType() == 'LineString') {
+
+					// id of the link we clicked on
+					var id_li = event.feature.getProperty('id');
+
+					// if we want to select queues
+					if (indicator == 'queues') {
+
+						// if count is even
+						if (count % 2 == 0) {
+
+							// we increment count
+							count = count + 1;
+
+							// we add the link id to list_queue_temp
+							list_queue_temp[0] = id_li;
+
+						}
+
+						// if count is uneven
+						else {
+							// we increment count
+							count = count + 1;
+
+							// we add the link id to list_queue_temp
+							list_queue_temp[1] = id_li;
+
+							// we add list_queue_temp to list_queues
+							list_queues.push([list_queue_temp[0], list_queue_temp[1]]);
+
+							// we create the html element
+							var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_queue" link1="'+ String(list_queue_temp[0]) + '" link2 = "' + String(list_queue_temp[1])  + '">[' + String(list_queue_temp[0]) +','+String(list_queue_temp[1]) + ']</li>';
+
+							// we append it to <ul>
+							$('#ul_queues').append(html_element);
+
+						}
+					}
+					// if we want to select flows
+					else {
+						// we add the link id to list_link
+						list_links.push(id_li);
+
+						// we create the html element
+						var html_element = '<li><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_flow" link="'+ String(id_li) + '">' + String(id_li) + '</li>';
+
+						// we append the html element to <ul>
+						$('#ul_flow').append(html_element);
+					}
+
+					// Delete queues
+					$('.img_delete_queue').click(function() {
+
+						// delete queue from list_queues
+						var link1 = $(this).attr('link1');
+						var link2 = $(this).attr('link2');
+						if (index_array(link1, link2, list_queues) != -1) {
+							list_queues.splice(index_array(link1, link2, list_queues), 1);
+						}
+
+						// delete queue from DOM
+						$(this).parent().remove();
+					});
+
+					// Delete links
+					$('.img_delete_flow').click(function() {
+
+						// delete queue from list_queues
+						var link = $(this).attr('link');
+
+						if (list_links.indexOf(link) != -1) {
+							list_links.splice(list_links.indexOf(link), 1);
+						}
+
+						// delete queue from DOM
+						$(this).parent().remove();
+					});
+
+				}
+			});
+
 		}
 
-		// Delete queues
-		$('.img_delete_queue').click(function() {
-
-			// delete queue from list_queues
-			var link1 = $(this).attr('link1');
-			var link2 = $(this).attr('link2');
-			if (index_array(link1, link2, list_queues) != -1) {
-				list_queues.splice(index_array(link1, link2, list_queues), 1);
-			}
-
-			// delete queue from DOM
-			$(this).parent().remove();
-		});
-
-		// Delete links
-		$('.img_delete_flow').click(function() {
-
-			// delete queue from list_queues
-			var link = $(this).attr('link');
-
-			if (list_links.indexOf(link) != -1) {
-				list_links.splice(list_links.indexOf(link), 1);
-			}
-
-			// delete queue from DOM
-			$(this).parent().remove();
-		});
-
-	        }
-	      });
-	      
-	    }
-
-	    google.maps.event.addDomListener(window, 'load', initialize);
-	});
-	</script>
-	<script type="text/javascript">
 		$(function() {
+
+			initialize();
 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// Interface
@@ -324,8 +366,6 @@
 			// Generate plots
 			$('#generate button').click(function() {
 
-				$('#generate button').button('loading');
-
 				// we delete previous plots
 				$('#flowchart').children().remove();
 				$('#queuechart').children().remove();
@@ -346,30 +386,46 @@
 				// if we want a flow analysis
 				if ($('#btn_analysis_flows').prop('checked')) {
 
-					$('#flowchart').css({'height': '400px', 'margin-bottom': '50px'});
+					if (list_links.length > 0 && t_end_analysis - t_start_analysis >= granularity) {
 
-					// generate flows plots
-					var links = list_links[0];
+						if (list_queues.length == 0) {
+							last_analysis = 'flow';
+						}
 
-					for (var i = 1; i < list_links.length; i++) {
-						links += '-' + list_links[i];
+						$('#generate button').button('loading');
+						$('#flowchart').css({'height': '400px', 'margin-bottom': '50px'});
+
+						// generate flows plots
+						var links = list_links[0];
+
+						for (var i = 1; i < list_links.length; i++) {
+							links += '-' + list_links[i];
+						}
+
+						generate_json_plot(links, 'flow', t_start_analysis, t_end_analysis, last_analysis, granularity);
 					}
-	
-					generate_json_plot(links, 'flow', t_start_analysis, t_end_analysis, last_analysis, granularity);
+
+					else {
+						$('#generate button').button('reset');
+					}
 				}
 
 				// if we want a queue analysis
 				if ($('#btn_analysis_queues').prop('checked')) {
 
-					$('#queuechart').css({'height': '400px'});
+					if (list_queues.length > 0) {
 
-					// generate queues plots
-					var queues = list_queues[0][0] + '.' + list_queues[0][1];
+						$('#generate button').button('loading');
+						$('#queuechart').css({'height': '400px'});
 
-					for (var i = 1; i < list_queues.length; i++) {
-						queues += '-' + list_queues[i][0] + '.' + list_queues[i][1];
+						// generate queues plots
+						var queues = list_queues[0][0] + '.' + list_queues[0][1];
+
+						for (var i = 1; i < list_queues.length; i++) {
+							queues += '-' + list_queues[i][0] + '.' + list_queues[i][1];
+						}
+						generate_json_plot(queues, 'queue', t_start_analysis, t_end_analysis, last_analysis, 0);
 					}
-					generate_json_plot(queues, 'queue', t_start_analysis, t_end_analysis, last_analysis, 0);
 				}
 			});
 
@@ -390,49 +446,7 @@
 					indicator = 'queues';
 				}
 			});
+		});			
 
-
-
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// Function Generate Graph
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			function generate_json_plot(link_id, type, t_start, t_end, last_analysis, granul) {
-				// First case: type flow
-				if (type == 'flow') {
-					// on crée une requête ajax asynchrone
-					$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'links': link_id, 'type': type, 't_start': t_start, 't_end': t_end, 'granul': granul}, function(data) {
-							var chart = new CanvasJS.Chart("flowchart", data);
-							chart.render();
-
-							if (last_analysis == 'flow') {
-								$('html, body').animate({
-									scrollTop: $("#generate").offset().top
-								}, 1000);
-								// we reset the generate button
-								$('#generate button').button('reset');
-							}
-					});
-				}
-				// Second cas: type queue
-				else if (type == 'queue') {
-					// on crée une requête ajax asynchrone
-					$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'queues': link_id, 'type': type, 't_start': t_start, 't_end': t_end}, function(data) {
-							var chart = new CanvasJS.Chart("queuechart", data);
-							chart.render();
-
-							if (last_analysis == 'queue') {
-								$('html, body').animate({
-									scrollTop: $("#generate").offset().top
-								}, 1000);
-								// we reset the generate button
-								$('#generate button').button('reset');
-							}
-					});
-				}
-
-			}
-			
-		});
-  	</script>
+	</script>
 {% endblock %}
