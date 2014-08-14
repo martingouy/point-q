@@ -1,0 +1,40 @@
+============================
+Introduction de Django Story
+============================
+
+:date: 2012-04-30 10:07
+:tags: django, python
+:category: Django
+:author: Rémy Hubscher
+
+Présentation
+============
+
+Je suis le premier membre inscrit sur le `Siteduzero.com`_ après l'ouverture de la v3.
+
+Cela fait déjà quelques années que je suis membre de cette
+communauté. C'est donc tout naturellement que j'ai commencé, en
+novembre 2011, `un tutoriel pour parler de Django`_.
+
+Cependant, il est assez difficile pour moi de rédiger les tutos dans
+le navigateur faire la mise en forme avec le zcode et tout.
+
+J'ai donc décidé de le reprendre ici en écrivant avec du RST présenté
+dans un pelican comme une histoire racontée à un ami sans détails inutiles.
+
+Si vous souhaitez une explication, il vous suffit de la demander dans
+les commentaires.
+
+Il est sous `Licence Art Libre`_.
+
+Vous pouvez trouver la source ici : http://bitbucket.org/natim/django-story
+
+Vous pouvez le lire en mode blog ici : http://django-story.ionyse.com/
+
+Vous pouvez le lire en mode documentation ici : http://django-story.rtfd.org/
+
+
+.. _`Siteduzero.com`: http://www.siteduzero.com/
+.. _`Licence Art Libre`: http://artlibre.org/licence/lal
+.. _`ReadTheDoc.org`: http://readthedocs.org/
+.. _`un tutoriel pour parler de Django`: http://www.siteduzero.com/tutoriel-3-329045-developpez-vos-applications-web-avec-django.html
