@@ -5,7 +5,7 @@ Introduction de Django Story
 :date: 2012-04-30 10:07
 :tags: django, python
 :category: Django
-:author: Rémy Hubscher
+:author: Martin Gouy
 
 Présentation
 ============
