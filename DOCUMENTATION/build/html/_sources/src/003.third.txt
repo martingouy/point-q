@@ -24,6 +24,7 @@ The first step is to upload the output database of the simulator (*file_recordin
 .. image:: images/003/upload_network.gif
 
 **Upload a new simulation:**
+
 .. image:: images/003/upload_simu.gif
 
 Analyze queues
