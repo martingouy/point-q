@@ -108,11 +108,11 @@ How to generate the configuration files from the XML
 
 How to proceed:
 
-#. Put your xml in the same folder than "network_configuration.py" located in the XML_TOOLS folder (cf Github of the project). 
-#. Run "network_configuration.py". The output is an excel workbook.
+#. **Put your xml in the same folder than "network_configuration.py" located in the XML_TOOLS folder (cf Github of the project).**
+#. **Run "network_configuration.py". The output is an excel workbook.**
 	Note: some of the configuration files are not generated automatically by this program. You will have to fill them by hand.
-#. Fill the uncompleted spreadsheets by hand
-#. Export the spreadsheets with excel to .txt with tabulations format 
+#. **Fill the uncompleted spreadsheets by hand.**
+#. **Export the spreadsheets with excel to .txt with tabulations format .**
 
 Note: You should always compare the structure of your configuration files with some that were already built and are correct. You can find some in the SMALL_NETWS folder.
 
