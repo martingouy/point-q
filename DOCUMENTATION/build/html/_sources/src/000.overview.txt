@@ -1,0 +1,29 @@
+============================
+Overview of Point Q Simulator
+============================
+
+:date: 2014-08-14 16:30
+:tags: pointq, simulator
+:author: Martin Gouy
+
+
+Global Schema
+============
+
+.. image:: images/000/overview.png
+
+Small Description
+===========
+
+The First Step when you want to compute a simulation is to create the configuration files (txt) needed by the simulator to run.
+To do so, you can either:
+
+* **Create them by hand**:
+	The list  and the descripttion of all the configuration files needed by the simulator to run is available in the LaTex documentation.
+	This process is very long and should only be used for very small networks.
+
+* **Extract them from the network file (XML)**
+
+The Second Step is to copy the configuration files into the right folder and select the parameters for your simulation (Duration, type of control...). Once the simulation is finished, it produces a a text database in which every event of the simulation is recorded.
+
+The Third Step is to upload this text database on the online analysis tool. Once uploaded, a list of the different analysis is available. You can easily generate the plots you need thanks to its user friendly interface.
