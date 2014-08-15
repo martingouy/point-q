@@ -7,9 +7,36 @@ Third Step: Analyze the results
 :author: Martin Gouy
 
 
-Test Gif
+Website
 ============
 
+The last part of the process is to analyze the results of the simulation. To do so, please log-in the `Point Q Analysis Website <http://sumupcloud.com/pointqanalysis/>`_ .
+
+Upload a new simulation
+==================
+
+The first step is to upload the output database of the simulator (*file_recording_event_db.txt*). You also have to upload the xml of the network which was used by the simulation. 
+
+**Note:** A network only needs to be uploaded once. Once uploaded, it can be linked to multiple simulations
+
+**Upload a new network:**
+
+.. image:: images/003/upload_network.gif
+
+**Upload a new simulation:**
 .. image:: images/003/upload_simu.gif
 
-..  youtube:: http://www.youtube.com/watch?v=JEe6w6HaDkM
+Analyze queues
+====================
+
+.. image:: images/003/queues.gif
+
+Analyze flows
+====================
+
+.. image:: images/003/flows.gif
+
+Export plots
+====================
+
+.. image:: images/003/export.gif
