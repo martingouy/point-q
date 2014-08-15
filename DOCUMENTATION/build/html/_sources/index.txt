@@ -26,3 +26,4 @@ Contents:
    src/001.first
    src/002.second
    src/003.third
+   src/004.website.advanced

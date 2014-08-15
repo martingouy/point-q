@@ -10,7 +10,7 @@ Third Step: Analyze the results
 Website
 ============
 
-The last part of the process is to analyze the results of the simulation. To do so, please log-in the `Point Q Analysis Website <http://sumupcloud.com/pointqanalysis/>`_ .
+The last part of the process is to analyze the results of the simulation. To do so, please log into the `Point Q Analysis Website <http://sumupcloud.com/pointqanalysis/>`_ .
 
 Upload a new simulation
 ==================

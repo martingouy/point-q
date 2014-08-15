@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Third Step: Analyze the results &mdash; Documentation Point Q 0.1 documentation</title>
+    <title>Website: Further information &mdash; Documentation Point Q 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,8 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Documentation Point Q 0.1 documentation" href="../index.html" />
-    <link rel="prev" title="Second Step: Run the simulation" href="002.second.html" /> 
+    <link rel="top" title="Documentation Point Q 0.1 documentation" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,9 +32,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="002.second.html" title="Second Step: Run the simulation"
-             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -45,8 +41,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="third-step-analyze-the-results">
-<h1>Third Step: Analyze the results<a class="headerlink" href="#third-step-analyze-the-results" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="website-further-information">
+<h1>Website: Further information<a class="headerlink" href="#website-further-information" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -59,30 +55,35 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="website">
-<h2>Website<a class="headerlink" href="#website" title="Permalink to this headline">¶</a></h2>
-<p>The last part of the process is to analyze the results of the simulation. To do so, please log into the <a class="reference external" href="http://sumupcloud.com/pointqanalysis/">Point Q Analysis Website</a> .</p>
+<div class="section" id="framework">
+<h2>Framework<a class="headerlink" href="#framework" title="Permalink to this headline">¶</a></h2>
+<p>The website runs under a web framework called Django which uses Python. This choice has been made for multiple reasons:</p>
+<ul class="simple">
+<li>Clean structure</li>
+<li>Modularity</li>
+<li>Well documented and big community</li>
+<li>Django is a python-based framework. The simulator is coded in Python, therefore it&#8217;s good to maintain the same environment in case for example we want to control the simulation from the website.</li>
+</ul>
+<p>More info / documentation can be found on <a class="reference external" href="https://www.djangoproject.com/">Django Website</a> .</p>
+<p><strong>Note:</strong> Their <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/">tutorial</a> is very well built and it is an easy way to get familiar with Django.</p>
 </div>
-<div class="section" id="upload-a-new-simulation">
-<h2>Upload a new simulation<a class="headerlink" href="#upload-a-new-simulation" title="Permalink to this headline">¶</a></h2>
-<p>The first step is to upload the output database of the simulator (<em>file_recording_event_db.txt</em>). You also have to upload the xml of the network which was used by the simulation.</p>
-<p><strong>Note:</strong> A network only needs to be uploaded once. Once uploaded, it can be linked to multiple simulations</p>
-<p><strong>Upload a new network:</strong></p>
-<img alt="../_images/upload_network.gif" src="../_images/upload_network.gif" />
-<p><strong>Upload a new simulation:</strong></p>
-<img alt="../_images/upload_simu.gif" src="../_images/upload_simu.gif" />
+<div class="section" id="design-choices">
+<h2>Design Choices<a class="headerlink" href="#design-choices" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/mvt.jpg" src="../_images/mvt.jpg" />
+<p>The recommended schema for a Django application is called <a class="reference external" href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names/">MVT</a> (Model/View/Template). However, for our application we decided to get rid of the Model part by connecting directly to the database.</p>
+<p>Advantages:</p>
+<ul class="simple">
+<li>In our case, we put a lot of strain on the databases. Using the Model layer would slow a lot our website</li>
+<li>We have much more liberty with the requests</li>
+</ul>
+<p>Inconvenient:</p>
+<ul class="simple">
+<li>Security</li>
+</ul>
 </div>
-<div class="section" id="analyze-queues">
-<h2>Analyze queues<a class="headerlink" href="#analyze-queues" title="Permalink to this headline">¶</a></h2>
-<img alt="../_images/queues.gif" src="../_images/queues.gif" />
-</div>
-<div class="section" id="analyze-flows">
-<h2>Analyze flows<a class="headerlink" href="#analyze-flows" title="Permalink to this headline">¶</a></h2>
-<img alt="../_images/flows.gif" src="../_images/flows.gif" />
-</div>
-<div class="section" id="export-plots">
-<h2>Export plots<a class="headerlink" href="#export-plots" title="Permalink to this headline">¶</a></h2>
-<img alt="../_images/export.gif" src="../_images/export.gif" />
+<div class="section" id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
+<p>We deployed the project on a web hosting called <a class="reference external" href="https://www.webfaction.com/">Webfaction</a> . If you want to do the same, you can follow this <a class="reference external" href="http://michal.karzynski.pl/blog/2013/09/14/django-in-virtualenv-on-webfactions-apache-with-mod-wsgi/">tutorial</a> which is very detailed and very instructive.</p>
 </div>
 </div>
 
@@ -94,22 +95,17 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Third Step: Analyze the results</a><ul>
-<li><a class="reference internal" href="#website">Website</a></li>
-<li><a class="reference internal" href="#upload-a-new-simulation">Upload a new simulation</a></li>
-<li><a class="reference internal" href="#analyze-queues">Analyze queues</a></li>
-<li><a class="reference internal" href="#analyze-flows">Analyze flows</a></li>
-<li><a class="reference internal" href="#export-plots">Export plots</a></li>
+<li><a class="reference internal" href="#">Website: Further information</a><ul>
+<li><a class="reference internal" href="#framework">Framework</a></li>
+<li><a class="reference internal" href="#design-choices">Design Choices</a></li>
+<li><a class="reference internal" href="#deployment">Deployment</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="002.second.html"
-                        title="previous chapter">Second Step: Run the simulation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/src/003.third.txt"
+    <li><a href="../_sources/src/004.website.advanced.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -135,9 +131,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="002.second.html" title="Second Step: Run the simulation"
-             >previous</a> |</li>
         <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
