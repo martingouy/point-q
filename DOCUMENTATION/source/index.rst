@@ -24,3 +24,4 @@ Contents:
 
    src/000.overview
    src/001.first
+   src/002.second
