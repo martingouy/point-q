@@ -11,3 +11,5 @@ Test Gif
 ============
 
 .. image:: images/003/upload_simu.gif
+
+..  youtube:: http://www.youtube.com/watch?v=JEe6w6HaDkM
