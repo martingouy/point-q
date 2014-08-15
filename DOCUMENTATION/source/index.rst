@@ -27,3 +27,5 @@ Contents:
    src/002.second
    src/003.third
    src/004.website.advanced
+   src/005.doc
+   

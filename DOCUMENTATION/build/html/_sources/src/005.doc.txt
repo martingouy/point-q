@@ -1,0 +1,18 @@
+============================
+Documentation
+============================
+
+:date: 2014-08-14 16:30
+:tags: pointq, simulator
+:author: Martin Gouy
+
+
+Documentation
+============
+
+.. image:: images/005/schema.jpg
+
+The documentation has been built with :
+
+* `Sphinx <http://sphinx-doc.org/>`_
+*  `Read the Docs <https://readthedocs.org/>`_
