@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>First Step: Configuration Files &mdash; Documentation Point Q 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Documentation Point Q 0.1 documentation" href="../index.html" />
+    <link rel="prev" title="Overview of Point Q Simulator" href="000.overview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="000.overview.html" title="Overview of Point Q Simulator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="first-step-configuration-files">
+<h1>First Step: Configuration Files<a class="headerlink" href="#first-step-configuration-files" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">date:</th><td class="field-body">2014-08-14 16:30</td>
+</tr>
+<tr class="field-even field"><th class="field-name">tags:</th><td class="field-body">pointq, simulator</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Martin Gouy</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The goal of this section is to present the different methods available to generate the configuration files needed to run the simulation.</p>
+</div>
+<div class="section" id="files-needed">
+<h2>Files needed<a class="headerlink" href="#files-needed" title="Permalink to this headline">¶</a></h2>
+<p>The list of the different files needed by the simulation is the following:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Network Configuration files</strong></dt>
+<dd><ul class="first last simple">
+<li>fi_demand_param_entry_link.txt</li>
+<li>fi_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration.txt</li>
+<li>fi_id_all_phases_max_queue_size_sat_flow_queue_type.txt</li>
+<li>fi_id_entry_exit_lk_related_path.txt</li>
+<li>fi_id_internal_link_id_orig_dest_node.txt</li>
+<li>fi_id_link_id_sublinks.txt</li>
+<li>fi_id_node_id_entering_links_to_node.txt</li>
+<li>fi_id_node_id_entry_links_to_network.txt</li>
+<li>fi_id_node_id_exit_links_from_network.txt</li>
+<li>fi_id_node_id_leaving_links_from_node.txt</li>
+<li>fi_id_node_type_node.txt</li>
+<li>fi_init_state_que.txt</li>
+<li>fi_mod_cum.txt</li>
+<li>fi_mrp.txt</li>
+<li>fi_mrp_cum.txt</li>
+<li>fi_phase_interference.txt</li>
+<li>fi_presence_detector.txt</li>
+<li>fi_que_size_detector.txt</li>
+<li>fi_series_cum_val_varying_rp.txt</li>
+<li>fi_series_varying_rp.txt</li>
+<li>fi_stages_each_non_sign_inters.txt</li>
+<li>fi_stages_each_sign_inters.txt</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Control Configuration files</strong></dt>
+<dd><ul class="first last simple">
+<li>fi_node_id_ctrl_type_category.txt</li>
+<li>files needed to define the type of control (FT/MP)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The specification of each of these files is available in the LaTex documentation available in the Github page of the project.</p>
+</div>
+<div class="section" id="first-method-generate-the-files-from-the-xml-of-the-network">
+<h2>First method: Generate the files from the XML of the network<a class="headerlink" href="#first-method-generate-the-files-from-the-xml-of-the-network" title="Permalink to this headline">¶</a></h2>
+<p>This method consist in representing the network thanks to an XML file, and then extract the info from the XML with a python program to create most of the required configuration files (some still need to be filled by hand).</p>
+<div class="section" id="create-the-xml-file-for-your-network">
+<h3>Create the XML file for your network<a class="headerlink" href="#create-the-xml-file-for-your-network" title="Permalink to this headline">¶</a></h3>
+<p>You can use this <a class="reference external" href="https://gateway.path.berkeley.edu/scenario-editor-0.4-no-drag/app/main.html#">Scenario Editor</a> to create your network and export it to XML.</p>
+<img alt="../_images/scenario_edit.png" src="../_images/scenario_edit.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">First Step: Configuration Files</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#files-needed">Files needed</a></li>
+<li><a class="reference internal" href="#first-method-generate-the-files-from-the-xml-of-the-network">First method: Generate the files from the XML of the network</a><ul>
+<li><a class="reference internal" href="#create-the-xml-file-for-your-network">Create the XML file for your network</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="000.overview.html"
+                        title="previous chapter">Overview of Point Q Simulator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/src/001.first.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="000.overview.html" title="Overview of Point Q Simulator"
+             >previous</a> |</li>
+        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Gouy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

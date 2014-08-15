@@ -23,3 +23,4 @@ Contents:
    :maxdepth: 1
 
    src/000.overview
+   src/001.first
