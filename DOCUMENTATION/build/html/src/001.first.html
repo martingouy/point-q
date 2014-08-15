@@ -116,6 +116,69 @@
 <p>You can use this <a class="reference external" href="https://gateway.path.berkeley.edu/scenario-editor-0.4-no-drag/app/main.html#">Scenario Editor</a> to create your network and export it to XML.</p>
 <img alt="../_images/scenario_edit.png" src="../_images/scenario_edit.png" />
 </div>
+<div class="section" id="structure-of-the-xml-file">
+<h3>Structure of the XML file<a class="headerlink" href="#structure-of-the-xml-file" title="Permalink to this headline">¶</a></h3>
+<p>The minimal structure of the XML should be the following:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;NetworkSet&gt;</span>
+        <span class="nt">&lt;network&gt;</span>
+                <span class="nt">&lt;NodeList&gt;</span>
+                        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;10001&quot;</span> <span class="na">in_sync=</span><span class="s">&quot;false&quot;</span> <span class="na">node_name=</span><span class="s">&quot;Huntington Dr &amp; 210 WB Off-Ramp&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;outputs&gt;</span>
+                                        <span class="nt">&lt;output</span> <span class="na">link_id=</span><span class="s">&quot;100054&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;output</span> <span class="na">link_id=</span><span class="s">&quot;200037&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;output</span> <span class="na">link_id=</span><span class="s">&quot;200053&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/outputs&gt;</span>
+                                <span class="nt">&lt;inputs&gt;</span>
+                                        <span class="nt">&lt;input</span> <span class="na">link_id=</span><span class="s">&quot;100037&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;input</span> <span class="na">link_id=</span><span class="s">&quot;100053&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;input</span> <span class="na">link_id=</span><span class="s">&quot;200054&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/inputs&gt;</span>
+                                <span class="nt">&lt;position&gt;</span>
+                                        <span class="nt">&lt;point</span> <span class="na">elevation=</span><span class="s">&quot;0&quot;</span> <span class="na">lat=</span><span class="s">&quot;34.1402560877304&quot;</span> <span class="na">lng=</span><span class="s">&quot;-118.016007095575&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/position&gt;</span>
+                        <span class="nt">&lt;/node&gt;</span>
+                <span class="nt">&lt;/NodeList&gt;</span>
+                <span class="nt">&lt;LinkList&gt;</span>
+                        <span class="nt">&lt;link</span> <span class="na">id=</span><span class="s">&quot;10002&quot;</span> <span class="na">in_sync=</span><span class="s">&quot;true&quot;</span> <span class="na">lane_offset=</span><span class="s">&quot;0&quot;</span> <span class="na">lanes=</span><span class="s">&quot;2&quot;</span> <span class="na">length=</span><span class="s">&quot;49.0728&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;begin</span> <span class="na">node_id=</span><span class="s">&quot;100016&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;end</span> <span class="na">node_id=</span><span class="s">&quot;10002&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;position&gt;</span>
+                                        <span class="nt">&lt;point</span> <span class="na">elevation=</span><span class="s">&quot;0&quot;</span> <span class="na">lat=</span><span class="s">&quot;34.1402927661392&quot;</span> <span class="na">lng=</span><span class="s">&quot;-118.01804959774&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;point</span> <span class="na">elevation=</span><span class="s">&quot;0&quot;</span> <span class="na">lat=</span><span class="s">&quot;34.14027&quot;</span> <span class="na">lng=</span><span class="s">&quot;-118.01873&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;point</span> <span class="na">elevation=</span><span class="s">&quot;0&quot;</span> <span class="na">lat=</span><span class="s">&quot;34.14022&quot;</span> <span class="na">lng=</span><span class="s">&quot;-118.01873&quot;</span><span class="nt">/&gt;</span>
+                                        <span class="nt">&lt;point</span> <span class="na">elevation=</span><span class="s">&quot;0&quot;</span> <span class="na">lat=</span><span class="s">&quot;34.140220557247&quot;</span> <span class="na">lng=</span><span class="s">&quot;-118.018722832203&quot;</span><span class="nt">/&gt;</span>
+                                <span class="nt">&lt;/position&gt;</span>
+                                <span class="nt">&lt;shape&gt;</span>u_koEnpioU?b@@rC<span class="nt">&lt;/shape&gt;</span>
+                        <span class="nt">&lt;/link&gt;</span>
+                <span class="nt">&lt;/LinkList&gt;</span>
+        <span class="nt">&lt;/network&gt;</span>
+<span class="nt">&lt;/NetworkSet&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-generate-the-configuration-files-from-the-xml">
+<h3>How to generate the configuration files from the XML<a class="headerlink" href="#how-to-generate-the-configuration-files-from-the-xml" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/network_builder.png" src="../_images/network_builder.png" />
+<p>How to proceed:</p>
+<ol class="arabic">
+<li><p class="first">Put your xml in the same folder than &#8220;network_configuration.py&#8221; located in the XML_TOOLS folder (cf Github of the project).</p>
+</li>
+<li><dl class="first docutils">
+<dt>Run &#8220;network_configuration.py&#8221;. The output is an excel workbook.</dt>
+<dd><p class="first last"><strong>Info:</strong> some of the configuration files are not generated automatically by this program. You will have to fill them by hand.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Fill the uncompleted spreadsheets by hand</p>
+</li>
+<li><p class="first">Export the spreadsheets with excel to .txt with tabulations format</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="second-method-create-the-files-by-hand">
+<h2>Second method: Create the files by hand<a class="headerlink" href="#second-method-create-the-files-by-hand" title="Permalink to this headline">¶</a></h2>
+<p>This method should only be used for very small networks. It&#8217;s a very painful method which will probably produce a lot of errors and make you loose some time to debug the mistakes.</p>
 </div>
 </div>
 
@@ -132,8 +195,11 @@
 <li><a class="reference internal" href="#files-needed">Files needed</a></li>
 <li><a class="reference internal" href="#first-method-generate-the-files-from-the-xml-of-the-network">First method: Generate the files from the XML of the network</a><ul>
 <li><a class="reference internal" href="#create-the-xml-file-for-your-network">Create the XML file for your network</a></li>
+<li><a class="reference internal" href="#structure-of-the-xml-file">Structure of the XML file</a></li>
+<li><a class="reference internal" href="#how-to-generate-the-configuration-files-from-the-xml">How to generate the configuration files from the XML</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#second-method-create-the-files-by-hand">Second method: Create the files by hand</a></li>
 </ul>
 </li>
 </ul>

@@ -58,3 +58,64 @@ Create the XML file for your network
 You can use this `Scenario Editor <https://gateway.path.berkeley.edu/scenario-editor-0.4-no-drag/app/main.html#>`_ to create your network and export it to XML.
 
 .. image:: images/001/scenario_edit.png
+
+Structure of the XML file
+------------------------------
+
+The minimal structure of the XML should be the following:
+
+.. code-block:: xml
+
+	<NetworkSet>
+		<network>
+			<NodeList>
+				<node id="10001" in_sync="false" node_name="Huntington Dr & 210 WB Off-Ramp">
+					<outputs>
+						<output link_id="100054"/>
+						<output link_id="200037"/>
+						<output link_id="200053"/>
+					</outputs>
+					<inputs>
+						<input link_id="100037"/>
+						<input link_id="100053"/>
+						<input link_id="200054"/>
+					</inputs>
+					<position>
+						<point elevation="0" lat="34.1402560877304" lng="-118.016007095575"/>
+					</position>
+				</node>
+			</NodeList>
+			<LinkList>
+				<link id="10002" in_sync="true" lane_offset="0" lanes="2" length="49.0728">
+					<begin node_id="100016"/>
+					<end node_id="10002"/>
+					<position>
+						<point elevation="0" lat="34.1402927661392" lng="-118.01804959774"/>
+						<point elevation="0" lat="34.14027" lng="-118.01873"/>
+						<point elevation="0" lat="34.14022" lng="-118.01873"/>
+						<point elevation="0" lat="34.140220557247" lng="-118.018722832203"/>
+					</position>
+					<shape>u_koEnpioU?b@@rC</shape>
+				</link>
+			</LinkList>
+		</network>
+	</NetworkSet>
+
+How to generate the configuration files from the XML
+--------------------------------------------------------
+
+.. image:: images/001/network_builder.png
+
+How to proceed:
+
+#. Put your xml in the same folder than "network_configuration.py" located in the XML_TOOLS folder (cf Github of the project). 
+#. Run "network_configuration.py". The output is an excel workbook.
+	**Info:** some of the configuration files are not generated automatically by this program. You will have to fill them by hand.
+#. Fill the uncompleted spreadsheets by hand
+#. Export the spreadsheets with excel to .txt with tabulations format 
+
+
+Second method: Create the files by hand
+===================================
+
+This method should only be used for very small networks. It's a very painful method which will probably produce a lot of errors and make you loose some time to debug the mistakes.
