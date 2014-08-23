@@ -706,16 +706,7 @@ class Simulation:
 						que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
 						que_link_b = len(self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].get_queue_veh())
 						
-						# Step 2: write the extracted value
-						file_pointq_state = open(val_fol_ctm_connect + '/pointq_state.tsv', 'w')
-						file_pointq_state.write(str(self._t_current))
-						file_pointq_state.write('\t')
-						file_pointq_state.write(str(que_link_a))
-						file_pointq_state.write('\t')
-						file_pointq_state.write(str(que_link_b))
-						file_pointq_state.close()
-
-						# Step 3a: we wait until the ctm file is created or updated
+						# Step 2a: we wait until the ctm file is created or updated
 						if not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
 							while not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
 								print('Freezed at :', self._t_current)
@@ -725,7 +716,7 @@ class Simulation:
 								print('Freezed at :', self._t_current)
 							ctm_state_md5 = self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv')
 
-						# Step 3b: we extract CTM data 
+						# Step 2b: we extract CTM data 
 						with open(val_fol_ctm_connect + '/ctm_state.tsv', 'rU') as f_ctm:
 							for line in f_ctm:
 								line_split = line.split('\t')
@@ -733,12 +724,21 @@ class Simulation:
 								flow_b = float(line_split[2])
 
 						
-						# Step 4: we update entry link A demand
+						# Step 3: we update entry link A demand
 						self._simul_system.get_network().get_di_entry_links_to_network()[100053].set_lis_parameters_fct_creating_demand_entry_link([demand_a])
 						#print get_lis_parameters_fct_creating_demand_entry_link(self):
 
-						# Step5 : we update flow intersection B
+						# Step 4: we update flow intersection B
 						self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].set_sat_flow_queue(flow_b)
+
+						# Step 5: write the extracted value
+						file_pointq_state = open(val_fol_ctm_connect + '/pointq_state.tsv', 'w')
+						file_pointq_state.write(str(self._t_current))
+						file_pointq_state.write('\t')
+						file_pointq_state.write(str(que_link_a))
+						file_pointq_state.write('\t')
+						file_pointq_state.write(str(que_link_b))
+						file_pointq_state.close()
 
 						time_stop += 5
 					
