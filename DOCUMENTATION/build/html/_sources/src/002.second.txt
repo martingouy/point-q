@@ -1,0 +1,20 @@
+============================
+Second Step: Run the simulation
+============================
+
+:date: 2014-08-14 16:30
+:tags: pointq, simulator
+:author: Martin Gouy
+
+
+How to proceed
+============
+
+#. **Copy the folder with your network configuration files into the SMALL_NETWS folder.**
+#. **Copy the control configuration files into sim_1/cc/Control_Param_Files**
+#. **Set the parameters for your simulation by editing *Dsu_1.py* located in sim_1/cc/**
+#. **Run the simulation: *python3.4 Simulation.py*.**
+#. **A new folder is created in which you'll find a file called *file_recording_event_db.txt*.**
+	This is the file containing all the data about the simulation. It is the file we will upload on the website to analyze the results.
+
+**Note:** For further informations, please refer to the Latex documentation

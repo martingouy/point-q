@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Website: Further information &mdash; Documentation Point Q 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Documentation Point Q 0.1 documentation" href="../index.html" />
+    <link rel="prev" title="Third Step: Analyze the results" href="003.third.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="003.third.html" title="Third Step: Analyze the results"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="website-further-information">
+<h1>Website: Further information<a class="headerlink" href="#website-further-information" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">date:</th><td class="field-body">2014-08-14 16:30</td>
+</tr>
+<tr class="field-even field"><th class="field-name">tags:</th><td class="field-body">pointq, simulator</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Martin Gouy</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="framework">
+<h2>Framework<a class="headerlink" href="#framework" title="Permalink to this headline">¶</a></h2>
+<p>The website runs under a web framework called Django which uses Python. This choice has been made for multiple reasons:</p>
+<ul class="simple">
+<li>Clean structure</li>
+<li>Modularity</li>
+<li>Well documented and big community</li>
+<li>Django is a python-based framework. The simulator is coded in Python, therefore it&#8217;s good to maintain the same environment in case for example we want to control the simulation from the website.</li>
+</ul>
+<p>More info / documentation can be found on <a class="reference external" href="https://www.djangoproject.com/">Django Website</a> .</p>
+<p><strong>Note:</strong> Their <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/">tutorial</a> is very well built and it is an easy way to get familiar with Django.</p>
+</div>
+<div class="section" id="design-choices">
+<h2>Design Choices<a class="headerlink" href="#design-choices" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/MVT.jpg" src="../_images/MVT.jpg" />
+<p>The recommended schema for a Django application is called <a class="reference external" href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names/">MVT</a> (Model/View/Template). However, for our application we decided to get rid of the Model part by connecting directly to the database.</p>
+<p>Advantages:</p>
+<ul class="simple">
+<li>In our case, we put a lot of strain on the databases. Using the Model layer would slow a lot our website</li>
+<li>We have much more liberty with the requests</li>
+</ul>
+<p>Inconvenient:</p>
+<ul class="simple">
+<li>Security</li>
+</ul>
+</div>
+<div class="section" id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
+<p>We deployed the project on a web hosting called <a class="reference external" href="https://www.webfaction.com/">Webfaction</a> . If you want to do the same, you can follow this <a class="reference external" href="http://michal.karzynski.pl/blog/2013/09/14/django-in-virtualenv-on-webfactions-apache-with-mod-wsgi/">tutorial</a> which is very detailed and very instructive.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Website: Further information</a><ul>
+<li><a class="reference internal" href="#framework">Framework</a></li>
+<li><a class="reference internal" href="#design-choices">Design Choices</a></li>
+<li><a class="reference internal" href="#deployment">Deployment</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="003.third.html"
+                        title="previous chapter">Third Step: Analyze the results</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/src/004.website.advanced.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="003.third.html" title="Third Step: Analyze the results"
+             >previous</a> |</li>
+        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Gouy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

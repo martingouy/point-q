@@ -50,7 +50,6 @@
 
 {% block javascript %} 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'pointqanalysis/js/zoombox.js' %}"></script>
 	<script type="text/javascript">
 		jQuery(function($){
@@ -91,7 +90,7 @@
 						if (httpRequest.readyState == 4){
 
 							$('#right_tree ul li').remove();
-							makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=listsim', 'avail_simul');
+							makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
 						}
 					};
 				}
@@ -125,17 +124,17 @@
 					$('#right_tree ul').append(xml_li);
 
 					$('img[sim = "' + sim_id + '"][alt = "close" ]').click(function(event){
-						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
+						makeRequest('../pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
 					});
 					$('img[sim = "' + sim_id + '"][alt = "choose" ]').click(function(event){
-						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
-						makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
+						makeRequest('../pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
+						makeRequest('../pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
 					});
 
 				}
 			}
 
-			makeRequest('http://127.0.0.1:8000/pointqanalysis/ajax?action=listsim', 'avail_simul');
+			makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
 		});
 	</script>
 {% endblock %}

@@ -80,9 +80,11 @@ body {
 #step2 {
   margin-top: 50px;
   margin-bottom: 100px;
+  width: 1100px;
+  height: 150px;
 }
 
-#step2 div {
+#div_type_analysis, #div_time_selection, #div_granularity {
   display: inline-block;
   vertical-align: top;
   width : 300px;
@@ -90,5 +92,9 @@ body {
 
 #generate {
   padding-top: 40px;
-  padding-left: 70px;
+  width: 120px;
+}
+
+#div_granularity {
+  margin-left: 40px;
 }
