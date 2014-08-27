@@ -60,8 +60,8 @@ def ajax(request):
 				data.append(tools_json.json_plot_flow(link_id, t_start, t_end, granul, sim_name))
 
 			title = {'text': 'Flows'}
-			axisX = {'title': "Time interval (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			axisY = {'title': "Number of veh. (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisX = {'title': "Time interval [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Flow [veh per interval]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'title': title, 'exportEnabled': 'true', 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 		# second case : queues
@@ -79,8 +79,8 @@ def ajax(request):
 				data.append(tools_json.json_plot_queue(queue, t_start, t_end, sim_name))
 
 			title = {'text': 'Queues'}
-			axisX = {'title': "Seconds (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			axisY = {'title': "Queue length (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisX = {'title': "Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Queue length [veh]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 		#last case :  ODs
@@ -97,8 +97,8 @@ def ajax(request):
 				print('finished appending')
 			print data
 			title = {'text': 'Travel Time'}
-			axisX = {'title': "Seconds (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			axisY = {'title': "Travel Time (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisX = {'title': "Entry Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Travel Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 
