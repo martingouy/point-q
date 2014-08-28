@@ -303,7 +303,7 @@ function getObjects(obj, key, val) {
 			map.data.setStyle(function(feature){
 				var color='blue';
 				    if (feature.getProperty('isColorful')) {
-     	 				color = 'green';
+     	 				color = '#30D630';
     				}
     				return({
 						icon: '{% static 'pointqanalysis/images/marker.png' %}',
@@ -454,7 +454,7 @@ $("#flow").on("mouseover",'.link_li',function(){
     console.log('mouseover');
     var linkStr = $(this).attr('link');
     var feat=map.data.getFeatureById("link_"+linkStr);
-    map.data.overrideStyle(feat, {strokeColor: 'green'});
+    map.data.overrideStyle(feat, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
 });
 $("#flow").on("mouseout",'.link_li',function(){
     map.data.revertStyle();
@@ -464,8 +464,9 @@ $("#queue").on("mouseover",'.queue_li',function(){
     var link2Str = $(this).attr('link2');
     var feat1=map.data.getFeatureById("link_"+link1Str);
     var feat2=map.data.getFeatureById("link_"+link2Str);
-    map.data.overrideStyle(feat1, {strokeColor: 'green'});
-    map.data.overrideStyle(feat2, {strokeColor: 'orange'});
+    map.data.overrideStyle(feat1, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
+    map.data.overrideStyle(feat2, {strokeColor: 'orange', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
+   
 });
 $("#queue").on("mouseout",'.queue_li',function(){
     map.data.revertStyle();
@@ -475,8 +476,8 @@ $("#OD").on("mouseover",'.OD_li',function(){
     var link2Str = $(this).attr('link2');
     var feat1=map.data.getFeatureById("link_"+link1Str);
     var feat2=map.data.getFeatureById("link_"+link2Str);
-    map.data.overrideStyle(feat1, {strokeColor: 'green'});
-    map.data.overrideStyle(feat2, {strokeColor: 'orange'});
+    map.data.overrideStyle(feat1, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
+    map.data.overrideStyle(feat2, {strokeColor: 'orange', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
 });
 $("#OD").on("mouseout",'.OD_li',function(){
     map.data.revertStyle();
@@ -578,7 +579,7 @@ function nodeAddOutOver(){
     $.each($.parseJSON(nodeOutLinks), function( index, id_li ) {
 	if (id_li != -1){
 	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: 'green'});
+	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
 	}
     });
 }
@@ -595,7 +596,7 @@ function nodeAddQueueOver(){
     $.each($.parseJSON(nodeInLinks), function( index, id_li ) {
 	if (id_li != -1){
 	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: 'green'});
+	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
 	}
     });
 }
@@ -606,7 +607,7 @@ function nodeAddInOver(){
     $.each($.parseJSON(nodeInLinks), function( index, id_li ) {
 	if (id_li != -1){
 	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: 'green'});
+	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
 	}
     });
 }

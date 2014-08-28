@@ -94,8 +94,6 @@ def ajax(request):
 			data=[]
 			for pair in list_pairs_treated:
 				data.append(tools_json.json_plot_TT(int(pair[0]), int(pair[1]), t_start, t_end, sim_name))
-				print('finished appending')
-			print data
 			title = {'text': 'Travel Time'}
 			axisX = {'title': "Entry Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			axisY = {'title': "Travel Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
