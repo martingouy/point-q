@@ -38,7 +38,6 @@ incoming link	outcoming link	max alllowed size of queue	saturation flow	type
 20008	10008	-1	0	0
 10008	100011	-1	.1	0
 10008	100036	-1	.05	1
-10008	10004	-1	0	0
 10008	100041	-1	0	0
 10008	20008	-1	0	0
 100042	100011	-1	.05	1
@@ -154,7 +153,7 @@ incoming link	outcoming link	max alllowed size of queue	saturation flow	type
 100027	200023	-1	.05	0
 100027	200027	-1	0	0
 200028	200023	-1	.1	0
-200028	200027	-1	.05	0
+200028	200027	-1	.1	0
 200028	100028	-1	0	0
 100071	200033	-1	.1	0
 100071	100072	-1	.05	1
@@ -168,5 +167,3 @@ incoming link	outcoming link	max alllowed size of queue	saturation flow	type
 100074	200033	-1	.05	0
 100074	100073	-1	.05	1
 100074 	100035 	-1 	0 	0
-100025	200025	-1	.05	0
-200027	200025	-1	.05	0
