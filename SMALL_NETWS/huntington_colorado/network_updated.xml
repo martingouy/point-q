@@ -287,11 +287,10 @@
                   <marker id="1" name="" postmile="0"/>
                </roadway_markers>
                <outputs>
-                  <output link_id="200025"/>
+                  <output link_id="-1"/>
                </outputs>
                <inputs>
                   <input link_id="100025"/>
-				  <input link_id="200027"/>
                </inputs>
                <position>
                   <point elevation="0" lat="34.1456501798376" lng="-118.04148003459"/>
@@ -375,7 +374,7 @@
                   <output link_id="-1"/>
 				  </outputs>
                <inputs>
-                  <input link_id="200025"/>
+                  <input link_id="200027"/>
                </inputs>
                <position>
                   <point elevation="0" lat="34.14559053280047" lng="-118.04129227995872"/>
@@ -1198,26 +1197,12 @@
                <shape>kbloEz~moUILKRKNKV_Al@e@XCB</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-			<link id="200025" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
-               <begin node_id="100024"/>
-               <end node_id="100027"/>
-               <position>
-                  <point elevation="0" lat="34.1456501798376" lng="-118.04148003459"/>
-                  <point elevation="0" lat="34.14559053280047" lng="-118.04129227995872"/>                                                
-               </position>
-               <shape>kbloEz~moUILKRKNKV_Al@e@XCB</shape>
-               <link_type id="1" name="Freeway"/>
-            </link>
 			<link id="200027" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
                <begin node_id="100025"/>
-               <end node_id="100024"/>
+               <end node_id="100027"/>
                <position>
                   <point elevation="0" lat="34.146038921601466" lng="-118.04193869233131"/>
-				  <point elevation="0" lat="34.14600649152447" lng="-118.04187163710594"/>
-                  <point elevation="0" lat="34.14597195918004" lng="-118.04185420274734"/>
-                  <point elevation="0" lat="34.14585737448155" lng="-118.0417750775814"/>
-                  <point elevation="0" lat="34.14572081443241" lng="-118.04162621498108"/>
-                  <point elevation="0" lat="34.1456501798376" lng="-118.04148003459"/>   				  
+                  <point elevation="0" lat="34.14559053280047" lng="-118.04129227995872"/>				  
                </position>
                <shape>kbloEz~moUILKRKNKV_Al@e@XCB</shape>
                <link_type id="1" name="Freeway"/>
