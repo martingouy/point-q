@@ -37,7 +37,12 @@ def ajax(request):
 	elif request.GET.get('action', '') == 'redirect':
 		redirection = request.GET.get('redirection', '')
 		return HttpResponse(reverse('pointqanalysis:' + redirection))
-
+	elif request.GET.get('action', '') == 'get_from_node':
+		node_id = request.GET.get('node_id', '')
+		type_anal = request.GET.get('type', '')
+		if type_anal == 'flow':
+			answer = tools_json.json_get_output_links(node_id)
+		return HttpResponse(json.dumps(answer,indent=4), content_type="application/json")
 	elif request.GET.get('action', '') == 'generate_json_plot':
 		# we treat the parameters
 		type_anal = request.GET.get('type', '')
@@ -55,8 +60,8 @@ def ajax(request):
 				data.append(tools_json.json_plot_flow(link_id, t_start, t_end, granul, sim_name))
 
 			title = {'text': 'Flows'}
-			axisX = {'title': "Time interval (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			axisY = {'title': "Number of veh. (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisX = {'title': "Time interval [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Flow [veh per interval]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'title': title, 'exportEnabled': 'true', 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 		# second case : queues
@@ -74,8 +79,24 @@ def ajax(request):
 				data.append(tools_json.json_plot_queue(queue, t_start, t_end, sim_name))
 
 			title = {'text': 'Queues'}
-			axisX = {'title': "Seconds (s)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
-			axisY = {'title': "Queue length (veh)", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisX = {'title': "Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Queue length [veh]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
+			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
+		#last case :  ODs
+		elif type_anal == 'OD':
+			pairs = request.GET.get('ODs', '')
+			list_pairs = pairs.split('-')
+			list_pairs_treated = []
+			for pair in list_pairs:
+				list_pairs_treated.append(pair.split('.'))
+
+			data=[]
+			for pair in list_pairs_treated:
+				data.append(tools_json.json_plot_TT(int(pair[0]), int(pair[1]), t_start, t_end, sim_name))
+			title = {'text': 'Travel Time'}
+			axisX = {'title': "Entry Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
+			axisY = {'title': "Travel Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 
@@ -104,8 +125,11 @@ def analysis(request):
 			query_2 = 'SELECT geojson FROM index_network WHERE name = \'' + str(associated_network) + '\''
 			geojson_associated_network = tools_data.query_sql([query_2], True, 'network_db')[0]['geojson']
 
+			# we load the topology json of the associated network
+			query_3 = 'SELECT topjson FROM index_network WHERE name = \'' + str(associated_network) + '\''
+			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 			template = loader.get_template('pointqanalysis/index.html')
-		    	context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network})
+		    	context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network, 'topjson':topjson_associated_network})
 
 		    	return HttpResponse(template.render(context))
 		else:

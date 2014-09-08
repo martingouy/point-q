@@ -8,6 +8,10 @@ import json
 from xml.dom import minidom
 from django.conf import settings
 
+def json_get_output_links(node):
+    to_return = {'links': 'sam'}
+    return to_return
+
 def json_plot_flow(link, t_start, t_end, granul, sim_name):
 	# granularity sanity check
 	if t_end - t_start >= granul :
@@ -48,8 +52,17 @@ def json_plot_queue(queue, t_start, t_end, sim_name):
 
 	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': queue, 'dataPoints': dataPoints}
 	return serie
-	
 
+def json_plot_TT(orig, dest, t_start, t_end, sim_name):
+	query = 'SELECT time_entry, time_exit FROM ' + sim_name + ' WHERE entry_id = ' + str(orig) + ' AND c_loc_link = ' + str(dest) + ' AND time_entry >= ' + str(t_start) + ' AND time_entry <= ' +str(t_end)
+	output = tools_data.query_sql([query], True, 'pointq_db')
+	dataPoints=[]
+	for event in output:
+		#dataPoints.append({'x':1, 'y':2})
+		dataPoints.append({'x':float(event['time_entry']), 'y':(float(event['time_exit']-float(event['time_entry'])))});
+	
+	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': str(orig)+' to '+str(dest), 'dataPoints': dataPoints}
+	return serie
 def xml2geojson(name_network):
 	xmldoc = minidom.parse(settings.MEDIA_ROOT + '/upload/network_xml/' + str(name_network) + '.xml')
 	xml_nodelist = xmldoc.getElementsByTagName('node') 
@@ -62,7 +75,7 @@ def xml2geojson(name_network):
 		point_lat = float(node.getElementsByTagName('point')[0].attributes['lat'].value)
 		point_lng = float(node.getElementsByTagName('point')[0].attributes['lng'].value)
 		point = geojson.Point((point_lng, point_lat))
-		feature = geojson.Feature(properties = {'id': node_id}, geometry = point)
+		feature = geojson.Feature(properties = {'id': node_id}, geometry = point, id = 'node_'+node_id)
 		feature_collection.append(feature)
 
 	for link in xml_linklist:
@@ -73,8 +86,26 @@ def xml2geojson(name_network):
 			point_lng = float(point.attributes['lng'].value)
 			line.append((point_lng, point_lat))
 		line_string = geojson.LineString(line)
-		feature = geojson.Feature(properties = {'id': link_id}, geometry = line_string)
+		feature = geojson.Feature(properties = {'id': link_id}, geometry = line_string, id = 'link_'+link_id)
 		feature_collection.append(feature)
 
 	feature_collection = geojson.FeatureCollection(feature_collection)
 	return geojson.dumps(feature_collection)
+
+def xml2topjson(name_network):
+	xmldoc = minidom.parse(settings.MEDIA_ROOT + '/upload/network_xml/' + str(name_network) + '.xml')
+	xml_nodelist = xmldoc.getElementsByTagName('node') 
+	xml_linklist = xmldoc.getElementsByTagName('link') 
+	nodes={}
+	link_outs={}
+	for s in xml_nodelist:
+		nodes[int(s.attributes['id'].value)]=([int(t.attributes['link_id'].value) for t in s.getElementsByTagName('input')],[int(t.attributes['link_id'].value) for t in s.getElementsByTagName('output')])
+		for t in s.getElementsByTagName('input'):
+			link_outs[int(t.attributes['link_id'].value)]=[int(u.attributes['link_id'].value) for u in s.getElementsByTagName('output')]
+
+	json_output='{"NodeList":['+', '.join(['{"id":"' + str(k) + '", "inputs":"'+str(v[0])+'", "outputs":"' + str(v[1])+ '"}' for k,v in nodes.iteritems()])+ \
+    '], "LinkList":['+', '.join(['{"link_id":"' + str(k) + '", "outputs":"' + str(v)+ '"}' for k,v in link_outs.iteritems() if k!=-1])+']}'
+
+
+	return json_output
+

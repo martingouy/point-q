@@ -23,7 +23,7 @@ def list_sim_db():
 		sim.text = line['name']
 		root.append(sim)
 
-	#return xml
+        #return xml
 	xml = etree.tostring(root)
 	return xml
 
@@ -41,24 +41,32 @@ def treat_simul_db(name, path):
 	name = str(name).lower()
 
 	# We create the table
-	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, veh_id int, c_link int, queue text)')
+	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, veh_id int, c_link int, queue text, time_entry real, entry_id int, time_exit int, c_loc_link int)')
+	#cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, veh_id int, c_link int, queue text)')
 	conn.commit()
 
 	# Conversion from csv to sqlite
 	with open('%s/%s' % (settings.MEDIA_ROOT + str(path), str(name) + '.txt'), 'rb') as file:
 		reader = csv.reader(file)
 		for row in reader:
-			cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[11] + " ," + row[24] + " ,'" + row[18] + "')")
+			if len(row)==9:
+				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[2] + " ," + row[3] + " ,'" + row[4] + "')")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[2] + " ," + row[3] + " ,'" + row[4] + "' ," + row[5] + " ," + row[6] + " ," + row[7] + " ," + row[8] + ")")
+			else:
+				#There's a typo in Jenny's Docs: Column 25 contains the id of the link associated with the current event. Due to 0-based indexing, it appears at 24 here
+				#NOTE that there's a difference between Column 25 (id of link associated with current event) and Column 15(id of link where the vehicle is currently located)
+				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[11] + " ," + row[24] + " ,'" + row[18] + "')")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[11] + " ," + row[24] + " ,'" + row[18] + "' ," + row[12] + " ," + row[13] + " ," + row[23] + " ," + row[14] + ")")
 		conn.commit()
 
 	conn.close()
 
 def treat_network_db(name,path):
-
 	# we create the table index_network if it's not created
-	query_1 = 'CREATE TABLE index_network (name text, geojson text)'
+	query_1 = 'CREATE TABLE index_network (name text, geojson text, topjson text)'
 	tools_data.query_sql([query_1], False, 'network_db')
 
 	# we insert a new row in index_network
-	query_2 = 'INSERT INTO index_network VALUES (\'' + name + '\',\'' + tools_json.xml2geojson(name) + '\')'
+    #	query_2 = 'INSERT INTO index_network VALUES (\'' + name + '\',\'' + tools_json.xml2geojson(name) + '\')'
+	query_2 = 'INSERT INTO index_network VALUES (\'' + name + '\',\'' + tools_json.xml2geojson(name) + '\',\'' + tools_json.xml2topjson(name) + '\')'
 	tools_data.query_sql([query_2], False, 'network_db')

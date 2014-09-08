@@ -8,7 +8,8 @@ def validate_file_extension(value):
 def get_my_choices():
 
 	# we create the table index_network if it's not created
-	query_1 = 'CREATE TABLE index_network (name text, geojson text)'
+    #	query_1 = 'CREATE TABLE index_network (name text, geojson text)'
+	query_1 = 'CREATE TABLE index_network (name text, geojson text, topjson text)'
 	tools_data.query_sql([query_1], False, 'network_db')
 
 	query_2 = 'SELECT name FROM index_network'
