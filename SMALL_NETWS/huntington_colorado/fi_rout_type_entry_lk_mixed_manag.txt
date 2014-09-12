@@ -1,0 +1,1 @@
+id lk (1st column), rout. type (2nd column) 1: od and given path, 2: od and dynam computed path	 
