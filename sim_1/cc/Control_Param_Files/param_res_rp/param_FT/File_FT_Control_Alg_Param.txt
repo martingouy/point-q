@@ -1,0 +1,12 @@
+'id nd (1st colm),id stage (2nd colm, if id=0 it is rd cleat), actuat durat (3rd colm),cycle duration (5th colm), 1st line	 
+for a given inersection the order of stage id is related to  their priority within the cycle'	 
+1.00	 1.00	 50.00	 100.00	 	 
+2.00	 1.00	 50.00	 100.00	 
+2.00	 2.00	 50.00	 100.00	
+3.00	 1.00	 50.00	 100.00	 
+3.00	 2.00	 50.00	 100.00	
+4.00	 1.00	 50.00	 100.00 
+5.00	 1.00	 50.00	 100.00	 
+5.00	 2.00	 50.00	 100.00
+6.00	 1.00	 50.00	 100.00	 
+6.00	 2.00	 50.00	 100.00
