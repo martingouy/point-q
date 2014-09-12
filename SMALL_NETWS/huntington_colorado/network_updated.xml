@@ -1296,7 +1296,7 @@
                <shape>grloEtwooUC?BtCF^B|J?tG@nA?fABfQ?nA?hA@pE?dF@jA?vABdR@z@IP?dA?z@@z@B?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100035" in_sync="true" lane_offset="-1" lanes="1" length="70.0714697469056">
+            <link id="100035" in_sync="true" lane_offset="-1" lanes=“2” length=“160.934”>
                <begin node_id="100014"/>
                <end node_id="100015"/>
                <position>
