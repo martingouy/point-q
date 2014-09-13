@@ -502,11 +502,13 @@ class Ev_veh_arrived_at_que(Cl_Event.Event):
 			val_netwk.get_di_intersections()[val_netwk.get_di_entry_internal_links()\
 			[self._id_arrival_link].get_id_head_intersection_node()].get_intersection_control_obj().\
 			get_t_duration_for_defining_t_ctrl_revision_when_at_given_time_sensor_records_veh_variation())
+			
+			for i in self._li_vehicle:
 		
-			self.fct_treat_case_veh_arrival_que_new_demand_final_dest_and_path_dyn_defined_with_sensor_monit(\
-			vehicle=i,v_val_netwk=val_netwk,v_val_min_veh_hold_time=val_min_veh_hold_time,v_val_prec_round=val_prec_round,\
-			v_val_ev_list=val_ev_list,v_file_recording_event_db=val_file_recording_event_db,\
-			v_val_ti_ctrl_revision_if_decided=val_ti_ctrl_revision_if_decided,val_min_nb_vehicles_to_detect=val_min_nb_veh_to_detect)
+				self.fct_treat_case_veh_arrival_que_new_demand_final_dest_and_path_dyn_defined_with_sensor_monit(\
+				vehicle=i,v_val_netwk=val_netwk,v_val_min_veh_hold_time=val_min_veh_hold_time,v_val_prec_round=val_prec_round,\
+				v_val_ev_list=val_ev_list,v_file_recording_event_db=val_file_recording_event_db,\
+				v_val_ti_ctrl_revision_if_decided=val_ti_ctrl_revision_if_decided,val_min_nb_vehicles_to_detect=val_min_nb_veh_to_detect)
 		
 		#if the t control revison does not require sensor monitor
 		elif val_netwk.get_di_intersections()[val_netwk.get_di_entry_internal_links()\
@@ -1216,6 +1218,44 @@ class Ev_veh_arrived_at_que(Cl_Event.Event):
 			print("PROBLEM IN CL_EV_VEH_AR, FCT fct_treat_case_veh_ar_at_que_when_new_demand_given_final_dest_and_dyn_computed_path ",\
 			val_netwk.get_di_intersections()[val_netwk.get_di_entry_internal_links()\
 			[self._id_arrival_link].get_id_head_intersection_node()].get_intersection_control_obj().get_type_control_related_to_t_revision())
+			import sys
+			sys.exit()
+
+#*****************************************************************************************************************************************************************************************
+
+#****************************************************Cas New demand - mixed management*************************************************************************************
+	#method treating the case when a new demand is consired and a mixed routing management is employed 
+	def fct_treat_case_veh_ar_at_que_new_demand_mixed_management_dyn_defined_path_or_initial_given_path(self,\
+	v_val_netwk,v_val_min_veh_hold_time,v_val_prec_round,v_val_ev_list,\
+	v_val_file_recording_event_db,v_val_min_nb_veh_to_detect):
+		
+		#if a dynam routing is employed for the vehicle 
+		if self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==-1:
+		
+			self.fct_treat_case_veh_ar_at_que_when_new_demand_final_dest_and_path_dynam_defined(\
+			val_netwk=v_val_netwk,val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,\
+			val_ev_list=v_val_ev_list,val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+			
+		#if an OD and initially given path is employed for the vehicle
+		elif self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_initially_given_path"]:
+		
+			self.fct_treat_case_veh_ar_at_que_when_new_demand_final_dest_and_path_given(\
+			val_netwk=v_val_netwk,val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		
+		#if an OD and dynamical constructed path is employed for the vehicle
+		#elif self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_dynam_constructed_path"]:
+		
+			#self.fct_treat_case_veh_ar_at_que_when_new_demand_given_final_dest_and_dyn_computed_path(\
+			#val_netwk=v_val_netwk,val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,\
+			#val_ev_list=v_val_ev_list,val_file_recording_event_db=v_val_file_recording_event_db,\
+			#val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed=v_val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed,\
+			#val_min_nb_vehicles_to_detect=v_val_min_nb_veh_to_detect)
+		
+		#if none of the previous cases is employed
+		else:
+			print("PROBLEM IN CL_EV_VEH_ARRIVED_AT_QUE, FCT fct_treat_case_veh_ar_at_que_new_demand_mixed_management,ROUTING TYPE EMPLOYED BY VEH:",self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag())
 			import sys
 			sys.exit()
 
@@ -2646,6 +2686,69 @@ class Ev_veh_arrived_at_que(Cl_Event.Event):
 			sys.exit()
 
 #*****************************************************************************************************************************************************************************************
+
+#************************************************Cas Previous Demand Mixed management ***********************************************************************************
+	def fct_treat_case_veh_ar_at_que_previous_demand_mixed_management_dyn_defined_path_or_initial_given_path(self,v_val_netwk,v_val_dict_vehicle_info_prev_sim,\
+	v_val_min_veh_hold_time,v_val_prec_round,v_val_ev_list,v_val_file_recording_event_db,v_val_min_nb_veh_to_detect):
+	
+		#if a dynam routing is employed for the vehicle 
+		if self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==-1:
+		
+			self.fct_treat_case_veh_ar_at_que_when_previous_demand_final_dest_and_dyn_computed(\
+			val_netwk=v_val_netwk,val_dict_vehicle_info_prev_sim=v_val_dict_vehicle_info_prev_sim,\
+			val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		#if an OD and initially given path is employed for the vehicle
+		elif self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_initially_given_path"]:
+		
+			self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path(\
+			val_netwk=v_val_netwk,val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,\
+			val_ev_list=v_val_ev_list,val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		
+		
+		#if an OD and dynamical constructed path is employed for the vehicle
+		#elif self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_dynam_constructed_path"]:
+		
+		#if none of the previous cases is employed
+		else:
+			print("PROBLEM IN CL_EV_VEH_ARRIVED_AT_QUE, FCT fct_treat_case_veh_ar_at_que_previous_demand_mixed_management,ROUTING TYPE EMPLOYED BY VEH:",self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag())
+			import sys
+			sys.exit()
+	
+
+
+#*****************************************************************************************************************************************************************************************
+	def fct_treat_case_veh_ar_at_que_previous_demand_mixed_management_dyn_defined_path_or_dyn_constructed_ctr_eval_1(self,v_val_netwk,v_val_dict_vehicle_info_prev_sim,\
+	v_val_min_veh_hold_time,v_val_prec_round,v_val_ev_list,v_val_file_recording_event_db,v_val_min_nb_veh_to_detect):
+	
+		#if a dynam routing is employed for the vehicle 
+		if self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==-1:
+		
+			self.fct_treat_case_veh_ar_at_que_when_previous_demand_final_dest_and_dyn_computed(\
+			val_netwk=v_val_netwk,val_dict_vehicle_info_prev_sim=v_val_dict_vehicle_info_prev_sim,\
+			val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+	
+		
+		#if an OD and dynamical constructed path is employed for the vehicle
+		elif self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag()==Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_dynam_constructed_path"]:
+		
+			self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path_dyn_computed_ctr_eval(\
+			val_netwk,\
+			val_min_veh_hold_time,val_prec_round,val_ev_list,val_file_recording_event_db,val_dict_vehicle_info_prev_sim,\
+			val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed,val_min_nb_veh_to_detect)
+		
+		#if none of the previous cases is employed
+		else:
+			print("PROBLEM IN CL_EV_VEH_ARRIVED_AT_QUE, FCT fct_treat_case_veh_ar_at_que_previous_demand_mixed_management,ROUTING TYPE EMPLOYED BY VEH:",self._li_vehicle[0].get_type_vehicle_rout_when_mixed_manag())
+			import sys
+			sys.exit()
+	
+
+
+#*****************************************************************************************************************************************************************************************
 #*****************************************************************************************************************************************************************************************
 	#method treating the event
 	def event_treat(self,val_key_fct_in_dict_to_treat,li_param_fct_treat_event):
@@ -2657,7 +2760,9 @@ class Ev_veh_arrived_at_que(Cl_Event.Event):
 		4:self.fct_treat_case_veh_ar_at_que_when_previous_demand_final_dest_and_dyn_computed,\
 		5:self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path,\
 		6:self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path_dyn_computed_ctr_eval,\
-		7:self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path_dyn_computed_rout_algo_eval}	
+		7:self.fct_treat_case_veh_ar_at_que_when_previous_demand_given_final_dest_and_path_dyn_computed_rout_algo_eval,\
+		8:self.fct_treat_case_veh_ar_at_que_new_demand_mixed_management_dyn_defined_path_or_initial_given_path,\
+		9:self.fct_treat_case_veh_ar_at_que_previous_demand_mixed_management_dyn_defined_path_or_initial_given_path}	
 	
 		return di_fct_ev_veh_ar_treat[val_key_fct_in_dict_to_treat](*li_param_fct_treat_event)
 

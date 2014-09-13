@@ -1013,16 +1013,27 @@ class Creation_Network:
 				#if we have od matrices
 				if val_exist_od_mat==1:
 				
-			
-					inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
-					va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
-					va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
-					val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
-					val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
-					val_current_dict_cum_mod=dict_current_cum_mod[k],\
-					val_estim_turn_ratios=1,\
-					val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj,\
-					val_lis_param_estim_turn_ratios=dict_id_nd_param_turn_ratio_estim[k],val_dict_estimat_rp=di)
+					if k in dict_current_cum_mod:
+					
+						inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
+						val_current_dict_cum_mod=dict_current_cum_mod[k],\
+						val_estim_turn_ratios=1,\
+						val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj,\
+						val_lis_param_estim_turn_ratios=dict_id_nd_param_turn_ratio_estim[k],val_dict_estimat_rp=di)
+						
+					else:
+						inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
+						val_estim_turn_ratios=1,\
+						val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj,\
+						val_lis_param_estim_turn_ratios=dict_id_nd_param_turn_ratio_estim[k],val_dict_estimat_rp=di)
 
 					di_inters[k]=inters
 					
@@ -1049,14 +1060,37 @@ class Creation_Network:
 				#if we have od matrices
 				if val_exist_od_mat==1:
 				
-					inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
-					va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
-					va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
-					val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
-					val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
-					val_current_dict_cum_mod=dict_current_cum_mod[k],\
-					val_estim_turn_ratios=0,\
-					val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj)
+					
+					if k in dict_current_cum_mod:
+						
+						if k in di_id_nd_val_di_cum_rp:
+						
+							inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
+							va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
+							va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
+							val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
+							val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
+							val_current_dict_cum_mod=dict_current_cum_mod[k],\
+							val_estim_turn_ratios=0,\
+							val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj)
+						
+						#if k not in di_id_nd_val_di_cum_rp
+						else:
+							inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
+							va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
+							va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
+							val_current_dict_cum_mod=dict_current_cum_mod[k],\
+							val_estim_turn_ratios=0,\
+							val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj)
+						
+					else:
+						inters=Cl_Intersection_Signalised.Intersection_Signalised(va_id_nd=k,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[k],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[k],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[k],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[k],\
+						val_estim_turn_ratios=0,\
+						val_di_stages_sign_intersection=dict_id_node_li_si_stages[k],val_ctrl_actuate_obj=ctr_act_obj)
 				
 					di_inters[k]=inters
 					
@@ -1082,15 +1116,25 @@ class Creation_Network:
 				#if we have od matrices
 				if val_exist_od_mat==1:
 				
-					inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
-					va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
-					va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
-					val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
-					val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
-					val_current_dict_cum_mod=dict_current_cum_mod[k],\
-					val_estim_turn_ratios=1,\
-					val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j],\
-					val_dict_estimat_rp=di)
+					if j in dict_current_cum_mod:
+						inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
+						val_current_dict_cum_mod=dict_current_cum_mod[j],\
+						val_estim_turn_ratios=1,\
+						val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j],\
+						val_dict_estimat_rp=di)
+					else:
+						inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
+						val_estim_turn_ratios=1,\
+						val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j],\
+						val_dict_estimat_rp=di)
 					
 				#if we do not have od mat
 				elif val_exist_od_mat==0:
@@ -1108,14 +1152,24 @@ class Creation_Network:
 			else:
 				#if we have od matrices
 				if val_exist_od_mat==1:
-					inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
-					va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
-					va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
-					val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
-					val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
-					val_current_dict_cum_mod=dict_current_cum_mod[k],\
-					val_estim_turn_ratios=0,\
-					val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j])
+				
+					if j in dict_current_cum_mod:
+						inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
+						val_current_dict_cum_mod=dict_current_cum_mod[j],\
+						val_estim_turn_ratios=0,\
+						val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j])
+					else:
+						inters=Cl_Intersection_Non_Signalised.Intersection_Non_Signalised(va_id_nd=j,\
+						va_li_id_input_network_links_to_inters_node=dict_id_node_id_entering_links_to_node[j],\
+						va_li_id_output_network_links_from_inters_node=dict_id_node_id_leaving_links_from_node[j],\
+						val_current_dict_rout_prob=di_id_nd_val_dic_rp[j],\
+						val_current_dict_cum_rout_prob=di_id_nd_val_di_cum_rp[j],\
+						val_estim_turn_ratios=0,\
+						val_di_li_compatible_phases=dict_id_node_li_nsi_stages[j])
 					
 				#if we do not have od mat
 				elif val_exist_od_mat==0:
@@ -1188,7 +1242,7 @@ class Creation_Network:
 	val_dic_key_que_id_value_li_pos_value_pres_detector={},val_dic_key_que_id_value_li_pos_value_que_size_detector={},\
 	val_dic_key_id_non_sign_inters_value_zero={},\
 	val_sim_duration=None,val_round_prec=2,val_di_id_nd_with_estim_turn_ratios=None,val_indicat_type_veh_final_dest=None,\
-	val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param={}):
+	val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param={},val_di_key_id_lk_value_type_rout_manag={}):
 	
 		dict_entry_link={}
 		val_que_id=val_ind_queue
@@ -1263,34 +1317,72 @@ class Creation_Network:
 				#if a new demand will be generated
 				if  val_creat_new_demand==List_Explicit_Values.initialisation_value_to_one:
 				
-					entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
-					val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
-					val_set_vehicle_que=set_q_obj,\
-					val_length_lnk=\
-					val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
-					List_Explicit_Values.val_third_element_of_list],\
-					val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
-					[List_Explicit_Values.val_fourth_element_of_list],\
-					val_id_head_intersection_nd=i,\
-					val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
-					val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
-					val_li_output_lks_queues=v_li_id_outp_lks)
+					#if a mixed rout management is associated with the link
+					if j in val_di_key_id_lk_value_type_rout_manag:
+					
+						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+						val_set_vehicle_que=set_q_obj,\
+						val_length_lnk=\
+						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+						List_Explicit_Values.val_third_element_of_list],\
+						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+						[List_Explicit_Values.val_fourth_element_of_list],\
+						val_id_head_intersection_nd=i,\
+						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+						val_li_output_lks_queues=v_li_id_outp_lks,val_type_routing_entry_lk_when_mixed_management=val_di_key_id_lk_value_type_rout_manag[j])
+					
+					#if not a mixed rout management is associated with the link
+					else:
+				
+						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+						val_set_vehicle_que=set_q_obj,\
+						val_length_lnk=\
+						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+						List_Explicit_Values.val_third_element_of_list],\
+						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+						[List_Explicit_Values.val_fourth_element_of_list],\
+						val_id_head_intersection_nd=i,\
+						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+						val_li_output_lks_queues=v_li_id_outp_lks)
 				#if a previous or given demand will be employed
 				elif val_creat_new_demand==List_Explicit_Values.initialisation_value_to_zero or\
 					val_creat_new_demand==List_Explicit_Values.initialisation_value_to_minus_one:
 					
-					entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
-					val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
-					val_set_vehicle_que=set_q_obj,\
-					val_length_lnk=\
-					val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
-					List_Explicit_Values.val_third_element_of_list],\
-					val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
-					[List_Explicit_Values.val_fourth_element_of_list],\
-					val_id_head_intersection_nd=i,\
-					val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
-					val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
-					val_li_output_lks_queues=v_li_id_outp_lks)
+					#if a mixed rout management is associated with the link
+					if j in val_di_key_id_lk_value_type_rout_manag:
+					
+						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+						val_set_vehicle_que=set_q_obj,\
+						val_length_lnk=\
+						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+						List_Explicit_Values.val_third_element_of_list],\
+						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+						[List_Explicit_Values.val_fourth_element_of_list],\
+						val_id_head_intersection_nd=i,\
+						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+						val_li_output_lks_queues=v_li_id_outp_lks,val_type_routing_entry_lk_when_mixed_management=val_di_key_id_lk_value_type_rout_manag[j])
+					
+					#if not a mixed rout management is associated with the link
+					else:
+					
+						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+						val_set_vehicle_que=set_q_obj,\
+						val_length_lnk=\
+						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+						List_Explicit_Values.val_third_element_of_list],\
+						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+						[List_Explicit_Values.val_fourth_element_of_list],\
+						val_id_head_intersection_nd=i,\
+						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+						val_li_output_lks_queues=v_li_id_outp_lks)
 					#,\
 					#val_fct_creating_demand_entry_link=Global_Functions.fct_calcul_demand_entry_link)
 				else:
@@ -1557,6 +1649,45 @@ class Creation_Network:
 
 
 #*****************************************************************************************************************************************************************************************
+	#method creating the related  dict to the cum values of the prob of exit link and updating the dict of intersections
+	def fct_creat_dict_cum_mod_without_varying_values_and_update_intersections(self,val_di_cum_mod,val_netw):
+	
+		dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk={}
+		#val_di_cum_mod=dict, key =id entry internal link, value=[...,[cum  prob final dest link, id final dest link],...]
+		for i in val_di_cum_mod:
+			#print("id entry link", i) 
+			#if the head node of the link is not in the dict
+			if val_netw.get_di_entry_links_to_network()[i].get_id_head_intersection_node() not in \
+			dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk:
+			
+				dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk[\
+				val_netw.get_di_entry_internal_links()[i].get_id_head_intersection_node()]={}
+				
+				di={}
+				di[i]=\
+				val_di_cum_mod[i]
+				
+				dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk[\
+				val_netw.get_di_entry_internal_links()[i].get_id_head_intersection_node()].update(di)
+				
+			
+			#if the head node of the link is  in the dict
+			else:
+				di={}
+				di[i]=\
+				val_di_cum_mod[i]
+										
+				dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk[\
+				val_netw.get_di_entry_internal_links()[i].get_id_head_intersection_node()].update(di)
+			
+			
+			#we associate the dict with the current cum rout prob to each intersection
+			for t in dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk:
+				val_netw.get_di_intersections()[t].set_current_di_cum_mod(\
+				dict_key_id_entry_intern_lk_value_li_cum_prob_final_dest_lk_and_id_lk[t])
+	
+			
+#*****************************************************************************************************************************************************************************************
 	#method returning a list [dict1, dict 2]
 	#dict1=dictionary,key=node id, value=[type control, control category(string), 1/0 turn ratios estimated/not estimated]
 	#dict2, key=id node with estim turn ratios, value=1
@@ -1583,6 +1714,12 @@ class Creation_Network:
 
 
 #*****************************************************************************************************************************************************************************************
+	#method updating the path dictionary of each intersection when the model requires a choice fo an initial final destination from the  beginning 
+	#and a given unique path is considered
+	#di_paths_all_intersections= dict, key = node id, value = dict, key=(id entry, id exit link), value=[..., node to follow,...]
+	def fct_update_path_dict_each_related_intersection(self,di_paths_all_intersections,val_network):
+		for i in di_paths_all_intersections:
+			val_network.get_di_intersections()[i].set_current_di_unique_paths(di_paths_all_intersections[i])
 
 
 
@@ -1702,17 +1839,21 @@ class Creation_Network:
 		
 		
 				
-		if self._module_name_import_sim_user_data.val_type_veh_final_dest!=\
-		Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["dynamically_defined"]:
+		#if self._module_name_import_sim_user_data.val_type_veh_final_dest!=\
+		#Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["dynamically_defined"]:
 		
 			#dictionary, key=id entry link, value=[...[cum prob value of exit link, id of related exit link],...]
-			dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk=Global_Functions_Network.\
-			fct_reading_file_cum_rout_prob(name_file_read=\
-			"../"+self._name_data_folder+"/"+self._module_name_import_file_names_model_network.val_name_file_cum_mod,\
-			nb_comment_lines=val_nb_comment_lines_fi_mod)
-		else:
+			#dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk=Global_Functions_Network.\
+			#fct_reading_file_cum_rout_prob(name_file_read=\
+			#"../"+self._name_data_folder+"/"+self._module_name_import_file_names_model_network.val_name_file_cum_mod,\
+			#nb_comment_lines=val_nb_comment_lines_fi_mod)
+			
+		
+		#else:
 			#dictionary, key=id entry link, value=[...[cum prob value of exit link, id of related exit link],...]
-			dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk={}
+			#dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk={}
+					
+		
 			
 		#li_di_signal_and_non_signal_intersections=[di id sign interes, value=1, di id non sign interes, value=0]
 		li_di_signal_and_non_signal_intersections=Global_Functions_Network.\
@@ -1730,6 +1871,10 @@ class Creation_Network:
 		function_reading_file_intersection_stages(path_and_name_file_read="../"+self._name_data_folder+"/"+\
 		File_names_network_model.val_name_file_stages_each_non_signalised_inters,nb_comment_lines=val_nb_comment_lines)
 		
+		#dictionaire, key=id entry link, value=type rout managem when mixed management
+		dict_key_id_lk_value_type_rout_manag=Global_Functions_Network.\
+		fct_read_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_read="../"+self._name_data_folder+"/"+\
+		File_names_network_model.val_name_file_rout_type_entry_lk_mixed_manag,nb_comment_lines=1)
 		
 		#if stoch demand
 		if self._module_name_import_sim_user_data.val_indicating_stoch_demand==1:
@@ -1756,7 +1901,7 @@ class Creation_Network:
 			if val_di_id_nd_type_and_ctrl_categ[m][0] not in val_lis_types_ctrl:
 				val_lis_types_ctrl.append(val_di_id_nd_type_and_ctrl_categ[m][0])
 
-
+		
 
 		#creation of the entry links, li_di_entry_lk=[dict_entry_link,val_que_id]
 		li_di_entry_lk=self.funct_creating_dict_entry_links_to_network(\
@@ -1776,7 +1921,8 @@ class Creation_Network:
 		val_round_prec=self._module_name_import_sim_user_data.val_precision_round_for_defin_time,\
 		val_di_id_nd_with_estim_turn_ratios=val_di_id_nd_with_estimated_turn_ratios,\
 		val_indicat_type_veh_final_dest=self._module_name_import_sim_user_data.val_type_veh_final_dest,\
-		val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param=dict_id_nd_interf_phases)
+		val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param=dict_id_nd_interf_phases,\
+		val_di_key_id_lk_value_type_rout_manag=dict_key_id_lk_value_type_rout_manag)
 		
 		
 		#the dictionary of the entry links of the network 
@@ -1913,7 +2059,27 @@ class Creation_Network:
 		di_cum_rp_per_inters=self.fct_creat_dict_cum_rp(val_di_cum_rp=dict_mat_rp_cum_key_entry_intern_lk_value_list_cum_fct_val,\
 		val_netw=network)
 		
-				
+		if self._module_name_import_sim_user_data.val_type_veh_final_dest!=\
+		Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["dynamically_defined"]:
+		
+			#dictionary, key=id entry link, value=[...[cum prob value of exit link, id of related exit link],...]
+			dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk=Global_Functions_Network.\
+			fct_reading_file_cum_rout_prob(name_file_read=\
+			"../"+self._name_data_folder+"/"+self._module_name_import_file_names_model_network.val_name_file_cum_mod,\
+			nb_comment_lines=val_nb_comment_lines_fi_mod)
+			
+			#di with the cum  mod per node
+			dict_cum_mod_per_inters=self.fct_creat_dict_cum_rp(val_di_cum_rp=dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk,\
+			val_netw=network)
+			
+		
+		else:
+			#dictionary, key=id entry link, value=[...[cum prob value of exit link, id of related exit link],...]
+			dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk={}
+			
+			dict_cum_mod_per_inters={}
+
+		
 		
 		#if (at least some) turn ratios will be estimated
 		if val_di_id_nd_with_estimated_turn_ratios!={}:
@@ -1952,7 +2118,7 @@ class Creation_Network:
 		else:
 			val_exist_od_matr=1
 		
-		#print("di_id_nd_val_di_rout_prob",di_id_nd_val_di_rout_prob)
+		#print("di_id_nd_val_di_rout_prob",di_id_nd_val_di_rout_prob.keys())
 		#import sys
 		#sys.exit()
 		#creation of the dictionary of the intersections
@@ -1964,7 +2130,7 @@ class Creation_Network:
 		di_id_nd_type_and_ctrl_categ=val_di_id_nd_type_and_ctrl_categ,\
 		di_id_nd_val_dic_rp=di_id_nd_val_di_rout_prob,\
 		di_id_nd_val_di_cum_rp=di_cum_rp_per_inters,\
-		dict_current_cum_mod=dict_mod_key_id_entry_lk_value_li_cum_prob_and_id_related_exit_lk,\
+		dict_current_cum_mod=dict_cum_mod_per_inters,\
 		dict_id_node_li_si_stages=dict_intersection_signalised_stages,\
 		dict_id_node_li_nsi_stages=dict_intersection_non_signalised_stages,\
 		di_id_sign_inters_nd_value_one=li_di_signal_and_non_signal_intersections[0],\
@@ -1974,6 +2140,8 @@ class Creation_Network:
 		v_nb_comment_lines_fa_max_green=val_nb_comment_lines_fa_max_green,\
 		dict_id_nd_param_turn_ratio_estim=di_id_nd_val_li_param_estim_turn_ratios,\
 		val_dict_estim_rp=di_id_nd_val_di_initial_value_estim_rout_prob,val_di_id_link_val_link=network.get_di_all_links())
+		
+		
 		
 		network.set_di_intersections(dict_intersections)
 
@@ -2024,10 +2192,12 @@ class Creation_Network:
 		
 		#If we have ODs and given paths
 		if self._module_name_import_sim_user_data.val_type_veh_final_dest==\
-		Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_given"]:
+		Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_given"] or\
+		self._module_name_import_sim_user_data.val_type_veh_final_dest==\
+		Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]:
 		
 			#dict, key=id inters node, value=dict, key=(id entry link, id exit link) value=[..., id link to follow,...]
-			di_unique_paths_all_inters=Global_Functions_Network. fct_creat_dict_unique_paths(\
+			di_unique_paths_all_inters=Global_Functions_Network.fct_creat_dict_unique_paths(\
 			val_name_file_to_read="../"+self._name_data_folder+"/"+File_names_network_model.val_name_file_id_entry_exit_link_path,\
 			val_nb_comment_lines=1,val_netw=network)
 		

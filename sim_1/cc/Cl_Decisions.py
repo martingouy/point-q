@@ -23,8 +23,9 @@ TYPE_TRAVEL_DURAT_MANAG={1:"fixed_tr_dur",2:"stoch_tr_dur"}
 #a) "dynamically_defined"= whe the vehicle final destination will be dynamically defined
 #b) "initially_defined_and_path_given"=when the vehicle final destination and path are intitially  given 
 #c) "initially_defined_and_path_dyn_constructed"=when tge veh final destination is initially give and the path is dynamically constructed
+#d) "mixed_dyndefined_or_odwithgivenpath"=when for some entry links we have OD matrix and given path and for some other links the path is dynam defined
 TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH={"dynamically_defined":1,"initially_defined_and_path_given":2,\
-"initially_defined_and_path_dyn_constructed":3}
+"initially_defined_and_path_dyn_constructed":3,"mixed_dyndefined_or_odwithgiven_path":4}
 
 #diction indicating the way at which split ratios are going to be calculated
 #a) "stoch_no_OD"= when split ratios are stoch and the vehicle final destination is dynamically calculated
@@ -119,6 +120,9 @@ class Decisions:
 	#value has as many elemens as the phases of the key
 	#i returns [ random uniform nb, id veh lk location, id dest lk]
 	def fct_calcul_queue_chosen_by_veh_from_cum_fct(self,id_veh_lk_location, di_cum_prob,a=0,b=1):
+	
+		
+		
 	
 		#print("di_cum_prob[id_veh_lk_location",di_cum_prob)
 		li=[]

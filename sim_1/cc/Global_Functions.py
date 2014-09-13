@@ -17,8 +17,8 @@ def fct_calcul_demand_entry_link_stoch_case(param):
 #*****************************************************************************************************************************************************************************************
 #function defining the time between two successive vehicle appearances  at en entry link,	when deterministic demand is considered
 def fct_calcul_demand_entry_link_deterministic_case(param):
-	if param <= 0.000000001:
-		return 5
+	if param <= 0.0000001:
+		return 600
 	else:
 		return 1 / param
 #*****************************************************************************************************************************************************************************************
@@ -319,6 +319,14 @@ val_line_number_dyn_constr_veh_final_dest=7,val_line_number_initial_defined_veh_
 			name_file_read=i,line_number=val_line_number_dyn_constr_veh_final_dest)
 			dict_vehicle_inform.update(di)
 		os.chdir(cur_dir)	
+	#if a mixed management will be employed concerning the veh final destination, either dynam defined or initial defined
+	elif veh_final_dest_dynam_construct==List_Explicit_Values.initialisation_value_to_four:
+		#val_line_number_dyn_constr_veh_final_dest=7
+		for i in os.listdir('.'):
+			di=fct_creating_dict_veh_inform_from_veh_file_when_mixed_rout_manag(\
+			name_file_read=i,line_number=val_line_number_dyn_constr_veh_final_dest)
+			dict_vehicle_inform.update(di)
+		os.chdir(cur_dir)	
 	#if the veh final destination will  be defined by the veh appearance
 	else:
 		#val_line_number_initial_defined_veh_final_dest=8
@@ -555,6 +563,49 @@ def fct_creating_dict_veh_inform_from_veh_file_creat_by_sim_treat_when_veh_final
 
 
 #*****************************************************************************************************************************************************************************************
+#method creat a dict with the veh inform, employed when a prev demand is utilized and a mixed rout management is  chosen
+#veh routing is either dynam or initially defined
+def fct_creating_dict_veh_inform_from_veh_file_when_mixed_rout_manag(name_file_read,line_number):
+
+	
+	#we open the file
+	file=open(name_file_read,"r")
+	
+	#we create the dict_veh_inform
+	dict_veh_inform={}
+	
+	ind=0
+	for i in file.readlines():
+		ind+=1
+		
+		if ind>line_number:
+			a=i.rsplit()
+			
+			#if a final destination is initially asigned to the veh
+			if eval(a[6]) !=-1:
+				if (eval(a[1]))==Cl_Event.TYPE_EV["type_ev_veh_appearance"]:
+					#the columns of the reading file are: [event_time,event_type,veh_id,current_veh_id_location,id_destination_link,t_exit_from_netwk,id_veh_final_dest]
+					dict_veh_inform[eval(a[2])]=[eval(a[0]),eval(a[3]),eval(a[6])]
+					
+					file.close()
+					return dict_veh_inform
+				
+			#if the veh final dest will be dynam defined
+			else:
+				
+			
+				if (eval(a[1]))==Cl_Event.TYPE_EV["type_ev_veh_appearance"]:
+					dict_veh_inform[eval(a[2])]=[eval(a[0]), [eval(a[3]),eval(a[4]) ] ]
+					
+
+				
+				elif eval(a[1])==Cl_Event.TYPE_EV["type_ev_veh_arrived_at_que"]:
+					dict_veh_inform[eval(a[2])][1].append(eval(a[4]) )
+	
+	file.close()
+	return dict_veh_inform
+
+#*****************************************************************************************************************************************************************************************
 #method reading a file (created by a sim treatement) and creating a dictionary of which the key is the vehicle id and
 #the value is a list [[t_ev,type_ev, id_current_veh_lk_location,id_dest_link_loc,t_exit_from_netw ],....]
 	
@@ -728,6 +779,7 @@ dict_vehicle_inform,name_file_with_veh_ap_ev_end_sim_to_read):
 	dict_entry_link_info={}
 	
 	#dict_vehicle_inform is a dict with key=veh_id, value=[t_veh_ap,id_entry_link,id_veh_final_dest_link]]
+	print(dict_vehicle_inform)
 	for i in dict_vehicle_inform:
 	
 		#if the id of the entry link is not in the doctionary
@@ -773,6 +825,47 @@ dict_vehicle_inform,name_file_with_veh_ap_ev_end_sim_to_read):
 	return dict_entry_link_info
 
 #*****************************************************************************************************************************************************************************************
+#method creating a dictionary, key=id_of_entry_link
+#value= [..., [t_appearance_veh, veh_id],..  ]  
+def fct_creat_dict_veh_appearance_info_entry_link_when_mixed_rout_manag_final_dest_dynam_or_initial_defined(\
+dict_vehicle_inform,name_file_with_veh_ap_ev_end_sim_to_read): 
+	
+	dict_entry_link_info={}
+	
+	#dict_vehicle_inform is a dict with key=veh_id, value=[t_veh_ap,[id_entry_link,id_dest_link_1,id_dest_link_2,...]] when the veh has a dynam defined final dest or
+	#dict_vehicle_inform is a dict with key=veh_id, value=[t_veh_ap,id_entry_link,id_veh_final_dest_link]] when the veh has initial defined final dest
+	for i in dict_vehicle_inform:
+	
+		#if the veh has dynam defined final dest
+		if len(dict_vehicle_inform[i])==2:
+			if dict_vehicle_inform[i][1][0] not in dict_entry_link_info:
+				dict_entry_link_info[dict_vehicle_inform[i][1][0]] =[[dict_vehicle_inform[i][0],i]]
+			else:
+				dict_entry_link_info[dict_vehicle_inform[i][1][0]].append([dict_vehicle_inform[i][0],i])
+				
+		#if the veh final dest is initially defined
+		else:
+			#if the id of the entry link is not in the dictionary
+			if dict_vehicle_inform[i][1] not in dict_entry_link_info:
+				#we add a new elem in the dict,
+				dict_entry_link_info[dict_vehicle_inform[i][1]] =[ [dict_vehicle_inform[i][0],i] ]
+			#if the id of the entry link is in the dictionary
+			else:
+				dict_entry_link_info[dict_vehicle_inform[i][1]].append([dict_vehicle_inform[i][0],i])
+				
+	file=open(name_file_with_veh_ap_ev_end_sim_to_read,"r")
+	for i in file.readlines():
+		dict_entry_link_info[eval(i)[1]].append([eval(i)[0],-1])
+	file.close()
+	for i in dict_entry_link_info:
+		dict_entry_link_info[i].sort()
+		
+	return dict_entry_link_info
+			
+
+
+#*****************************************************************************************************************************************************************************************
+
 #method returning a dict with the veh information for each entry link, key = id entry link, 
 #if the  sim cosntruct the veh final destination by the veh appear, value= [..., [t_appearance_veh, veh_id],..  ]  
 #if the veh final dest is dynam constructed, value= [..., [t_appearance_veh, veh_id, [id_current_link_location_1,id_destination_link_1,...]     ]  ] 
@@ -784,7 +877,10 @@ v_dict_vehicle_inform,v_name_file_with_veh_ap_ev_end_sim_to_read):
 		di_rep=fct_creat_dict_veh_appearance_info_entry_link_when_final_dest_dynam_constructed(\
 		dict_vehicle_inform=v_dict_vehicle_inform,\
 		name_file_with_veh_ap_ev_end_sim_to_read=v_name_file_with_veh_ap_ev_end_sim_to_read)
-	
+	#if a mixed rout manag will be employed where the veh final dest will either be dyn calculated or init defined
+	elif v_veh_final_dest_dynam_construct==List_Explicit_Values.initialisation_value_to_four:
+		di_rep=fct_creat_dict_veh_appearance_info_entry_link_when_mixed_rout_manag_final_dest_dynam_or_initial_defined(\
+		dict_vehicle_inform=v_dict_vehicle_inform,name_file_with_veh_ap_ev_end_sim_to_read=v_name_file_with_veh_ap_ev_end_sim_to_read)
 	#if the veh final dest will be defined by the veh appearance
 	else:
 		di_rep=fct_creat_dict_veh_appearance_info_entry_link_when_veh_final_dest_initially_defined(\

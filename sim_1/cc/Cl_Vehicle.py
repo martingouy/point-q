@@ -5,6 +5,7 @@ from heapq import *
 
 TYPE_STATE_VEH={"veh_dep_planned":1,"other":-1}
 TYPE_VEH_FINAL_DESTINATION={"dynam_constructed_final_dest":1,"initially_defined_final_dest":2}
+TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT={"od_and_initially_given_path":1,"od_and_dynam_constructed_path":2}
 
 class Vehicle:
 
@@ -19,7 +20,8 @@ class Vehicle:
 	val_nb_veh_occupied_positions_in_que=1,val_time_veh_insertion_in_the_veh_list_when_at_nsi=-1,\
 	val_type_vehicle_final_destination=None,val_id_veh_final_destination_link=None,\
 	val_index_current_veh_link_location_in_path_list_when_given_destination=-1,val_veh_suppressed_when_que_update=-1,\
-	val_veh_added_when_que_update=-1,val_veh_sat_flow_when_current_que_locat_affected=None):
+	val_veh_added_when_que_update=-1,val_veh_sat_flow_when_current_que_locat_affected=None,\
+	val_type_vehicle_rout_when_mixed_manag=-1):
 	
 
 		#the vehicle id
@@ -96,6 +98,10 @@ class Vehicle:
 		
 		#variable indicating the veh sat flow when jining a queue afectd by another one
 		self._veh_sat_flow_when_current_que_locat_affected=val_veh_sat_flow_when_current_que_locat_affected
+		
+		#variable indicating the type of the veh routing when a mixed management and the veh appeared at a link for which
+		# the routing is given by od and the entire path od the routing is given by an od matrix and the path is dynamically computed 
+		self._type_vehicle_rout_when_mixed_manag=val_type_vehicle_rout_when_mixed_manag
 		
 		
 #*****************************************************************************************************************************************************************************************
@@ -208,6 +214,10 @@ class Vehicle:
 		return self._veh_sat_flow_when_current_que_locat_affected
 
 #*****************************************************************************************************************************************************************************************
+	#method returning the variable indicating the type of the veh routing when a mixed management 
+	def get_type_vehicle_rout_when_mixed_manag(self):
+		return self._type_vehicle_rout_when_mixed_manag
+#*****************************************************************************************************************************************************************************************
 
 	
 	#method modyfing  the vehicle id
@@ -316,6 +326,10 @@ class Vehicle:
 	def set_veh_sat_flow_when_current_que_locat_affected(self,n_v):
 		self._veh_sat_flow_when_current_que_locat_affected=n_v
 
+#*****************************************************************************************************************************************************************************************
+	#method modifying the variable indicating the type of the veh routing when a mixed management 
+	def set_type_vehicle_rout_when_mixed_manag(self,n_v):
+		self._type_vehicle_rout_when_mixed_manag=n_v
 #*****************************************************************************************************************************************************************************************
 	def __le__(self,other_vehicle):
 		return  self._t_end_veh_hold_time_que<=other_vehicle.get_t_end_veh_hold_time_que()		
@@ -439,6 +453,8 @@ class Vehicle:
 			for i in val_selected_que.get_di_phase_interference():
 			
 				a=len(val_netw.get_di_entry_internal_links()[i[0]].get_set_veh_queue().get_di_obj_veh_queue_at_link()[i[0],i[1]].get_queue_veh())
+				
+				
 				#if the  affecting queue is of limited que size
 				if a>0:
 					#if the size of the afffecting queue exceeds the max permitted size

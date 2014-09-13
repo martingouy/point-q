@@ -1786,6 +1786,23 @@ def fct_read_file_fi_init_state_que(name_file_to_read,nb_comment_lines):
 	return di_rep
 
 #*****************************************************************************************************************************************************************************************
+#fct reading  file fi_rout_type_entry_lk_mixed_manag.txt
+#it returns a dict, key=id entry link, value= type of routing managem
+def fct_read_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_read,nb_comment_lines):
+
+	di_rep={}
+	file=open(name_file_to_read,"r")
+	
+	ind=0
+	for i in file.readlines():
+		ind+=1
+		if ind>nb_comment_lines:
+			a=i.rsplit()
+			di_rep[eval(a[0])]=eval(a[1])
+	return di_rep
+
+
+#*****************************************************************************************************************************************************************************************
 #method returning a dictionary, key=id link, value=dict, key=id phase associated with link, 
 #value=-1 if sensor captures the entire que, or
 #value=n>0 if sensor captures the whole que from the nth position (1st position indicated by zero) or
@@ -3098,7 +3115,22 @@ li_phrases=["id node (1 colm), id phase  affected (2-3 colm), id affecting phase
 			
 	file.close()
 
+#*****************************************************************************************************************************************************************************************
+#fct write the file with the routing type of entry links associated with od and given paths or dynamically computed ones
+def fct_write_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_write,li_valeurs,\
+li_phrases=["id lk (1st column), rout. type (2nd column) 1: od and given path, 2: od and dynam computed path"]):
 
+	file=open(name_file_to_write,"w")
+	
+	for i in li_phrases:
+		file.write("%s\t \n"%(i))
+		
+	for j in li_valeurs:
+		
+		file.write("%d\t %d  \n"%(j[0],j[1]))
+	
+	file.close()
+	
 
 
 #*****************************************************************************************************************************************************************************************
@@ -5393,8 +5425,14 @@ list_valeurs_fi_id_nd_type_ctrl_cat=[
 
 #print(li_di_mu_sigma_shift[0])
 
+# we write the file with the routing type of entry links associated with od and given paths or dynamically computed ones
 
+#val_li_valeurs=[[8,1],[5,1]]
+#fct_write_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_write=File_names_network_model.val_name_file_rout_type_entry_lk_mixed_manag,li_valeurs=val_li_valeurs,\
+#li_phrases=["id lk (1st column), rout. type (2nd column) 1: od and given path, 2: od and dynam computed path"])
 
+#di_rep=fct_read_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_read=File_names_network_model.val_name_file_rout_type_entry_lk_mixed_manag,nb_comment_lines=1)
+#print(di_rep)
 
 
 

@@ -93,9 +93,29 @@ def fct_define_param_ev_veh_ap(val_obj_simulation,val_obj_data_sim,val_obj_creat
 			
 			return[val_key_fct_in_dict,val_li_parm_fct]
 			
+		#if we have a mixed management and the routing is either dynamical or  with od and given path
+		elif val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]:
+		
+			val_key_fct_in_dict=7
+			
+			
+			
+			val_li_parm_fct=[\
+			val_obj_simulation.get_new_veh_id(),val_obj_simulation.get_simul_system().get_network(),\
+			val_obj_data_sim.get_type_veh_final_dest(),val_obj_data_sim.get_min_hold_t_veh_in_que(),\
+			val_obj_data_sim.get_precision_round_for_defin_time(),val_obj_simulation.get_heap_even(),\
+			val_obj_creation_record_files.get_file_recording_event_db(),\
+			List_Explicit_Values.initialisation_value_to_one]
+			
+			
+			return[val_key_fct_in_dict,val_li_parm_fct]
+			
+			
+			
 	
 	#if a previously generated demand is considered
 	elif val_obj_data_sim.get_creation_new_dem()==List_Explicit_Values.initialisation_value_to_zero:
+		
 	
 		#if the path will dynam be computed (no predefined final destination)
 		if val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["dynamically_defined"]:
@@ -114,8 +134,9 @@ def fct_define_param_ev_veh_ap(val_obj_simulation,val_obj_data_sim,val_obj_creat
 		
 			return[val_key_fct_in_dict,val_li_parm_fct]
 		
-		#if the final destination id given
-		else:
+		#if the final destination is given by OD and the path is given or dyn computed
+		elif val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_given"] or \
+		val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_dyn_constructed"]:
 			#if the purpose  of the implem is to evaluate the signal control policy
 			if val_obj_data_sim.get_reason_employing_previous_demand()==Cl_Decisions.TYPE_REASON_EMPLOYING_PREVIOUS_DEMAND["CTRL_EVAL"]:
 			
@@ -167,12 +188,24 @@ def fct_define_param_ev_veh_ap(val_obj_simulation,val_obj_data_sim,val_obj_creat
 				List_Explicit_Values.initialisation_value_to_one]
 				
 				return[val_key_fct_in_dict,val_li_parm_fct]
+				#if none of the previous case
 			
-			#if none of the previous case
-			else:
-				print("PROBLEM IN IN CREATION_PARAMETERS_EVENT_TREAT, REASON IMPLEMENTATION: ",val_obj_data_sim.get_reason_employing_previous_demand())
-				import sys
-				sys.exit()
+		#if a mixed management is employed and a dynam routing is employed or  the final destination is given by OD and the path is given 
+		elif val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]:
+			
+			
+			val_key_fct_in_dict=8
+				
+			val_li_parm_fct=[val_obj_simulation.get_simul_system().get_network(),\
+			val_obj_data_sim.get_type_veh_final_dest(),val_obj_data_sim.get_min_hold_t_veh_in_que(),\
+			val_obj_data_sim.get_precision_round_for_defin_time(),val_obj_simulation.get_heap_even(),\
+			val_obj_creation_record_files.get_file_recording_event_db(),\
+			val_obj_data_sim.get_dict_entry_link_information_prev_sim(),\
+			val_obj_data_sim.get_dict_veh_information_prev_sim(),\
+			List_Explicit_Values.initialisation_value_to_one]
+				
+			return[val_key_fct_in_dict,val_li_parm_fct]
+			
 	
 	#if a given demand is considered
 	elif val_obj_data_sim.get_creation_new_dem()==List_Explicit_Values.initialisation_value_to_minus_one:
@@ -200,6 +233,7 @@ val_obj_creation_record_files):
 	
 	#if finite link capacities are considered
 	if val_obj_data_sim.get_variable_indicating_finite_capacity_internal_links()==List_Explicit_Values.initialisation_value_to_one:
+		
 	
 		#val_fct=obj_ev_end_veh_dep.fct_treat_event_case_finite_lk_capacity
 		val_key_fct_in_dict=1
@@ -309,7 +343,18 @@ def fct_define_param_ev_veh_ar_at_que(val_gl_fct_obj,val_obj_simulation,val_obj_
 			
 			return [val_key_fct_in_dict,val_li_parm_fct]
 		
+		#if we have a mixed management (dyn defined paths and or OD with given path)
+		elif val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]:
+		
+			val_key_fct_in_dict=8
 			
+			val_li_parm_fct=[val_obj_simulation.get_simul_system().get_network(),\
+			val_obj_data_sim.get_min_hold_t_veh_in_que(),\
+			val_obj_data_sim.get_precision_round_for_defin_time(),val_obj_simulation.get_heap_even(),\
+			val_obj_creation_record_files.get_file_recording_event_db(),\
+			List_Explicit_Values.initialisation_value_to_one]
+			
+			return [val_key_fct_in_dict,val_li_parm_fct]
 		else:
 			print("PROBLEM IN CREATION_PARAMETERS_EVENT_TREAT, final dest: ",val_obj_data_sim.get_type_veh_final_dest())
 			import sys
@@ -343,6 +388,20 @@ def fct_define_param_ev_veh_ar_at_que(val_gl_fct_obj,val_obj_simulation,val_obj_
 			val_key_fct_in_dict=5
 	
 			val_li_parm_fct=[val_obj_simulation.get_simul_system().get_network(),\
+			val_obj_data_sim.get_min_hold_t_veh_in_que(),\
+			val_obj_data_sim.get_precision_round_for_defin_time(),val_obj_simulation.get_heap_even(),\
+			val_obj_creation_record_files.get_file_recording_event_db(),\
+			List_Explicit_Values.initialisation_value_to_one]
+			
+			return [val_key_fct_in_dict,val_li_parm_fct]
+		
+		#if we have a mixed management (dyn defined paths and or OD with given path)
+		elif val_obj_data_sim.get_type_veh_final_dest()==Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]:
+		
+			val_key_fct_in_dict=9
+			
+			val_li_parm_fct=[val_obj_simulation.get_simul_system().get_network(),\
+			val_obj_data_sim.get_dict_veh_information_prev_sim(),\
 			val_obj_data_sim.get_min_hold_t_veh_in_que(),\
 			val_obj_data_sim.get_precision_round_for_defin_time(),val_obj_simulation.get_heap_even(),\
 			val_obj_creation_record_files.get_file_recording_event_db(),\
@@ -600,5 +659,6 @@ def fct_creating_parameter_list_event_treat_event_heap(obj_simulation,obj_data_s
 	
 	
 	dict_p={1:li_1,2:li_2,3:li_3,4:li_4,5:li_5,6:li_6,7:li_7,8:li_8,9:li_9,10:li_10,11:li_11}
+	
 	return dict_p
 #*****************************************************************************************************************************************************************************************	

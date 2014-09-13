@@ -703,17 +703,18 @@ class Simulation:
 							os.makedirs(val_fol_ctm_connect)
                           
 						# Step 1: extract queue size from entry link A / exit link B
-						que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
+						#que_link_a = len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 100054)].get_queue_veh()) + len(self._simul_system.get_network().get_di_entry_links_to_network()[100053].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100053, 200037)].get_queue_veh())
+						que_link_a = len(self._simul_system.get_network().get_di_internal_links_to_network()[100054].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100054, 10002)].get_queue_veh()) + len(self._simul_system.get_network().get_di_internal_links_to_network()[100054].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100054, 100056)].get_queue_veh())
 						que_link_b = len(self._simul_system.get_network().get_di_internal_links_to_network()[100035].get_set_veh_queue().get_di_obj_veh_queue_at_link()[(100035, 100069)].get_queue_veh())
 						
 						# Step 2a: we wait until the ctm file is created or updated
 						if not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
 							while not os.path.isfile(val_fol_ctm_connect + '/ctm_state.tsv'):
-								print('Freezed at :', self._t_current)
+								print('Frozen at :', self._t_current)
 							ctm_state_md5 = self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv')
 						else:
 							while self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv') == ctm_state_md5:
-								print('Freezed at :', self._t_current)
+								print('Frozen at :', self._t_current)
 							ctm_state_md5 = self.md5Checksum(val_fol_ctm_connect + '/ctm_state.tsv')
 
 						# Step 2b: we extract CTM data 

@@ -3,6 +3,8 @@ import Cl_Set_Vehicle_Queues_Link
 import List_Explicit_Values
 
 #TYPE_NETWORK_ENTRY_LINK={"signalised_entry_link":1,"non_signalised_entry_link":0}
+TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT={\
+"od_and_initial_given_path_when_mixed_manag":1,"od_and_dynamically_defined_path_when_mixed_manag":2}
 
 class Network_Entry_Link(Cl_Network_Link.Network_Link):
 
@@ -10,7 +12,8 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 	
 	def __init__(self,val_id_lnk=-1,val_li_id_output_links_from_lnk=[],val_set_vehicle_que=None,val_length_lnk=-1,\
 	val_capacity_lnk=-1,val_id_head_intersection_nd=-1,val_li_id_sublks=[],val_fct_creating_demand_entry_link=None,\
-	val_lis_parameters_fct_creating_demand_entry_link=[],val_type_entry_link=1,val_li_output_lks_queues=None):
+	val_lis_parameters_fct_creating_demand_entry_link=[],val_type_entry_link=1,val_li_output_lks_queues=None,\
+	val_type_routing_entry_lk_when_mixed_management=-1):
 	
 		Cl_Network_Link.Network_Link.__init__(self,val_id_nwlink=val_id_lnk,val_li_id_output_links_from_nwlink=val_li_id_output_links_from_lnk,\
 		val_set_vehicle_queue_nwlink=val_set_vehicle_que,val_length_nwlink=val_length_lnk,val_capacity_nwlink=val_capacity_lnk,\
@@ -22,6 +25,11 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 		
 		#the list of the parameters of the function creating the demand
 		self._lis_parameters_fct_creating_demand_entry_link=val_lis_parameters_fct_creating_demand_entry_link 
+		
+		#the type of the routing  of an entry link when a mixed rout management is employed
+		self._type_routing_entry_lk_when_mixed_management=val_type_routing_entry_lk_when_mixed_management
+		
+		
 		
 		#the number of vehicles appeared at this entry link, initialised at zero and updated after every new vehicle appearance
 		#self._nb_vehicle_appearance_at_entry_link=List_Explicit_Values.initialisation_value_to_zero
@@ -42,6 +50,11 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 	#method returning the number of vehicles appeared at this entry link, initialised at zero and updated after every new vehicle appearance
 	def get_nb_vehicle_appearance_at_entry_link(self):
 		return self._nb_vehicle_appearance_at_entry_link
+#*****************************************************************************************************************************************************************************************
+	#method returning the type of the routing  of an entry link when a mixed rout management is employed
+	def get_type_routing_entry_lk_when_mixed_management(self):
+		return self._type_routing_entry_lk_when_mixed_management
+
 #*****************************************************************************************************************************************************************************************
 	#method returning the type  of the entry link
 	#def get_type_entry_link(self):
@@ -64,6 +77,11 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 	#method modifying the type  of the entry link
 	def set_type_entry_link(self,n_v):
 		self._type_entry_link=n_v
+#*****************************************************************************************************************************************************************************************
+	#method modifying the type of the routing  of an entry link when a mixed rout management is employed
+	def set_type_routing_entry_lk_when_mixed_management(self,n_v):
+		self._type_routing_entry_lk_when_mixed_management=n_v
+
 #*****************************************************************************************************************************************************************************************
 	#method creating the demand of the entry link
 	def fct_creating_demand_entry_link(self):

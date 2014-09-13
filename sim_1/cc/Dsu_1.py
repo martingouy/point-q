@@ -22,6 +22,9 @@ import Cl_Control_Actuate
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_SD_avec_OD"
 val_name_folder_network_files="../SMALL_NETWS/huntington_colorado"
 #val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_reseau_15_nds"
+#val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_DATA_reseau_2_nds"
+#val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_round_about_jennie"
+#val_name_folder_network_files="../SMALL_NETWS/reseaux_3/SMALL_round_about_mixed_rout_jennie"
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating if we will  creat the text record file (value=1 the text file will be created,  0 otherwise)
@@ -141,7 +144,7 @@ t_start_new_simulation=0
 #t_simulation_duration=10800
 t_simulation_duration=18000
 #t_simulation_duration=21600
-#t_simulation_duration=7200
+t_simulation_duration=7200
 #t_simulation_duration=36000
 #t_simulation_duration=28800
 
@@ -187,6 +190,7 @@ val_min_hold_t_veh_in_que=0.1
 #val_t_marge_start_calcul_veh_appearance=4
 #val_t_marge_start_calcul_veh_appearance=2
 val_t_marge_start_calcul_veh_appearance=0.2
+#val_t_marge_start_calcul_veh_appearance=1.2
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating if we wish to treat the sim resutls or not (writ veh hist files)
@@ -204,10 +208,12 @@ val_each_icm_read=0
 #"dynamically_defined"=when give proba are attributes to each phase and the veh final destination is not inti defined (no OD mat)
 #"initially_defined_and_path_given"=when the final dest and the whole path are defined (OD mat)
 #"initially_defined_and_path_dyn_constructed"=when the veh final dest is initially defined but the routing is dynam computed
+#"mixed_dyndefined_or_odwithgiven_path"=when for some entry links we have OD matrix and given path and for some other links the path is dynam defined
 
 val_type_veh_final_dest=Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["dynamically_defined"]
 #val_type_veh_final_dest=Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_given"]
 #val_type_veh_final_dest=Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["initially_defined_and_path_dyn_constructed"]
+#val_type_veh_final_dest=Cl_Decisions.TYPE_VEHICLE_FINAL_DESTINATION_AND_PATH["mixed_dyndefined_or_odwithgiven_path"]
 #*****************************************************************************************************************************************************************************************
 
 #variable indicating how (the algo)  paths are computed when OD matrice and path dyn computed

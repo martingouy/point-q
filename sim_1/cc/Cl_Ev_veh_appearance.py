@@ -10,6 +10,7 @@ import Cl_Intersection
 import Cl_Control_Actuate
 import Cl_Vehicle_Queue
 import Cl_Ev_end_decision_next_intersection_control
+import Cl_Network_Entry_Link
 
 
 
@@ -212,9 +213,11 @@ class Ev_veh_appearance(Cl_Event.Event):
 	v_val_veh_id,v_val_netwk,v_val_type_veh_final_destination,v_val_min_veh_hold_time,v_val_prec_round,\
 	v_val_ev_list,v_file_recording_event_db):
 	
-
+		
 		t_appear_next_veh=round(self._event_time+v_val_netwk.get_di_entry_links_to_network()\
 		[self._id_entry_link].fct_creating_demand_entry_link(),v_val_prec_round)
+		
+		
 		
 		#creation of the next vehicle
 		next_veh=Cl_Vehicle.Vehicle(val_t_veh_appearance_at_network=t_appear_next_veh,\
@@ -240,9 +243,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-	
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 		
 		#if v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].\
 		#get_id_head_intersection_node()==37605:
@@ -385,8 +387,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 		
 		
 		#param for the chosen queue
@@ -582,8 +584,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[self._id_entry_link,self._id_entry_link,\
@@ -612,7 +614,7 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update queue (add the vehicle in the queue)
 		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_set_veh_queue().get_di_obj_veh_queue_at_link()\
 		[queue_phase.get_associated_phase_to_queue()[0],queue_phase.get_associated_phase_to_queue()[1]].\
-		fct_update_veh_queue_when_veh_prohibited_to_leave_no_mod(self._vehicle)
+		fct_update_veh_queue_when_veh_prohibited_to_leave_with_mod(self._vehicle)
 		
 		#we indicate the time at which the vehicle hold in the queue  ceases
 		self._vehicle.set_t_end_veh_hold_time_que(t_end_veh_hold_time)
@@ -731,8 +733,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[self._id_entry_link,self._id_entry_link,\
@@ -927,8 +929,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 					
 		#we decide the que chosen by the vehicle
 		li_param_fct_calcul_que_chosen_by_veh=[\
@@ -1079,8 +1081,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 		#we update the number of vehicles in the  link
 		#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 		#is  not exit link  but internal if  finite capacity 
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-		v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+		#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 				
 		
 		#we decide the que chosen by the vehicle
@@ -1268,8 +1270,9 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			
 			
 			#if we have generated a next destination for the vehicle 
 			if len(v_val_dict_veh_info_prev_sim[self._vehicle.get_id_veh()][1])>List_Explicit_Values.initialisation_value_to_one:
@@ -1426,8 +1429,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a next destination for the vehicle 
 			if len(v_val_dict_veh_info_prev_sim[self._vehicle.get_id_veh()][1])>List_Explicit_Values.initialisation_value_to_one:
@@ -1627,12 +1630,13 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
 			
+				
 				#we associate the final dest to the vehicle 
 				self._vehicle.set_id_veh_final_destination_link(v_val_dict_veh_info_prev_sim[self._vehicle.get_id_veh()][2])
 				
@@ -1799,8 +1803,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -2016,8 +2020,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -2190,8 +2194,8 @@ class Ev_veh_appearance(Cl_Event.Event):
 			#we update the number of vehicles in the  link
 			#even in the case of infinite management of the internal links; that's why we avoid a test examining if the destination link
 			#is  not exit link  but internal if  finite capacity 
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
-			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].set_current_nb_veh_link(\
+			#v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_current_nb_veh_link()+1)
 			
 			#if we have generated a final destination for the vehicle 
 			if self._vehicle.get_id_veh() in v_val_dict_veh_info_prev_sim:
@@ -2500,7 +2504,58 @@ class Ev_veh_appearance(Cl_Event.Event):
 			import sys
 			sys.exit()
 
-#******************************************************************************************************************************************************************************************
+#***************************************************************************************************************************************************************************************************
+
+
+
+#********************************************************Case New Demand-mixed-dyn computed paths and ODs with given path************************************************
+
+
+	#method treating the case when a veh appears, a new generated demand is considered, the veh destination is defined by a mixed management
+	#this is either dynamically or by an OD matrix with a given path 
+	def fct_treat_case_new_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path(self,\
+	v_val_veh_id,v_val_network,v_val_type_veh_final_destination,v_val_min_veh_hold_time,v_val_prec_round,v_val_ev_list,v_val_file_recording_event_db,\
+	v_val_min_nb_veh_to_detect):
+	#v_val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed=None):
+		
+		
+		#if the routing of teh entry link is dynamically defined
+		if v_val_network.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management()==-1:
+		#Cl_Network_Entry_Link.\
+		#TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT["dynamically_defined_rout_when_mixed_manag"]:
+			
+			self.fct_treat_case_new_demand_final_dest_and_path_dynam_defined(\
+			val_veh_id=v_val_veh_id,val_network=v_val_network,val_type_veh_final_destination=v_val_type_veh_final_destination,\
+			val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		#if the routing of the entry link is defined by od and given path
+		elif v_val_network.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management()==Cl_Network_Entry_Link.\
+		TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT["od_and_initial_given_path_when_mixed_manag"]:
+		
+			#we indicate the vehicle the type of the rout 
+			self._vehicle.set_type_vehicle_rout_when_mixed_manag(n_v=Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_initially_given_path"])
+		
+			self.fct_treat_case_new_demand_final_dest_and_path_initial_defined(\
+			val_veh_id=v_val_veh_id,val_netwk=v_val_network,val_type_veh_final_destination=v_val_type_veh_final_destination,\
+			val_min_veh_hold_time=v_val_min_veh_hold_time,val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,\
+			val_min_nb_vehicles_to_detect=v_val_min_nb_veh_to_detect)
+			
+			#we indicate the vehicle the type of the rout 
+			#self._vehicle.set_type_vehicle_rout_when_mixed_manag(n_v=Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_initially_given_path"])
+		
+		#if none of the previous cases
+		else:
+			print("IN CL_EV_VEH_APPEAR, FCT fct_treat_case_new_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path the link rout type is;",\
+			v_val_network.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management())
+			import sys
+			sys.exit()
+
+
+
+
+#***************************************************************************************************************************************************************************************************
 #*****************************************************************Cas Previous Demand-without OD***************************************************************************************
 	#method treating the case when a veh appears, a previously generated demand is being considered, 
 	#the vehicle final destination and path were dyn decided,(in prev demand)
@@ -2547,7 +2602,7 @@ class Ev_veh_appearance(Cl_Event.Event):
 			sys.exit()
 	
 #******************************************************************************************************************************************************************************************
-#***************************************************Cas Previous Demand-with OD - ctrl eval**************************************************************************************************
+#***************************************************Cas Previous Demand-with OD - ctrl eval***********************************************************************************
 	#method treating the case when a veh appears, a previously generated demand is being considered, the vehicle final destination is predefined,
 	#and the purpose of the study is to eval the control
 	
@@ -2649,13 +2704,74 @@ class Ev_veh_appearance(Cl_Event.Event):
 
 
 #******************************************************************************************************************************************************************************************
+#********************************************************Case Previous Demand-mixed-dyn computed paths and ODs with given path*********************************
+
+
+	#method treating the case when a veh appears, a new generated demand is considered, the veh destination is defined by a mixed management
+	#this is either dynamically or by an OD matrix with a given path 
+	def fct_treat_case_previous_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path(self,\
+	v_val_netwk,v_val_type_veh_final_destination,v_val_min_veh_hold_time,v_val_prec_round,v_val_ev_list,v_val_file_recording_event_db,\
+	v_val_dict_entry_link_info_prev_sim,v_val_dict_veh_info_prev_sim,v_val_min_nb_veh_to_detect):
+	#v_val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed=None):
+	
+		
+		#if a previous demand is employed a mixed rout management is employed and for the entry  link is a dynam rout is employed
+		if v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management()==-1:
+		#Cl_Network_Entry_Link.\
+		#TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT["dynamically_defined_rout_when_mixed_manag"]:
+
+			self.fct_treat_case_previous_demand_final_dest_and_path_dyn_defined(\
+			val_netwk=v_val_netwk,val_type_veh_final_destination=v_val_type_veh_final_destination,val_min_veh_hold_time=v_val_min_veh_hold_time,\
+			val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,val_file_recording_event_db=v_val_file_recording_event_db,\
+			val_dict_entry_link_info_prev_sim=v_val_dict_entry_link_info_prev_sim,val_dict_veh_info_prev_sim=v_val_dict_veh_info_prev_sim,\
+			val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		
+		#if a previous demand is employed a mixed rout management is employed and for the entry  link an OD is employed and the puprose of the study is the ctrl evaluation
+		elif v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management()==Cl_Network_Entry_Link.\
+		TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT["od_and_initial_given_path_when_mixed_manag"]:
+		
+			self.fct_treat_case_veh_appear_previous_demand_final_dest_given_ctrl_eval(\
+			val_netwk=v_val_netwk,val_type_veh_final_destination=v_val_type_veh_final_destination,val_min_veh_hold_time=v_val_min_veh_hold_time,\
+			val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			val_file_recording_event_db=v_val_file_recording_event_db,val_dict_entry_link_info_prev_sim=v_val_dict_entry_link_info_prev_sim,\
+			val_dict_veh_info_prev_sim=v_val_dict_veh_info_prev_sim,val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+			
+			#we indicate the vehicle the type of the rout 
+			self._vehicle.set_type_vehicle_rout_when_mixed_manag(n_v=Cl_Vehicle.TYPE_VEH_ROUT_WHEN_MIXED_MANAGEMENT["od_and_initially_given_path"])
+		
+		
+		#if a previous demand is employed a mixed rout management is employed and for the entry  link an OD is employed and the puprose of the study is the rout algo evaluation
+		#elif v_val_network.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management()==Cl_Network_Entry_Link.\
+		#TYPE_ROUTING_NETWORK_ENTRY_LINK_WHEN_MIXED_MANAGEMENT["od_and_dynamically_defined_path_when_mixed_manag"]:
+		
+			#self.fct_treat_case_veh_appear_previous_demand_final_dest_given_rout_algo_eval(\
+			#val_netwk=v_val_netwk,val_type_veh_final_destination=v_val_type_veh_final_destination,val_min_veh_hold_time=v_val_min_veh_hold_time,\
+			#val_prec_round=v_val_prec_round,val_ev_list=v_val_ev_list,\
+			#val_file_recording_event_db=v_val_file_recording_event_db,val_dict_entry_link_info_prev_sim=v_val_dict_entry_link_info_prev_sim,\
+			#val_dict_veh_info_prev_sim=v_val_dict_veh_info_prev_sim,\
+			#val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed=v_val_fct_calc_queue_id_when_given_final_dest_and_path_dynam_constructed,\
+			#val_min_nb_veh_to_detect=v_val_min_nb_veh_to_detect)
+		
+		#if none of the previous cases is employed
+		else:
+			print("PROBLEM IN CL_EV_VEH_APPEAR, FCT fct_treat_case_previous_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path, TYPE OF ROUR MANAG:",\
+			v_val_netwk.get_di_entry_links_to_network()[self._id_entry_link].get_type_routing_entry_lk_when_mixed_management())
+			import sys
+			sys.exit()
+	
+	
+#******************************************************************************************************************************************************************************************	
+	
 	#method treating the event
 	def event_treat(self,val_key_fct_in_dict_to_treat,val_li_param_fct_to_treat):
 	
 		#dictionary with the functions treat each case of this event
 		di_fct_ev_treat={1:self.fct_treat_case_new_demand_final_dest_and_path_dynam_defined,2:self.fct_treat_case_new_demand_final_dest_and_path_initial_defined,\
 		3:self.fct_treat_case_new_demand_final_dest_initial_defined_path_dyn_computed,4:self.fct_treat_case_previous_demand_final_dest_and_path_dyn_defined,\
-		5:self.fct_treat_case_veh_appear_previous_demand_final_dest_given_ctrl_eval,6:self.fct_treat_case_veh_appear_previous_demand_final_dest_given_rout_algo_eval}
+		5:self.fct_treat_case_veh_appear_previous_demand_final_dest_given_ctrl_eval,6:self.fct_treat_case_veh_appear_previous_demand_final_dest_given_rout_algo_eval,\
+		7:self.fct_treat_case_new_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path,\
+		8:self.fct_treat_case_previous_demand_mixed_manag_final_dest_dynam_defined_or_od_and_given_path}
 		
 		
 		return di_fct_ev_treat[val_key_fct_in_dict_to_treat](*val_li_param_fct_to_treat)
@@ -2667,7 +2783,7 @@ class Ev_veh_appearance(Cl_Event.Event):
 
 
 
-
+#******************************************************************************************************************************************************************************************
 
 
 
