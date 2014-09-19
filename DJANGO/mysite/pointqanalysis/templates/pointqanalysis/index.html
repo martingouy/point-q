@@ -6,9 +6,6 @@
 
 	<div id= "step1">
 		<div id='left_tree'>
-
-
-
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-primary active" analysis="flow">
 					<input type="radio" name="options"  checked> Flow
@@ -43,6 +40,15 @@
 			        <input type="text" id="add_OD" size="26" value=""> <button id="add_OD_button"  type="button" class="btn btn-default" data-loading-text="Adding...">Add</button> <img width=15px src=" {% static "pointqanalysis/images/question.png" %}" alt="question" id="OD_question"/>
 			</div>
 		</div>
+		<div id="left_tree_2">
+			<div id="queue_w_origin">
+				<img src='{% static "pointqanalysis/images/close.png" %}' alt='close'/>Close
+				<hr>
+				<h2>Select origins:</h2>
+				<table class="table" id="table_queue_w_origin">
+				</table>
+			</div>
+		</div>
 		<div id="map-canvas"></div>
 	</div>
 	<div id="step2">
@@ -69,8 +75,26 @@
 		</div>
 		<div id='div_granularity'>
 			<h3>Flow granularity:</h3>
-			<input type="text" id="box_granularity" size="10" name="box_granularity" value="" />[s]
+			<br />
+			<div class="input-group">
+				<div class="input-group-addon">[s]</div>
+				<input class="form-control" type="text" id="box_granularity" name="box_granularity" value="" >
+			</div>
 
+		</div>
+		<div id = "div_advanced_param">
+			<h3>Advanced Parameters:</h3>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" id = "link_occupancy"> Plot total link occupancy
+				</label>
+			</div>
+			<div class="checkbox">
+				<label> 
+					<input type="checkbox" id = "cb_queue_origin"> Seperate queue traffic based on origin link
+				</label>
+				<span id = "config_queue_origin">&nbsp;&nbsp;|&nbsp;&nbsp;<u>configure</u></span>
+			</div>
 		</div>
 		<div id = "generate">
 			<button type="button" class="btn btn-default btn-lg" data-loading-text="Generating...">Generate</button>
@@ -142,7 +166,15 @@
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'pointqanalysis/js/ion.rangeSlider.min.js' %}"></script>
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>	
-	<script type="text/javascript">	
+	<script type="text/javascript">
+
+		// GLOBAL VARIABLES
+		var geojson = JSON.parse('{{ geojson|safe}}');
+		var topjson = JSON.parse('{{ topjson|safe}}');
+		var maxtimesim =  {{ maxtimesim }};
+
+		var static_img_marker = '{% static 'pointqanalysis/images/marker.png' %}';
+		var static_img_close = '{% static "pointqanalysis/images/close.png" %}';
 
 		var map;
 		var indicator = 'flow';
@@ -162,692 +194,10 @@
 		var list_OD_temp = ['link1', 'link2'];
 		var list_OD_temp_feat= '';
 
-		function in_array(string, array){
-			var result = false;
-			for(var i=0; i<array.length; i++){
-				if(array[i] == string){
-					result = true;
-				}
-			}
-			return result;
-		}
-
-		function index_array(link1, link2, array) {
-			var result = -1;
-			for (var i = 0; i < array.length; i++) {
-				if(array[i][0] == link1 && array[i][1] == link2) {
-					return i;
-				}
-			}
-
-			return result;
-		}
-
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Function Generate Graph
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		function generate_json_plot(link_id, type, t_start, t_end, last_analysis, granul) {
-			// First case: type flow
-			if (type == 'flow') {
-				// on crée une requête ajax asynchrone
-				$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'links': link_id, 'type': type, 't_start': t_start, 't_end': t_end, 'granul': granul}, function(data) {
-						var chart = new CanvasJS.Chart("flowchart", data);
-						chart.render();
-
-						if (last_analysis == 'flow') {
-							$('html, body').animate({
-								scrollTop: $("#generate").offset().top
-							}, 1000);
-							// we reset the generate button
-							$('#generate button').button('reset');
-						}
-				});
-			}
-			// Second cas: type queue
-			else if (type == 'queue') {
-				// on crée une requête ajax asynchrone
-				$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'queues': link_id, 'type': type, 't_start': t_start, 't_end': t_end}, function(data) {
-						var chart = new CanvasJS.Chart("queuechart", data);
-						chart.render();
-
-						if (last_analysis == 'queue') {
-							$('html, body').animate({
-								scrollTop: $("#generate").offset().top
-							}, 1000);
-							// we reset the generate button
-							$('#generate button').button('reset');
-						}
-				});
-			}
-		    else if (type == 'OD'){
-		    	console.log('about to call ajax for TT');
-				$.getJSON('../pointqanalysis/ajax?action=generate_json_plot', {'ODs': link_id, 'type': type, 't_start': t_start, 't_end': t_end}, function(data) {
-					console.log('received data');
-					var chart = new CanvasJS.Chart("TTchart", data);
-					chart.render();
-					if (last_analysis == 'OD') {
-						$('html, body').animate({
-							scrollTop: $("#generate").offset().top
-						}, 1000);
-						// we reset the generate button
-						$('#generate button').button('reset');
-					}
-				});
-		    }
-
-		}
-
-
-		/**
-		 * Update a map's viewport to fit each geometry in a dataset
-		 * @param {google.maps.Map} map The map to adjust
-		 */
-		function zoom(map) {
-			var bounds = new google.maps.LatLngBounds();
-			map.data.forEach(function(feature) {
-				processPoints(feature.getGeometry(), bounds.extend, bounds);
-			});
-			map.fitBounds(bounds);
-		}
-
-		/**
-		 * Process each point in a Geometry, regardless of how deep the points may lie.
-		 * @param {google.maps.Data.Geometry} geometry The structure to process
-		 * @param {function(google.maps.LatLng)} callback A function to call on each
-		 *     LatLng point encountered (e.g. Array.push)
-		 * @param {Object} thisArg The value of 'this' as provided to 'callback' (e.g.
-		 *     myArray)
-		 */
-		function processPoints(geometry, callback, thisArg) {
-			if (geometry instanceof google.maps.LatLng) {
-				callback.call(thisArg, geometry);
-			} 
-			else if (geometry instanceof google.maps.Data.Point) {
-				callback.call(thisArg, geometry.get());
-			} else {
-				geometry.getArray().forEach(function(g) {
-					processPoints(g, callback, thisArg);
-				});
-			}
-		}
-
-function getObjects(obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
-        } else if (i == key && obj[key] == val) {
-            objects.push(obj);
-        }
-    }
-    return objects;
-}
-		                var nodeInLinks
-		                var nodeOutLinks
-		function initialize() {
-
-			// Create a simple map.
-			map = new google.maps.Map(document.getElementById('map-canvas'), {
-			    disableAutoPan: true,
-				zoom: 16,
-				center: {lat: 34.149156, lng: -118.0677},
-			});
-
-			var geojson = JSON.parse('{{ geojson|safe}}');
-			var topjson = JSON.parse('{{ topjson|safe}}');
-			map.data.addGeoJson(geojson);
-			zoom(map);
-		   
-			map.data.setStyle(function(feature){
-				var color='blue';
-				    if (feature.getProperty('isColorful')) {
-     	 				color = '#30D630';
-    				}
-    				return({
-						icon: '{% static 'pointqanalysis/images/marker.png' %}',
-						//strokeColor: '#0019ff',
-						strokeColor: color,
-						strokeOpacity: 0.6,
-						strokeWeight: 9,
-					});
-			});
-				var infowindow = new google.maps.InfoWindow({
-				    content: 'sam',
-				    disableAutoPan:true
-				});
-				var nodeinfowindow = new google.maps.InfoWindow({
-				    content: '<h5>Node:  1</h5><div><p><button type="button" class="btn btn-info btn-block" id="node_add_out">Add Out Links</button></p><p><button type="button" class="btn btn-info btn-block" id="node_add_in">Add In Links</button></p><p><button type="button" class="btn btn-info btn-block" id="node_add_queues">Add All Queues</button></p></div>',
-				    disableAutoPan:true
-				});
-		    
-			// Add infowindow when mouse on an element
-		    
-
-			map.data.addListener('mouseover', function(event) {
-			    if (event.feature.getGeometry().getType() == 'LineString') {
-   			        infowindow.setContent(event.feature.getProperty('id'))
-				infowindow.setPosition({lat: event.latLng.lat() + 0.00005, lng: event.latLng.lng()});
-				infowindow.open(map);
-			    }
-			});
-
-				map.data.addListener('mouseout', function(event) {
-					infowindow.close();                    
-				});
-
-
-			map.data.addListener('mousedown', function(event) {
-				if (event.feature.getGeometry().getType() == 'LineString') {
-				    map.data.overrideStyle(event.feature, {strokeColor: 'orange'});
-				}			    
-			});
-			map.data.addListener('mouseup', function(event) {
-				if (event.feature.getGeometry().getType() == 'LineString') {
-				    map.data.revertStyle();
-				}			    
-			});
-
-			map.data.addListener('click', function(event) {
-			    if (event.feature.getGeometry().getType() == 'Point'){
-				var id_no = event.feature.getProperty('id');
-				console.log(event.feature.getId());
-				$.getJSON('../pointqanalysis/ajax?action=get_from_node', {'node_id': id_no, 'type': 'flow'}, function(result) {
-				    nodeinfowindow.setContent('<h5>Node: '+id_no+'</h5><div><p><button type="button" class="btn btn-info btn-block" id="node_add_out" onclick="nodeAddOutFunction()" onmouseover="nodeAddOutOver()" onmouseout="nodeAddOutOut()">Add Out Links</button></p><p><button type="button" class="btn btn-info btn-block" id="node_add_in" onclick="nodeAddInFunction()" onmouseover="nodeAddInOver()" onmouseout="nodeAddInOut()">Add In Links</button></p><p><button type="button" class="btn btn-info btn-block" id="node_add_queues" onclick="nodeAddQueueFunction()" onmouseover="nodeAddQueueOver()" onmouseout="nodeAddQueueOut()">Add All Queues</button></p></div>');
-				nodeinfowindow.setPosition({lat: event.latLng.lat() + 0.00005, lng: event.latLng.lng()});
-				nodeinfowindow.open(map);
-				    var node=getObjects(topjson, 'id', id_no);
-				    nodeInLinks=node[0].inputs;
-				    nodeOutLinks=node[0].outputs;
-				});
-			    }
-			    // Add the link to the list_links array
-				if (event.feature.getGeometry().getType() == 'LineString') {
-					// id of the link we clicked on (NOT the  actual feature id; the id stored in the "properties" field)
-					var id_li = event.feature.getProperty('id');
-					// if we want to select queues
-					if (indicator == 'queue') {
-
-						// if count is even
-						if (count % 2 == 0) {
-
-							// we increment count
-							count = count + 1;
-
-							// we add the link id to list_queue_temp
-							list_queue_temp[0] = id_li;
-							list_queue_temp_feat=event.feature;
-						    // we change the color of the link
-						    event.feature.setProperty('isColorful', true);
-					 		map.data.revertStyle();
-						}
-
-						// if count is uneven
-						else {
-							// we increment count
-							count = 0;
-						    if (id_li!=list_queue_temp[0]){
-
-							// we add the link id to list_queue_temp
-							list_queue_temp[1] = id_li;
-
-							// we add list_queue_temp to list_queues
-							addQueue(list_queue_temp);
-						    }
-						    else {
-							var link=getObjects(topjson, 'link_id', id_li);
-							nodeOutLinks=link[0].outputs;
-
-							$.each($.parseJSON(nodeOutLinks), function( index, id_li_out ) {
-							    if (id_li_out !=-1){
-								list_queue_temp[0] = id_li;
-								list_queue_temp[1] = id_li_out;
-								addQueue(list_queue_temp);
-							    }
-							});
-						    }
-						      
-						    //we revert the color of the link
-						    list_queue_temp_feat.setProperty('isColorful', false);
-					 		map.data.revertStyle();
-
-						}
-					}
-					// if we want to select flows
-					else if (indicator == 'flow') {
-					    addLink(id_li);
-					}
-				    else if (indicator == 'OD'){
-					if (ODcount % 2 == 0) {
-
-					    // we increment count
-					    ODcount = ODcount + 1;
-
-					    // we add the link id to list_queue_temp
-					    list_OD_temp[0] = id_li;
-					    list_OD_temp_feat = event.feature; 
-					    // we change the color of the link
-					 event.feature.setProperty('isColorful', true);
-					 map.data.revertStyle();
-					}else {
-					    // we increment count
-					    ODcount = 0;
-					    // we add the link id to list_queue_temp
-					    list_OD_temp[1] = id_li;
-					    // we add list_OD_temp to list_ODs
-					    addOD(list_OD_temp);
-					    list_OD_temp_feat.setProperty('isColorful', false);
-					 	map.data.revertStyle();
-				    }
-				}
-				}
-			});
-
-
-		}
-
-$("#flow").on("click",'.img_delete_flow',function(){deletable_flow_link(this);});
-$("#queue").on("click",'.img_delete_queue',function(){deletable_queue(this);});
-$("#OD").on("click",'.img_delete_OD',function(){deletable_OD(this);});
-$("#flow").on("mouseover",'.link_li',function(){
-    console.log('mouseover');
-    var linkStr = $(this).attr('link');
-    var feat=map.data.getFeatureById("link_"+linkStr);
-    map.data.overrideStyle(feat, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
-});
-$("#flow").on("mouseout",'.link_li',function(){
-    map.data.revertStyle();
-});
-$("#queue").on("mouseover",'.queue_li',function(){
-    var link1Str = $(this).attr('link1');
-    var link2Str = $(this).attr('link2');
-    var feat1=map.data.getFeatureById("link_"+link1Str);
-    var feat2=map.data.getFeatureById("link_"+link2Str);
-    map.data.overrideStyle(feat1, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
-    map.data.overrideStyle(feat2, {strokeColor: 'orange', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
-   
-});
-$("#queue").on("mouseout",'.queue_li',function(){
-    map.data.revertStyle();
-});
-$("#OD").on("mouseover",'.OD_li',function(){
-    var link1Str = $(this).attr('link1');
-    var link2Str = $(this).attr('link2');
-    var feat1=map.data.getFeatureById("link_"+link1Str);
-    var feat2=map.data.getFeatureById("link_"+link2Str);
-    map.data.overrideStyle(feat1, {strokeColor: '#30D630', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
-    map.data.overrideStyle(feat2, {strokeColor: 'orange', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
-});
-$("#OD").on("mouseout",'.OD_li',function(){
-    map.data.revertStyle();
-});
-		function deletable_flow_link(link_img) {
-						// delete queue from list_queues
-						var link = $(link_img).attr('link');
-						if (list_links.indexOf(link) != -1) {
-							list_links.splice(list_links.indexOf(link), 1);
-						}
-
-						// delete queue from DOM
-						$(link_img).parent().remove();
-		    map.data.revertStyle();
-					}
-		function deletable_queue(queue_img) {
-
-						// delete queue from list_queues
-						var link1 = $(queue_img).attr('link1');
-						var link2 = $(queue_img).attr('link2');
-						if (index_array(link1, link2, list_queues) != -1) {
-							list_queues.splice(index_array(link1, link2, list_queues), 1);
-						}
-
-						// delete queue from DOM
-						$(queue_img).parent().remove();
-		    map.data.revertStyle();
-					}
-		function deletable_OD(OD_img) {
-						// delete queue from list_queues
-						var link1_torem = $(OD_img).attr('link1');
-						var link2_torem = $(OD_img).attr('link2');
-						console.log('attempting to remove'+link1_torem+', '+link2_torem+'from '+list_ODs);
-						ind_torem=index_array(link1_torem, link2_torem, list_ODs);
-						console.log('index is '+ind_torem)
-						if (ind_torem!= -1) {
-							console.log('found in array: '+link1_torem+', '+link2_torem+' at index '+ind_torem)
-							list_ODs.splice(ind_torem, 1);
-						}
-
-						// delete queue from DOM
-						$(OD_img).parent().remove();
-		    map.data.revertStyle();
-					}
-function addLink(id_li){
-    //add to list_links
-				list_links.push(id_li.toString());
-// we create the html element
-				var html_element = '<li class="link_li" link="'+String(id_li)+'"><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_flow" link="'+ String(id_li) + '">' + String(id_li) + '</li>';
-						// we append the html element to <ul>
-						$('#ul_flow').append(html_element);
-			    }
-function addQueue(pair){
-				    // we add list_queue_temp to list_queues
-				    var pair=pair.slice(0);
-				    list_queues.push(pair);
-
-				    // we create the html element
-				    var html_element = '<li class="queue_li" link1="'+pair[0].toString()+'" link2="'+pair[1].toString()+'"><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_queue" link1="'+ pair[0]+ '" link2 = "' + pair[1]  + '">[' + pair[0] +','+pair[1] + ']</li>';
-
-				    // we append it to <ul>
-				    $('#ul_queues').append(html_element);
-}
-function addOD(pair){
-				    // we add list_queue_temp to list_queues
-				    var pair=pair.slice(0);
-				    list_ODs.push(pair);
-				    // we create the html element
-				    var html_element = '<li class="OD_li" link1="'+pair[0].toString()+'" link2="'+pair[1].toString()+'"><img src=" {% static "pointqanalysis/images/close.png" %}" alt="close" class="img_delete_OD" link1="'+ pair[0]+ '" link2 = "' + pair[1]  + '">[' + pair[0] +','+pair[1] + ']</li>';
-
-				    // we append it to <ul>
-				    $('#ul_OD').append(html_element);
-}
-		    function nodeAddInFunction(){
-			$.each($.parseJSON(nodeInLinks), function( index, id_li ) {
-			    if (id_li != -1){
-				addLink(id_li);
-			    }
-			});
-		    }
-                   function nodeAddOutFunction(){
-			$.each($.parseJSON(nodeOutLinks), function( index, id_li ) {
-			    if (id_li != -1){
-				addLink(id_li);
-			    }
-			});
-		    }
-		    function nodeAddQueueFunction(){
-			$.each($.parseJSON(nodeInLinks), function( index, id_li_in ) {
-			    $.each($.parseJSON(nodeOutLinks), function( index, id_li_out ) {
-				if (id_li_in !=-1 && id_li_out !=-1){
-				    addQueue([id_li_in,id_li_out]);
-				}
-			    });
-			});
-
-		    }
-function nodeAddOutOver(){
-    $.each($.parseJSON(nodeOutLinks), function( index, id_li ) {
-	if (id_li != -1){
-	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
-	}
-    });
-}
-function nodeAddOutOut(){
-    map.data.revertStyle();
-}
-function nodeAddQueueOver(){
-    $.each($.parseJSON(nodeOutLinks), function( index, id_li ) {
-	if (id_li != -1){
-	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: 'orange'});
-	}
-    });
-    $.each($.parseJSON(nodeInLinks), function( index, id_li ) {
-	if (id_li != -1){
-	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
-	}
-    });
-}
-function nodeAddQueueOut(){
-    map.data.revertStyle();
-}
-function nodeAddInOver(){
-    $.each($.parseJSON(nodeInLinks), function( index, id_li ) {
-	if (id_li != -1){
-	    var feat=map.data.getFeatureById("link_"+id_li.toString());
-	    map.data.overrideStyle(feat, {strokeColor: '#30D630'});
-	}
-    });
-}
-function nodeAddInOut(){
-    map.data.revertStyle();
-}
-
-		$(function() {
-
-			initialize();
-
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			// Interface
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		    $("#link_question").click(function(){
-			$('#linkModal').modal();
-		    });
-		    $("#queue_question").click(function(){
-			$('#queueModal').modal();
-		    });
-		    $("#OD_question").click(function(){
-			$('#ODModal').modal();
-		    });
-		    $( "#clear_links_button" ).click(function() {
-			$(".img_delete_flow").each(function() {
-			    deletable_flow_link(this);
-			});
-		    });
-		    $( "#clear_ODs_button" ).click(function() {
-			$(".img_delete_OD").each(function() {
-			    deletable_OD(this);
-			});
-		    });
-		    $( "#clear_queues_button" ).click(function() {
-			$(".img_delete_queue").each(function() {
-			    deletable_queue(this);
-			});
-		    });
-			//Manual Link
-		    $("#add_link").keyup(function(event){
-			if(event.keyCode == 13){
-			    $("#add_link_button").click();
-			}
-		    });
-			$( "#add_link_button" ).click(function() {
-			                        var ids=$("#add_link").val();
-					        ids=ids.split(" ");			    
-			    $.each(ids, function( index, id_li ){
-						// we add the link id to list_link
-				addLink(id_li);
-				$('#add_link').val("");
-			    });
-			});
-		    $("#add_q1").keyup(function(event){
-			if(event.keyCode == 13){
-			    $("#add_q_button").click();
-			}
-		    });
-
-		        $("#add_q_button").click(function() {
- 							// we add the link id to list_queue_temp\
-			    var pairs=$("#add_q1").val();
-			    if (pairs !=""){
-			    pairs=pairs.split("] ");
-				$.each(pairs,function( index, pair ){
-				    var matches = pair.match(/(\d+),\s*(\d+)/);
-				    addQueue([matches[1],matches[2]]);
-				    $("#add_q1").val("");
-				});
-			    }    
-			});
-		    $("#add_OD").keyup(function(event){
-			if(event.keyCode == 13){
-			    $("#add_OD_button").click();
-			}
-		    });
-		    $("#add_OD_button").click(function() {
- 							// we add the link id to list_queue_temp\
-			    var pairs=$("#add_OD").val();
-			    if (pairs !=""){
-			    pairs=pairs.split("] ");
-				$.each(pairs,function( index, pair ){
-				    var matches = pair.match(/(\d+),\s*(\d+)/);
-				    addOD([matches[1],matches[2]]);
-				    $("#add_OD").val("");
-				});
-			    }
-		    });
-			// Slider time simul
-			var t_start_analysis;
-			var t_end_analysis;
-
-			$("#slider_time").ionRangeSlider({
-				min: 0,
-				max: {{ maxtimesim }},
-				type: 'double',
-				step: 1,
-				postfix: " s",
-				hasGrid: true,
-				gridMargin: 15,
-				onLoad: function (obj) {        // callback is called after slider load and update
-					t_start_analysis = obj['fromNumber'];
-					t_end_analysis = obj['toNumber'];
-				},
-				onChange: function (obj) {      // callback is called on every slider change
-					t_start_analysis = obj['fromNumber'];
-					t_end_analysis = obj['toNumber'];
-				},
-				onFinish: function (obj) {      // callback is called on slider action is finished
-					t_start_analysis = obj['fromNumber'];
-					t_end_analysis = obj['toNumber'];
-				}
-			});
-
-			// Slider time granularity
-			granularity={{ maxtimesim }} / 2;
-			$("#box_granularity").val(granularity);
-			$("#box_granularity").keyup(function() {
-							  granularity=$("#box_granularity").val();
-							  });
-
-			// granularity hide/show
-			$('#lb_btn_analysis_flows').click(function() {
-				if($('#btn_analysis_flows').prop('checked')) {
-					$('#div_granularity').hide();
-				}
-				else {
-					$('#div_granularity').show();
-				}
-			});
-
-			// Generate plots
-			$('#generate button').click(function() {
-
-				// we delete previous plots
-				$('#flowchart').children().remove();
-				$('#queuechart').children().remove();
-				$('#TTchart').children().remove();
-
-				// we reset the heights of the plots divs
-				$('#flowchart').css({'height': '', 'margin-bottom' : ''});
-				$('#queuechart').css({'height': ''});
-				$('#TTchart').css({'height': ''});
-
-				// we determine which is the last analysis to be made
-				var last_analysis = 'flow';
-				if ($('#btn_analysis_queues').prop('checked') && list_queues.length != 0){
-					last_analysis = 'queue';
-				}
-				if ($('#btn_analysis_TT').prop('checked') && list_ODs.length != 0){
-					last_analysis = 'OD';
-				}
-
-				// if we want a flow analysis
-				if ($('#btn_analysis_flows').prop('checked')) {
-
-					if (list_links.length > 0 && t_end_analysis - t_start_analysis >= granularity) {
-
-						$('#generate button').button('loading');
-						$('#flowchart').css({'height': '400px', 'margin-bottom': '50px'});
-
-						// generate flows plots
-						var links = list_links[0];
-
-						for (var i = 1; i < list_links.length; i++) {
-							links += '-' + list_links[i];
-						}
-
-						generate_json_plot(links, 'flow', t_start_analysis, t_end_analysis, last_analysis, granularity);
-					}
-
-					else {
-						$('#generate button').button('reset');
-					}
-				}
-
-				// if we want a queue analysis
-				if ($('#btn_analysis_queues').prop('checked')) {
-
-					if (list_queues.length > 0) {
-
-						$('#generate button').button('loading');
-						$('#queuechart').css({'height': '400px'});
-
-						// generate queues plots
-						var queues = list_queues[0][0] + '.' + list_queues[0][1];
-
-						for (var i = 1; i < list_queues.length; i++) {
-							queues += '-' + list_queues[i][0] + '.' + list_queues[i][1];
-						}
-						generate_json_plot(queues, 'queue', t_start_analysis, t_end_analysis, last_analysis, 0);
-					}
-				}
-
-				if ($('#btn_analysis_TT').prop('checked')) {
-					console.log('producing TT analysis')
-					if (list_ODs.length > 0) {
-
-						$('#generate button').button('loading');
-						$('#TTchart').css({'height': '400px'});
-
-						// generate queues plots
-						var ODs = list_ODs[0][0] + '.' + list_ODs[0][1];
-
-						for (var i = 1; i < list_ODs.length; i++) {
-							ODs += '-' + list_ODs[i][0] + '.' + list_ODs[i][1];
-						}
-						generate_json_plot(ODs, 'OD', t_start_analysis, t_end_analysis, last_analysis, 0);
-					}
-				}
-			});
-
-			
-			// Hide queues
-			$('#queue').hide();
-			$('#OD').hide();
-
-			// Show/Hide flow or queue div
-			$('#left_tree label').click(function() {
-				if ($(this).attr('analysis') == 'flow') {
-					$('#queue').hide();
-					$('#OD').hide();
-					$('#flow').show();
-					indicator = 'flow';
-				}
-				else if ($(this).attr('analysis') == 'queue') {
-					$('#flow').hide();
-					$('#OD').hide();
-					$('#queue').show();
-					indicator = 'queue';
-				}
-				else if ($(this).attr('analysis') == 'OD') {
-					$('#flow').hide();
-					$('#OD').show();
-					$('#queue').hide();
-					indicator = 'OD';
-				}
-			});
-		});			
+		var queues_w_origin = {};
 
 	</script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/main.globalfunctions.js' %}"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/main.map.js' %}"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/main.interface.js' %}"></script>		
 {% endblock %}

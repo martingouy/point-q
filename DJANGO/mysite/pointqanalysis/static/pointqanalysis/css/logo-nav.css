@@ -37,6 +37,15 @@ body {
   vertical-align: top;
 }
 
+#left_tree_2 {
+  display: inline-block;
+  height: 400px;
+  width: 28%;
+  min-width: 318px;
+  overflow: auto;
+  vertical-align: top;
+}
+
 #right_tree {
   vertical-align: top;
   display: inline-block;
@@ -81,7 +90,7 @@ body {
   margin-top: 50px;
   margin-bottom: 100px;
   width: 1100px;
-  height: 150px;
+  height: 275px;
 }
 
 #div_type_analysis, #div_time_selection, #div_granularity {

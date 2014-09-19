@@ -64,19 +64,78 @@ def ajax(request):
 			axisY = {'title': "Flow [veh per interval]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
 			answer = {'title': title, 'exportEnabled': 'true', 'axisX': axisX, 'axisY': axisY, 'data': data}
 			return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
+
 		# second case : queues
 		elif type_anal == 'queue':
-
+			link_occupancy = request.GET.get('link_occupancy', '')
+			sep_queues_origin = request.GET.get('sep_queues_origin', '')
 			queues = request.GET.get('queues', '')
 			list_queues = queues.split('-')
+			queues_occupancy = {}
+			queues_origin = []
+
 			list_queues_treated = []
 			for queue in list_queues:
 				list_queues_treated.append('[' + queue.split('.')[0] + ', ' + queue.split('.')[1] + ']')
 
+			if link_occupancy == 'true':
+				list_first_link = []
+				for queue in list_queues_treated:
+					list_first_link.append(queue.split(',')[0][1:])
+
+				list_first_link_occupancy = set()
+				for first_link in list_first_link:
+					if (list_first_link.count(first_link) > 1):
+						list_first_link_occupancy.add(first_link)
+
+				for link in list_first_link_occupancy:
+					queues_occupancy[link] = []
+
+				for queue in list_queues_treated:
+					first_link = queue.split(',')[0][1:]
+					second_link = int(queue.split(',')[1][:-1])
+					if first_link in list_first_link_occupancy:
+						queues_occupancy[first_link].append(second_link)
+
+				# we delete keys of queues occupancy from list_queus treated
+				# queues_occupancy -> we want to plot the total occupancy of a link
+				# list_queues_treated -> we want to plot independant queues
+				
+				list_queues_treated = [x for x in list_queues_treated if x.split(',')[0][1:] not in queues_occupancy.keys()]
+
+			elif sep_queues_origin == 'true':
+				# we reset list_queues_treated
+				list_queues_treated = []
+
+				# we create the string to plot queues without any separation
+				for queue in list_queues:
+					list_queues_treated.append('[' + queue.split('.')[1] + ', ' + queue.split('.')[2] + ']')
+
+				# we create an array to plot origin based separated queues
+				for queue in list_queues:
+					temp = []
+					temp.append(queue.split('.')[0])
+					temp.append(queue.split('.')[1])
+					temp.append(queue.split('.')[2])
+					queues_origin.append(temp)
+
 			data = []
 
+			# we generate the plots for independant queues
 			for queue in list_queues_treated:
 				data.append(tools_json.json_plot_queue(queue, t_start, t_end, sim_name))
+
+			# we generate the plots for the total occupancy of links
+			if link_occupancy == 'true':
+				list_series = tools_json.json_plot_link_occupancy(queues_occupancy, t_start, t_end, sim_name)
+
+				for serie in list_series:
+					data.append(serie)
+
+			# we generate the plots for origin based queues
+			if sep_queues_origin == 'true':
+				for queue in queues_origin:
+					data.append(tools_json.json_plot_queue_origin(queue, t_start, t_end, sim_name))
 
 			title = {'text': 'Queues'}
 			axisX = {'title': "Time [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}

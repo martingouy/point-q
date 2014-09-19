@@ -53,6 +53,66 @@ def json_plot_queue(queue, t_start, t_end, sim_name):
 	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': queue, 'dataPoints': dataPoints}
 	return serie
 
+def json_plot_link_occupancy(dict_link_occupancy, t_start, t_end, sim_name):
+
+	list_serie = []
+
+	# for each link we want to plot the occupancy
+	for link in dict_link_occupancy.keys():
+		dataPoints = []
+		nb_veh_queue = 0
+
+		# we build the query
+		query_partial = '('
+
+		for second_link in dict_link_occupancy[link]:
+			if second_link == dict_link_occupancy[link][0]:
+				query_partial += 'queue = \'[' + str(link) + ', ' + str(second_link) + ']\''
+			else:
+				query_partial += ' OR queue = \'[' + str(link) + ', ' + str(second_link) + ']\''
+
+		query_partial += ')'
+
+		query = 'SELECT ev_time, ev_type FROM ' + sim_name + ' WHERE ' + query_partial + ' AND (ev_type = 4 OR ev_type = 1 OR ev_type = 5)'
+		output = tools_data.query_sql([query], True, 'pointq_db')
+
+		for event in output:
+			if (event['ev_type'] == 1 or event['ev_type'] == 5):
+				nb_veh_queue += 1
+			else:
+				nb_veh_queue -= 1
+
+			if (event['ev_time'] >= t_start and event['ev_time'] <= t_end):
+				dataPoints.append({'x': float(event['ev_time']), 'y': int(nb_veh_queue)})
+	
+
+		serie = {'type': 'line', 'showInLegend': 'true', 'legendText': 'Link ' + link + ' occupancy', 'dataPoints': dataPoints}
+		list_serie.append(serie)
+
+	return list_serie
+
+def json_plot_queue_origin(queue, t_start, t_end, sim_name):
+	dataPoints = []
+	nb_veh_queue = 0
+	origin_link = queue[0]
+	str_queue = '[' + queue[1] + ', ' + queue[2] + ']'
+
+	query = 'SELECT ev_time, ev_type FROM ' + sim_name + ' WHERE queue = \'' + str_queue + '\' AND (ev_type = 4 OR ev_type = 1 OR ev_type = 5) AND entry_id = \'' + origin_link + '\''
+	output = tools_data.query_sql([query], True, 'pointq_db')
+
+	for event in output:
+		if (event['ev_type'] == 1 or event['ev_type'] == 5):
+			nb_veh_queue += 1
+		else:
+			nb_veh_queue -= 1
+
+		if (event['ev_time'] >= t_start and event['ev_time'] <= t_end):
+			dataPoints.append({'x': float(event['ev_time']), 'y': int(nb_veh_queue)})
+	
+
+	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': str_queue + ' from ' + str(origin_link), 'dataPoints': dataPoints}
+	return serie
+
 def json_plot_TT(orig, dest, t_start, t_end, sim_name):
 	query = 'SELECT time_entry, time_exit FROM ' + sim_name + ' WHERE entry_id = ' + str(orig) + ' AND c_loc_link = ' + str(dest) + ' AND time_entry >= ' + str(t_start) + ' AND time_entry <= ' +str(t_end)
 	output = tools_data.query_sql([query], True, 'pointq_db')
