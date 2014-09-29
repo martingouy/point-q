@@ -121,6 +121,8 @@ def json_plot_TT(orig, dest, t_start, t_end, sim_name):
 		#dataPoints.append({'x':1, 'y':2})
 		dataPoints.append({'x':float(event['time_entry']), 'y':(float(event['time_exit']-float(event['time_entry'])))});
 	
+	# we sort datapoints by x values to avoid the bug
+	dataPoints.sort(key=lambda item:item['x'])
 	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': str(orig)+' to '+str(dest), 'dataPoints': dataPoints}
 	return serie
 def xml2geojson(name_network):

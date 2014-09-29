@@ -15,6 +15,12 @@ $(function() {
 	$("#OD_question").click(function(){
 		$('#ODModal').modal();
 	});
+	$("#link_occupancy_question").click(function(){
+		$('#linkoccupancyModal').modal();
+	});
+	$("#queue_origin_question").click(function(){
+		$('#queueoriginModal').modal();
+	});
 	$( "#clear_links_button" ).click(function() {
 		$(".img_delete_flow").each(function() {
 	    		deletable_flow_link(this);
@@ -126,7 +132,6 @@ $(function() {
 
 	// Generate plots
 	$('#generate button').click(function() {
-
 		// we delete previous plots
 		$('#flowchart').children().remove();
 		$('#queuechart').children().remove();
@@ -180,6 +185,7 @@ $(function() {
 
 				// we check if we want to separate queues based on origin links
 				if (!$('#cb_queue_origin').prop('checked')) {
+
 					// generate queues plots
 					var queues = list_queues[0][0] + '.' + list_queues[0][1];
 
@@ -188,6 +194,10 @@ $(function() {
 					}
 				}
 				else {
+
+					// we sync queues_w_origin with list_queues to avoid the bug
+					sync_panel();
+
 					var i = 0;
 					var queues = '';
 					for (key in queues_w_origin) {

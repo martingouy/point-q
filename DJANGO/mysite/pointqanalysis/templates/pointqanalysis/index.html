@@ -85,13 +85,15 @@
 		<div id = "div_advanced_param">
 			<h3>Advanced Parameters:</h3>
 			<div class="checkbox">
+				<img width=15px src=" {% static "pointqanalysis/images/question.png" %}" alt="question" id="link_occupancy_question"/>
 				<label>
 					<input type="checkbox" id = "link_occupancy"> Plot total link occupancy
 				</label>
 			</div>
 			<div class="checkbox">
+				<img width=15px src=" {% static "pointqanalysis/images/question.png" %}" alt="question" id="queue_origin_question"/>
 				<label> 
-					<input type="checkbox" id = "cb_queue_origin"> Seperate queue traffic based on origin link
+					<input type="checkbox" id = "cb_queue_origin"> Separate queue traffic based on origin link
 				</label>
 				<span id = "config_queue_origin">&nbsp;&nbsp;|&nbsp;&nbsp;<u>configure</u></span>
 			</div>
@@ -129,6 +131,52 @@
       </div>
       <div class="modal-body">
     Enter the pair of link IDs for a queue between brackets, separated by a comma. Separate queues by a space to add multiple queues. For instance, entering<br><br> <samp>[100014,100017] [100017,100020] [100020,100021]</samp><br><br> will add queues [100014,100017], [100017,100020], and [100020,100021].
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="linkoccupancyModal" tabindex="-1" role="dialog" aria-labelledby="linkoccupancyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="queueModalLabel">Plot total link occupancy</h4>
+      </div>
+      <div class="modal-body">
+    	If this option is checked, then any queues selected that are from the same link are added together, and therefore there is one line plot per link.<br /><br />
+	So for example, suppose Link 1 has a total of 3 queues: [1,2], [1,3], and [1,4]. Now suppose you selected queues [1,2] and [1,3], and checked the option "Plot total link occupancy", then one line plot would be generated containing the total of queues [1,2] and [1,3] (queue [1,4] would not be included since it was not selected).<br /><br />
+	If you selected, e.g., queues [1,2], [1,3], [6,7], and [6,8], then two line plots would be generated: one for link 1, and one for link 6.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="queueoriginModal" tabindex="-1" role="dialog" aria-labelledby="queueoriginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="queueModalLabel">Separate queue traffic based on origin link</h4>
+      </div>
+      <div class="modal-body">
+    	This option allows you to to plot a queue considering only the vehicules that started their journey from the origin link you selected.<br />
+    	If you select for example queue [100014, 100015] with origin link 10001, two plots will be generated:<br /><br />
+    	<ul>
+    		<li>The usual plot for the queue [100014, 100015]</li>
+    		<li>The plot of the queue [100014, 100015] considering vehicles that entered the network through link 10001</li>
+    	</ul>
+    	<br/>
+    	How to proceed:<br />
+    	---> Select your queues as usual<br />
+	---> Click on configure to enter manually the origin for each queue<br />
+	---> Check the correct checkbox<br />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
