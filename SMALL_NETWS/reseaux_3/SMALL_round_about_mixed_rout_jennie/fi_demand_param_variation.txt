@@ -1,0 +1,3 @@
+id entry lk (1st column), t_duration first variation (2nd column), demand parameter first variation (3rd column), t_duration second variation (4thcolumn),...   	 
+1.000	20.000	0.050	30.000	0.200	20.000	0.039	
+5.000	20.000	0.050	30.000	0.200	20.000	0.063
