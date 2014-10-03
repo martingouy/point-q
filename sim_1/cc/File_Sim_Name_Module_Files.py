@@ -16,6 +16,9 @@ val_name_file_distribution_fct_nb_dep_veh="File_Distribution_Fct_nb_depart_veh.t
 val_name_folder_with_control_param_files="Control_Param_Files"
 
 #*****************************************************************************************************************************************************************************************
+#the name of the folder containing the algos when demand variate
+val_name_folder_with_demand_variat_param_files="Demand_Variation_Param_Files"
+#*****************************************************************************************************************************************************************************************
 #the name of the file indicating the names of the user (data) files in order to implement a series of simulations, f_d
 val_name_file_user_li_data_files="f_d.txt"
 #*****************************************************************************************************************************************************************************************
@@ -85,6 +88,10 @@ val_name_file_values_mp_practical_control="File_MP_Practical_Control_Alg_Param.t
 #*****************************************************************************************************************************************************************************************
 #the name of the file with the node  id and the related type of control
 val_name_file_node_id_control_type_category="fi_node_id_ctrl_type_category.txt"
+
+#*****************************************************************************************************************************************************************************************
+#the name of the file with the lk  id and the related type of algorithm whend emand variat
+val_name_file_lk_id_demand_variat_algo_type_category="fi_lk_id_dem_var_algo_type_category.txt"
 
 #*****************************************************************************************************************************************************************************************
 #the name of the file indicating the node id, the parameter for estim the turn ratios and  the duration of the estim turn ratio values

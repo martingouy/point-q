@@ -423,6 +423,43 @@ class Simulation:
 				
 				t_init=t
 #*****************************************************************************************************************************************************************************************
+	#method initial the event list with the events corresponding to the demand intensity variation
+	def initialisation_event_list_sim_veh_flow_changes_var_demand_intensity(self, t_start_sim,v_round_precis=1):
+	
+		
+		#for each entry link with demand variation
+		for i in self._simul_system.get_network().get_di_entry_links_with_varying_demands():
+		
+			t_init=round(t_start_sim+self._simul_system.get_network().get_di_entry_links_with_varying_demands()[i][0],v_round_precis)
+			
+		
+			ev=Cl_Ev_veh_flow_changes.Ev_veh_flow_changes(val_ev_t=t_init,\
+			val_id_entry_lk_with_varying_demand=i,val_ty_algo_computing_current_demand=self._simul_system.get_network().get_di_entry_links_with_varying_demands()[i][1],\
+			val_reason_event=Cl_Ev_veh_flow_changes.TYPE_REASON_EVENT_HEV_FLOW_CHANGES["demand_intensity_variation"])
+			
+			heappush(self._heap_even,ev)
+			
+#*****************************************************************************************************************************************************************************************
+	#method initial the event list with the events corresponding to the demand intensity variation
+	def initialisation_event_list_sim_veh_flow_changes_var_demand_intensity_contin_prev_sim(self, t_start_sim,v_round_precis=1):
+	
+		
+		#for each entry link with demand variation
+		for i in self._simul_system.get_network().get_di_entry_links_with_varying_demands():
+			if self._simul_system.get_network().get_di_entry_links_to_network()[i].get_demand_variation_actuate_obj().\
+			get_li_param_algo_given_timeanddem_param_entire_sim()!=[]:
+		
+				t_init=round(t_start_sim+self._simul_system.get_network().get_di_entry_links_with_varying_demands()[i][0],v_round_precis)
+			
+		
+				ev=Cl_Ev_veh_flow_changes.Ev_veh_flow_changes(val_ev_t=t_init,\
+				val_id_entry_lk_with_varying_demand=i,val_ty_algo_computing_current_demand=self._simul_system.get_network().get_di_entry_links_with_varying_demands()[i][1],\
+				val_reason_event=Cl_Ev_veh_flow_changes.TYPE_REASON_EVENT_HEV_FLOW_CHANGES["demand_intensity_variation"])
+			
+				heappush(self._heap_even,ev)
+			
+#*****************************************************************************************************************************************************************************************
+	
 	#method initialising the initial state of single queue at the beginning of a new simulation
 	#IT MAKES SENS ONLY FOR A NEW DEMAND
 	#li_veh_final_dest_id=[-1] or [,...>0,...]
@@ -628,6 +665,10 @@ class Simulation:
 		
 			self.initialisation_event_list_sim_veh_flow_changes_var_tr_events_network(t_start_sim=v_t_start_sim,t_un=v_t_unit,v_round_precis=1)
 			
+		#if demand variation is associated with some entry links
+		if self._simul_system.get_network().get_di_entry_links_with_varying_demands()!={}:
+			self.initialisation_event_list_sim_veh_flow_changes_var_demand_intensity(t_start_sim=v_t_start_sim,v_round_precis=1)
+
 #*****************************************************************************************************************************************************************************************
 	#method returning the md5 checksum of a file
 	def md5Checksum(self, filePath):
@@ -908,7 +949,7 @@ class Simulation:
 				self._t_current=self._heap_even[List_Explicit_Values.val_first_element_of_list].get_event_time()
 				print("CURRENT TIME IN SIM:",self._t_current)
 				
-				
+				self.initialisation_event_list_sim_veh_flow_changes_var_demand_intensity_contin_prev_sim(t_start_sim=self._t_current,v_round_precis=1)
 				
 				#while the simulation time is inferior to the limit simulation time 
 				while(self._t_current<t_end_simulation and len(self._heap_even)>0):
