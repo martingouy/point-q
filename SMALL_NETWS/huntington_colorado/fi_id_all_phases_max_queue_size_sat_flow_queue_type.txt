@@ -167,3 +167,6 @@ incoming link	outcoming link	max alllowed size of queue	saturation flow	type
 100074	200033	-1	.05	0
 100074	100073	-1	.05	1
 100074 	100035 	-1 	0 	0
+100080	100054	-1	.05	0
+100080	200037	-1	0	0
+100080	200053	-1	0	0
