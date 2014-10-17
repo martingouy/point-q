@@ -107,3 +107,22 @@ body {
 #div_granularity {
   margin-left: 40px;
 }
+
+#VT_routes {
+  display: inline-block;
+  height: 400px;
+  width: 40%;
+  min-width: 318px;
+  overflow: auto;
+  vertical-align: top;
+}
+
+#VT_parameters {
+  display: inline-block;
+  margin-left: 15px;
+  height: 400px;
+  width: 50%;
+  min-width: 318px;
+  overflow: auto;
+  vertical-align: top;
+}

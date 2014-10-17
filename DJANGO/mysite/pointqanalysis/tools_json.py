@@ -125,6 +125,7 @@ def json_plot_TT(orig, dest, t_start, t_end, sim_name):
 	dataPoints.sort(key=lambda item:item['x'])
 	serie = {'type': 'line', 'showInLegend': 'true', 'legendText': str(orig)+' to '+str(dest), 'dataPoints': dataPoints}
 	return serie
+
 def xml2geojson(name_network):
 	xmldoc = minidom.parse(settings.MEDIA_ROOT + '/upload/network_xml/' + str(name_network) + '.xml')
 	xml_nodelist = xmldoc.getElementsByTagName('node') 
@@ -142,13 +143,14 @@ def xml2geojson(name_network):
 
 	for link in xml_linklist:
 		link_id = link.attributes['id'].value
+		link_length = link.attributes['length'].value
 		line = []
 		for point in link.getElementsByTagName('point'):
 			point_lat = float(point.attributes['lat'].value)
 			point_lng = float(point.attributes['lng'].value)
 			line.append((point_lng, point_lat))
 		line_string = geojson.LineString(line)
-		feature = geojson.Feature(properties = {'id': link_id}, geometry = line_string, id = 'link_'+link_id)
+		feature = geojson.Feature(properties = {'id': link_id, 'length': link_length}, geometry = line_string, id = 'link_'+link_id)
 		feature_collection.append(feature)
 
 	feature_collection = geojson.FeatureCollection(feature_collection)

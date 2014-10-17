@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^simulations$', views.simul_manag, name='simulations'),
     url(r'^uploadxml$', views.upload_xml, name='upload_xml'),
     url(r'^ajax', views.ajax, name='ajax'),
+    url(r'^testzone', views.testzone, name='testzone')
 )

@@ -1,0 +1,204 @@
+{% extends 'pointqanalysis/template_skeleton.html' %}
+{% load staticfiles %}
+{% block title %} Vehicles trajectories{% endblock %}
+
+{% block container %} 
+
+	<div id= "step1">
+		<div id='left_tree'>
+			<p>	
+				<h2>Origin link:</h2>
+				<button id = "btn_origin_link" type="button" class="btn btn-default">Select the origin link</button>
+				<h2>Destination link:</h2>
+				<button id = "btn_destination_link" type="button" class="btn btn-default">Select the destination link</button>
+			</p>
+			<p style="margin-top: 150px; margin-left: 190px;">
+				<button id="btn_continue" type="button" class="btn btn-primary" data-loading-text="Processing...">Continue</button>
+			</p>
+		</div>
+		<div id="map-canvas"></div>
+	</div>
+	<div id="step2">
+		<div id="VT_routes">
+			<h2>Available routes</h2>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Number of vehicles:</th>
+						<th>Display:</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div id="VT_parameters">
+			<h2>Parameters</h2>
+
+			<div class="form-group">
+				<label for="id_route_analyse"># of the route to analyse: </label>
+				<input type="text" class="form-control" id="id_route_analyse" placeholder="#">
+			</div>
+			<div class="form-group">
+				<label for="max_nb_veh">Max number of vehicles: </label>
+				<input type="text" class="form-control" id="mx_nb_veh" placeholder="Max number of vehicles">
+			</div>
+			<button id = "btn_submit" type="submit" class="btn btn-default">Submit</button>
+
+		</div>
+	</div>
+	<div id = "rendercharts">
+		<div id="veh_traj" ></div>
+	</div>
+
+{% endblock %}
+
+{% block javascript %} 
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>	
+	<script type="text/javascript">
+
+		// GLOBAL VARIABLES
+		var geojson = JSON.parse('{{ geojson|safe}}');
+		var topjson = JSON.parse('{{ topjson|safe}}');
+
+		var map; 
+		var indicator;
+		var ori_dest_links = [null,null];
+		var static_img_marker = '{% static 'pointqanalysis/images/marker.png' %}';
+		var static_img_close = '{% static "pointqanalysis/images/close.png" %}';
+		var routes;
+		var dic_veh;
+
+	</script>
+	<script type="text/javascript"  src="{% static 'pointqanalysis/js/vehicle.traj.map.js' %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			initialize();
+			$('#step2').hide();
+			$('#btn_origin_link').click(function(){
+				$(this).text('Click on the map');
+				$(this).attr('class', 'btn btn-default active');
+				indicator = 'first_link';
+			});
+			$('#btn_destination_link').click(function(){
+				$(this).text('Click on the map');
+				$(this).attr('class', 'btn btn-default active');
+				indicator = 'second_link';
+			});
+
+			$('#btn_continue').click(function(){
+				if (ori_dest_links[0] && ori_dest_links[1]){
+
+					$('#btn_continue').button('loading');
+					$('#step2').hide();
+
+					// we create an asyncronous ajax query
+					$.getJSON('../pointqanalysis/ajax?action=list_vehicle_traj', {'ori_link': ori_dest_links[0] , 'dest_link': ori_dest_links[1] }, function(data) {
+						dic_veh = data.dic_veh;
+						routes = data.routes;
+						var table = '<tbody>';
+						for (var i = 0; i < routes.length; i++) {
+							table += '<tr>';
+							table += '<td>' + i + '</td>';
+							table += '<td>' + routes[i][1].length + '</td>';
+							table += '<td><form><input type="checkbox" id="checkbox_' + i + '"></form></td>';
+							table += '</tr>';
+						}
+						table += '</tbody>';
+
+						// we replace the table
+						$('tbody').replaceWith(table);
+
+						// We show step2 div
+						$('#step2').show();
+
+						$('html, body').animate({
+							scrollTop: $("#btn_continue").offset().top
+						}, 1000);
+
+						// We reset the button
+						$('#btn_continue').button('reset');
+
+						color_links(routes, '#30D630');
+
+						// When we want to display the route
+						$('input[type="checkbox"]').change(function() {
+							if (this.checked) {
+								// we recover the id
+								var id = $(this).attr('id');
+								id = id.substr(9);
+								color_links(routes[id][0], '#30D630');
+							}
+							else if (! this.checked) {
+								// we recover the id
+								var id = $(this).attr('id');
+								id = id.substr(9);
+								color_links(routes[id][0], 'blue');
+							}
+						});
+					});
+				}
+			});
+
+			$("#btn_submit").click(function() {
+
+				// if fields are filled
+				if ($('#id_route_analyse').val() && $('#mx_nb_veh').val()){
+
+					// we gather data
+					var max_nb_veh = $('#mx_nb_veh').val();
+					var id_route_analyse = $('#id_route_analyse').val();
+					var intersections = JSON.stringify(routes[id_route_analyse][2]);
+					var links = JSON.stringify(routes[id_route_analyse][0]);
+					var vehicles = JSON.stringify(routes[id_route_analyse][1]);
+					var action = "veh_trajectory";
+
+					// we create the AJAX request
+					$.post('../pointqanalysis/ajax', {'vehicles': vehicles, 'nb_veh': max_nb_veh, 'links': links, 'intersections': intersections, 'action':action}, function(data) {
+							var dic_length = JSON.parse(data);
+							links = routes[id_route_analyse][0];
+							vehicles = routes[id_route_analyse][1];
+
+							// we start building the JSON for the plot
+							var json_plot = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': {'text': "Vehicles Trajectory"}, 'axisX': {'title': "Time (s)"}, 'axisY': {'title': "Traveled distance (m)"}, 'data': []};
+
+							// we iterate over the vehicles:
+							for (var i = 0; i < vehicles.length && i < max_nb_veh; i++) {
+
+								// We create the JSON for the vehicle
+								var temp_json = {'type': "line", 'dataPoints': []};
+								var vehicle = vehicles[i];
+								var y_init = 0;
+
+								// We iterate over the links
+								for (var j = 0; j < links.length; j++){
+
+									var link = links[j];
+
+									// we check if the link is an internal link
+									if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
+										var x_entry = dic_veh[vehicle][link]['t_entry'];
+										var x_exit = dic_veh[vehicle][link]['t_exit'];
+										var length = parseFloat(dic_length[link.toString()]);
+										temp_json.dataPoints.push({'x': x_entry, 'y': y_init});
+										temp_json.dataPoints.push({'x': x_exit, 'y': y_init + length});
+										y_init += length;
+									}
+								}
+								json_plot.data.push(temp_json);
+							}
+							var chart = new CanvasJS.Chart("veh_traj", json_plot);
+							chart.render();
+							$('html, body').animate({
+								scrollTop: $("#btn_submit").offset().top
+							}, 1000);
+					});
+				}
+			});				
+		});
+	</script>
+{% endblock %}
