@@ -13,6 +13,6 @@ def main():
     with open(f, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            output.writerow([row[i] for i in [0,1,11,24,18,12,13,23,14]])
+            output.writerow([row[i] for i in [0,1,2,8,11,24,18,12,13,23,14]])
 if __name__=="__main__":
    main()

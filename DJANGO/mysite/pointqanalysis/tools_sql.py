@@ -50,9 +50,9 @@ def treat_simul_db(name, path):
 	with open('%s/%s' % (settings.MEDIA_ROOT + str(path), str(name) + '.txt'), 'rb') as file:
 		reader = csv.reader(file)
 		for row in reader:
-			if len(row)==9:
+			if len(row)==11:
 				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[2] + " ," + row[3] + " ,'" + row[4] + "')")
-				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[2] + " ," + row[3] + " ,'" + row[4] + "' ," + row[5] + " ," + row[6] + " ," + row[7] + " ," + row[8] + ")")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[3] + "',"+ row[4] + " ," + row[5] + " ,'" + row[6] + "' ," + row[7] + " ," + row[8] + " ," + row[9] + " ," + row[10] + ")")
 			else:
 				#There's a typo in Jenny's Docs: Column 25 contains the id of the link associated with the current event. Due to 0-based indexing, it appears at 24 here
 				#NOTE that there's a difference between Column 25 (id of link associated with current event) and Column 15(id of link where the vehicle is currently located)
