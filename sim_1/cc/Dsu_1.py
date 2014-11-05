@@ -205,7 +205,7 @@ val_treat_sim_res=1
 val_each_icm_read=0
 #*****************************************************************************************************************************************************************************************
 #variable indicating the type of each vehicle regarding its final destination
-#"dynamically_defined"=when give proba are attributes to each phase and the veh final destination is not inti defined (no OD mat)
+#"dynamically_defined"=when given probabilities are attributes to each phase and the veh final destination is not inti defined (no OD mat)
 #"initially_defined_and_path_given"=when the final dest and the whole path are defined (OD mat)
 #"initially_defined_and_path_dyn_constructed"=when the veh final dest is initially defined but the routing is dynam computed
 #"mixed_dyndefined_or_odwithgiven_path"=when for some entry links we have OD matrix and given path and for some other links the path is dynam defined

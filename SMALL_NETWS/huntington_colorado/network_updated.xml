@@ -17,6 +17,7 @@
                <inputs>
                   <input link_id="100037"/>
                   <input link_id="100053"/>
+				  <input link_id="100080"/>
                <input link_id="200054"/></inputs>
                <position>
                   <point elevation="0" lat="34.1402560877304" lng="-118.016007095575"/>
@@ -981,6 +982,21 @@
                </position>
                <node_type id="10003" name="Simple"/>
             </node>
+			<node id="100080" in_sync="false" node_name="210 WB Off-Ramp">
+               <roadway_markers>
+                  <marker id="1" name="" postmile="0"/>
+               </roadway_markers>
+               <outputs>
+                  <output link_id="100080"/>
+               </outputs>
+               <inputs>
+                  <input link_id="-1"/>
+               </inputs>
+               <position>
+                  <point elevation="0" lat="34.141357187565255" lng="-118.01633298397064"/>
+               </position>
+               <node_type id="10004" name="simple"/>
+            </node>
          </NodeList>
          <LinkList>
 		 <link id="10002" in_sync="true" lane_offset="0" lanes="2" length="49.0728">
@@ -1296,7 +1312,7 @@
                <shape>grloEtwooUC?BtCF^B|J?tG@nA?fABfQ?nA?hA@pE?dF@jA?vABdR@z@IP?dA?z@@z@B?</shape>
                <link_type id="1" name="Freeway"/>
             </link>
-            <link id="100035" in_sync="true" lane_offset="-1" lanes=“2” length=“160.934”>
+            <link id="100035" in_sync="true" lane_offset="0" lanes="2" length="160.22">
                <begin node_id="100014"/>
                <end node_id="100015"/>
                <position>
@@ -2019,6 +2035,18 @@
                   <point elevation="0" lat="34.14032" lng="-118.01447"/>
                   </position>
                <shape>_`koEluhoU?jB?x@?bC?TLA</shape>
+               <link_type id="1" name="Freeway"/>
+            </link>
+			<link id="100080" in_sync="true" lane_offset="0" lanes="2" length="124.907945075713">
+               <begin node_id="100080"/>
+               <end node_id="10001"/>
+               <position>
+                  <point elevation="0" lat="34.141357187565255" lng="-118.01633298397064"/>
+                  <point elevation="0" lat="34.14045" lng="-118.01608"/>
+                  <point elevation="0" lat="34.14032" lng="-118.01607"/>
+                  <point elevation="0" lat="34.14025" lng="-118.01606"/>
+               </position>
+               <shape>qfkoEt_ioUF?TCf@?vAAX?XALA</shape>
                <link_type id="1" name="Freeway"/>
             </link>
 			</LinkList>

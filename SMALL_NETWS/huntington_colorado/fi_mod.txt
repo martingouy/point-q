@@ -1,0 +1,2 @@
+entry-exit (1-2 colm), rout probab(3rd col)
+100080 100069 1

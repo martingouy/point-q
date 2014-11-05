@@ -42,7 +42,7 @@ def treat_simul_db(name, path):
 	name = str(name).lower()
 
 	# We create the table
-	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, id_inter text, veh_id int, c_link int, queue text, time_entry real, entry_id int, time_exit int, c_loc_link int)')
+	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, id_inter text, int_ctrl_mat text, veh_id int, c_link int, queue text, time_entry real, entry_id int, time_exit int, c_loc_link int)')
 	#cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, veh_id int, c_link int, queue text)')
 	conn.commit()
 
@@ -57,7 +57,7 @@ def treat_simul_db(name, path):
 				#There's a typo in Jenny's Docs: Column 25 contains the id of the link associated with the current event. Due to 0-based indexing, it appears at 24 here
 				#NOTE that there's a difference between Column 25 (id of link associated with current event) and Column 15(id of link where the vehicle is currently located)
 				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[11] + " ," + row[24] + " ,'" + row[18] + "')")
-				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ," + row[11] + " ," + row[24] + " ,'" + row[18] + "' ," + row[12] + " ," + row[13] + " ," + row[23] + " ," + row[14] + ")")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[8] + "',"+ row[11] + " ," + row[24] + " ,'" + row[18] + "' ," + row[12] + " ," + row[13] + " ," + row[23] + " ," + row[14] + ")")
 		conn.commit()
 
 	conn.close()

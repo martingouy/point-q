@@ -5,6 +5,7 @@ import Cl_Network_Entry_Link
 import Cl_Network_Exit_Link
 import Cl_Network_Internal_Link
 import Cl_Set_Vehicle_Queues_Link
+import Cl_Demand_Variation_Algo_Actuate
 import Cl_Intersection
 import Cl_Intersection_Signalised
 import Cl_Intersection_Non_Signalised
@@ -933,6 +934,7 @@ class Creation_Network:
 
 			#if a FT control will be  considered 
 			elif Cl_Control_Actuate.TYPE_CONTROL[di_id_nd_type_and_ctrl_categ[k][0]]==Cl_Control_Actuate.TYPE_CONTROL[1]:
+				
 				va_li_param_inters_ctrl=di_ctrl_param_inters[di_id_nd_type_and_ctrl_categ[k][0]][k]
 				
 			#if a FT with offsets control 
@@ -1242,7 +1244,8 @@ class Creation_Network:
 	val_dic_key_que_id_value_li_pos_value_pres_detector={},val_dic_key_que_id_value_li_pos_value_que_size_detector={},\
 	val_dic_key_id_non_sign_inters_value_zero={},\
 	val_sim_duration=None,val_round_prec=2,val_di_id_nd_with_estim_turn_ratios=None,val_indicat_type_veh_final_dest=None,\
-	val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param={},val_di_key_id_lk_value_type_rout_manag={}):
+	val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param={},val_di_key_id_lk_value_type_rout_manag={},\
+	val_di_key_id_lk_value_param_dem_variation={}):
 	
 		dict_entry_link={}
 		val_que_id=val_ind_queue
@@ -1319,35 +1322,84 @@ class Creation_Network:
 				
 					#if a mixed rout management is associated with the link
 					if j in val_di_key_id_lk_value_type_rout_manag:
+						
+						#if the demand will vary on this link
+						if j in val_di_key_id_lk_value_param_dem_variation:
+							
+							
+							#creation of the demand actuate objet
+							dem_var_alg_act=Cl_Demand_Variation_Algo_Actuate.Demand_Variation_Algo_Actuate(\
+							val_di_key_id_lk_value_param_dem_variation[j])
+							
+							entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+							val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+							val_set_vehicle_que=set_q_obj,\
+							val_length_lnk=\
+							val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+							List_Explicit_Values.val_third_element_of_list],\
+							val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+							[List_Explicit_Values.val_fourth_element_of_list],\
+							val_id_head_intersection_nd=i,\
+							val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+							val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+							val_li_output_lks_queues=v_li_id_outp_lks,val_type_routing_entry_lk_when_mixed_management=val_di_key_id_lk_value_type_rout_manag[j],\
+							val_demand_variation_actuate_obj=dem_var_alg_act)
+						
+						#if the demand will notvary on this link
+						else:
 					
-						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
-						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
-						val_set_vehicle_que=set_q_obj,\
-						val_length_lnk=\
-						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
-						List_Explicit_Values.val_third_element_of_list],\
-						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
-						[List_Explicit_Values.val_fourth_element_of_list],\
-						val_id_head_intersection_nd=i,\
-						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
-						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
-						val_li_output_lks_queues=v_li_id_outp_lks,val_type_routing_entry_lk_when_mixed_management=val_di_key_id_lk_value_type_rout_manag[j])
+							entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+							val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+							val_set_vehicle_que=set_q_obj,\
+							val_length_lnk=\
+							val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+							List_Explicit_Values.val_third_element_of_list],\
+							val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+							[List_Explicit_Values.val_fourth_element_of_list],\
+							val_id_head_intersection_nd=i,\
+							val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+							val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+							val_li_output_lks_queues=v_li_id_outp_lks,val_type_routing_entry_lk_when_mixed_management=val_di_key_id_lk_value_type_rout_manag[j])
 					
 					#if not a mixed rout management is associated with the link
 					else:
+						#if the demand will vary
+						if j in val_di_key_id_lk_value_param_dem_variation:
+						
+							#creation of the demand actuate objet
+							dem_var_alg_act=Cl_Demand_Variation_Algo_Actuate.Demand_Variation_Algo_Actuate(\
+							val_di_key_id_lk_value_param_dem_variation[j])
+							
+							entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+							val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+							val_set_vehicle_que=set_q_obj,\
+							val_length_lnk=\
+							val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+							List_Explicit_Values.val_third_element_of_list],\
+							val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+							[List_Explicit_Values.val_fourth_element_of_list],\
+							val_id_head_intersection_nd=i,\
+							val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+							val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+							val_li_output_lks_queues=v_li_id_outp_lks,\
+							val_demand_variation_actuate_obj=dem_var_alg_act)
+						
+						#if the demand on this entry link is not going vary
+						else:
 				
-						entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
-						val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
-						val_set_vehicle_que=set_q_obj,\
-						val_length_lnk=\
-						val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
-						List_Explicit_Values.val_third_element_of_list],\
-						val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
-						[List_Explicit_Values.val_fourth_element_of_list],\
-						val_id_head_intersection_nd=i,\
-						val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
-						val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
-						val_li_output_lks_queues=v_li_id_outp_lks)
+							entry_lk=Cl_Network_Entry_Link.Network_Entry_Link(\
+							val_id_lnk=j,val_li_id_output_links_from_lnk=val_dict_id_node_id_leaving_links_from_node[i],\
+							val_set_vehicle_que=set_q_obj,\
+							val_length_lnk=\
+							val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j][\
+							List_Explicit_Values.val_third_element_of_list],\
+							val_capacity_lnk=val_dict_id_all_network_link_id_orig_dest_node_length_link_capacity_link_param_travel_duration[j]\
+							[List_Explicit_Values.val_fourth_element_of_list],\
+							val_id_head_intersection_nd=i,\
+							val_fct_creating_demand_entry_link=val_fct_calcul_demand_entry_link,\
+							val_lis_parameters_fct_creating_demand_entry_link=val_di_parameters_fct_creating_demand_entry_link[j],\
+							val_li_output_lks_queues=v_li_id_outp_lks)
+						
 				#if a previous or given demand will be employed
 				elif val_creat_new_demand==List_Explicit_Values.initialisation_value_to_zero or\
 					val_creat_new_demand==List_Explicit_Values.initialisation_value_to_minus_one:
@@ -1688,6 +1740,16 @@ class Creation_Network:
 	
 			
 #*****************************************************************************************************************************************************************************************
+	#method creat a dict with the type of algo to employ when demand variation
+	def fct_creat_di_key_id_entry_lk_value_type_dem_variat_algo(self):
+		
+		di=Global_Functions_Network.fct_reading_fi_id_entry_lk_type_algo_when_demand_variat(\
+		val_name_file_to_read=File_Sim_Name_Module_Files.val_name_folder_with_demand_variat_param_files+"/"+\
+		File_Sim_Name_Module_Files.val_name_file_lk_id_demand_variat_algo_type_category,nb_comment_lines=1)
+		
+		return di
+
+#*****************************************************************************************************************************************************************************************
 	#method returning a list [dict1, dict 2]
 	#dict1=dictionary,key=node id, value=[type control, control category(string), 1/0 turn ratios estimated/not estimated]
 	#dict2, key=id node with estim turn ratios, value=1
@@ -1778,7 +1840,6 @@ class Creation_Network:
 		#the dictionary: key=the id of the entry link, value the list of parameters for calculating the demand of the entry link
 		dic_demand_param_entry_link=Global_Functions_Network.function_reading_file_containing_nd_or_link_information(file_name_read=\
 		"../"+self._name_data_folder+"/"+self._file_name_demand_param_entry_link,type=float)
-		
 		
 		
 		#the dictionary with the id of all links, the id of their origin and destination node and their length
@@ -1902,7 +1963,17 @@ class Creation_Network:
 				val_lis_types_ctrl.append(val_di_id_nd_type_and_ctrl_categ[m][0])
 
 		
-
+		#the dict with the parameters of the demand variation
+		dict_key_id_lk_value_param_dem_variation=Global_Functions_Network.\
+		fct_read_file_fi_demand_param_variation(name_file_to_read="../"+self._name_data_folder+"/"+\
+		File_names_network_model.val_fi_demand_param_variation,nb_comment_lines=1)
+		
+		
+		if dict_key_id_lk_value_param_dem_variation!={}:
+			dict_id_lk_value_type_demand_variation_algo=self.fct_creat_di_key_id_entry_lk_value_type_dem_variat_algo()
+		else:
+			dict_id_lk_value_type_demand_variation_algo={}
+	
 		#creation of the entry links, li_di_entry_lk=[dict_entry_link,val_que_id]
 		li_di_entry_lk=self.funct_creating_dict_entry_links_to_network(\
 		val_time_unit=self._module_name_import_sim_user_data.val_t_unit,\
@@ -1922,7 +1993,10 @@ class Creation_Network:
 		val_di_id_nd_with_estim_turn_ratios=val_di_id_nd_with_estimated_turn_ratios,\
 		val_indicat_type_veh_final_dest=self._module_name_import_sim_user_data.val_type_veh_final_dest,\
 		val_di_key_id_nd_val_dict_id_phase_val_li_interf_phase_and_param=dict_id_nd_interf_phases,\
-		val_di_key_id_lk_value_type_rout_manag=dict_key_id_lk_value_type_rout_manag)
+		val_di_key_id_lk_value_type_rout_manag=dict_key_id_lk_value_type_rout_manag,\
+		val_di_key_id_lk_value_param_dem_variation=dict_key_id_lk_value_param_dem_variation)
+		#,\
+		#val_di_id_lk_value_type_demand_variation_algo=dict_id_lk_value_type_demand_variation_algo)
 		
 		
 		#the dictionary of the entry links of the network 
@@ -2047,7 +2121,16 @@ class Creation_Network:
 
 		
 		
-		
+		#if  demand variation is associated with entry links
+		if dict_id_lk_value_type_demand_variation_algo !={}:
+			di_id_entry_links_with_varying_dem={}
+			for v in dict_key_id_lk_value_param_dem_variation.keys():
+				di_id_entry_links_with_varying_dem[v]=[dict_key_id_lk_value_param_dem_variation[v][0][0],dict_id_lk_value_type_demand_variation_algo[v]]
+			
+			#di_id_entry_links_with_varying_dem=dict, key=id enry link, 
+			#value=[duree after the begin of the sim at which demand changes, type algo demand variation]
+			network.set_di_entry_links_with_varying_demands(di_id_entry_links_with_varying_dem)
+				
 		
 		#we calculate the dict, key=id intersection, valeur=dict, key =id  pahse, valeur=rout prob
 		di_id_nd_val_di_rout_prob=Global_Functions_Network.fct_reading_file_fi_mrp(\

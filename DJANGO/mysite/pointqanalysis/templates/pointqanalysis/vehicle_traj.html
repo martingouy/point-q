@@ -2,6 +2,85 @@
 {% load staticfiles %}
 {% block title %} Vehicles trajectories{% endblock %}
 
+{% block css %} 
+<style>
+	.grid .tick {
+		stroke: lightgrey;
+		opacity: 0.7;
+		shape-rendering: crispEdges;
+	}
+	 
+	.grid path {
+		stroke-width: 0;
+	}
+	 
+	.axis path {
+		fill: none;
+		stroke: #bbb;
+		shape-rendering: crispEdges;
+	}
+	 
+	.axis text {
+		fill: #555;
+	}
+	 
+	.axis line {	
+		stroke: #e7e7e7;
+		shape-rendering: crispEdges;
+	}
+	 
+	.axis .axis-label {
+		font-size: 14px;
+	}
+	 
+	.line {
+		fill: none;
+		stroke-width: 1.5px;
+	}
+	 
+	.dot {
+		/* consider the stroke-with the mouse detect radius? */
+		stroke: transparent;
+		stroke-width: 10px;  
+		cursor: pointer;
+	}
+	 
+	.dot:hover {
+		stroke: rgba(68, 127, 255, 0.3);
+	}
+
+	.d3-tip {
+		line-height: 1;
+		font-weight: bold;
+		padding: 12px;
+		background: rgba(0, 0, 0, 0.8);
+		color: #fff;
+		border-radius: 2px;
+	}
+
+	/* Creates a small triangle extender for the tooltip */
+	.d3-tip:after {
+		box-sizing: border-box;
+		display: inline;
+		font-size: 10px;
+		width: 100%;
+		line-height: 1;
+		color: rgba(0, 0, 0, 0.8);
+		content: "\25BC";
+		position: absolute;
+		text-align: center;
+	}
+
+	/* Style northward tooltips differently */
+		.d3-tip.n:after {
+		margin: -1px 0 0 0;
+		top: 100%;
+		left: 0;
+	}
+</style>
+
+{% endblock %}
+
 {% block container %} 
 
 	<div id= "step1">
@@ -17,6 +96,8 @@
 			</p>
 		</div>
 		<div id="map-canvas"></div>
+	</div>
+	<div id = "rendercharts">
 	</div>
 	<div id="step2">
 		<div id="VT_routes">
@@ -48,9 +129,6 @@
 
 		</div>
 	</div>
-	<div id = "rendercharts">
-		<div id="veh_traj" ></div>
-	</div>
 
 {% endblock %}
 
@@ -59,6 +137,8 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.min.js' %}"></script>
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>	
+	<script src="http://d3js.org/d3.v3.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 	<script type="text/javascript">
 
 		// GLOBAL VARIABLES
@@ -159,9 +239,12 @@
 
 					// we create the AJAX request
 					$.post('../pointqanalysis/ajax', {'vehicles': vehicles, 'nb_veh': max_nb_veh, 'links': links, 'intersections': intersections, 'action':action}, function(data) {
+						//*****************************************************************************************
+						// We treat the data we receive
+						//*****************************************************************************************
 							var dic_length = JSON.parse(data);
-							links = routes[id_route_analyse][0];
-							vehicles = routes[id_route_analyse][1];
+							var links = routes[id_route_analyse][0];
+							var vehicles = routes[id_route_analyse][1];
 
 							// we start building the JSON for the plot
 							var json_plot = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': {'text': "Vehicles Trajectory"}, 'axisX': {'title': "Time (s)"}, 'axisY': {'title': "Traveled distance (m)"}, 'data': []};
@@ -191,11 +274,282 @@
 								}
 								json_plot.data.push(temp_json);
 							}
-							var chart = new CanvasJS.Chart("veh_traj", json_plot);
-							chart.render();
+
+						//*****************************************************************************************
+						// We want to create a dictionary:  key: distance / value: corresponding node for the tooltip
+						//*****************************************************************************************
+
+
+							// we create a list of the links that will be plotted:
+							var links_plotted = [];
+							var nodes_plotted = routes[id_route_analyse][2];
+							var index_not_plotted = [];
+							// We iterate over the links
+							for (var j = 0; j < links.length; j++){
+
+								var link = links[j];
+								var vehicle = vehicles[0];
+
+								// we check if the link is an internal link
+								if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
+									links_plotted.push(link);
+								}
+								else{
+									index_not_plotted.push(j);
+								}
+							}
+
+							if (index_not_plotted.indexOf(0) != -1) {
+								nodes_plotted.splice(0, 1);
+							}
+
+							var dic_dist_node = {};
+							var temp_length = 0;
+
+							for (var i = 0; i < links_plotted.length; i++) {
+								temp_length += parseFloat(dic_length[links_plotted[i]]);
+								dic_dist_node[Math.round(temp_length).toString()] = nodes_plotted[i];
+							}
+
+
 							$('html, body').animate({
 								scrollTop: $("#btn_submit").offset().top
 							}, 1000);
+
+						//*****************************************************************************************
+						// We create the interface between D3 and the Google map
+						//*****************************************************************************************
+
+							// The graph when hover returns the id of the corresponding node
+							// Which are the lat / long coordinates of the node ?
+
+							function get_node_coodinates(id_node) {
+
+								var id_node = 'node_' + id_node;
+								// We parse the json of the network
+								for (var i = 0; i < geojson.features.length; i++) {
+									var feature = geojson.features[i];
+									if (feature.id == id_node){
+										return new google.maps.LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+									} 
+								} 
+							}
+
+							// we create an array to store all the markers
+							var markers_hover_node = [];
+
+							// Add a marker to the map and push to the array.
+							function addMarker(d, i) {
+								var distance = Math.round(d.y);
+								var id_node = dic_dist_node[distance];
+								var location = get_node_coodinates(id_node);
+								var marker = new google.maps.Marker({
+									position: location,
+									map: map,
+									animation: google.maps.Animation.DROP
+								});
+								markers_hover_node.push(marker);
+							}
+
+							// Sets the map on all markers in the array.
+							function setAllMap(map) {
+								for (var i = 0; i < markers_hover_node.length; i++) {
+									markers_hover_node[i].setMap(map);
+								}
+							}
+
+							// Removes the markers from the map, but keeps them in the array.
+							function clearMarkers() {
+								setAllMap(null);
+							}
+
+							// Deletes all markers in the array by removing references to them.
+							function deleteMarkers() {
+								clearMarkers();
+								markers_hover_node = [];
+							}
+
+						//*****************************************************************************************
+						// We start to build the svg plot with D3.js
+						//*****************************************************************************************
+
+							// We load the data
+							var json_data = json_plot;
+
+							// We create the plot:
+
+							// Let's start with the margins, width, height of the plot:
+
+							var margin = {top: 20, right: 20, bottom: 30, left: 50},
+								width = 960 - margin.left - margin.right,
+								height = 500 - margin.top - margin.bottom;
+
+							// Now we define the scale functions (range + domain):
+
+							// We have to find xmin and xmax / ymin and ymax
+							var x_values = [];
+							var y_values = [];
+							for (var vehicle = 0; vehicle < json_data.data.length; vehicle++) {
+
+								dataPoints = json_data.data[vehicle].dataPoints;
+								for (var point = 0; point < dataPoints.length; point++) {
+									x_values.push(dataPoints[point].x);
+									y_values.push(dataPoints[point].y);
+								}
+							}
+							var xmin = Math.min.apply(Math, x_values);
+							var xmax = Math.max.apply(Math, x_values) * 1.1;
+							var ymin = Math.min.apply(Math, y_values);
+							var ymax = Math.max.apply(Math, y_values) * 1.1;
+
+							var x = d3.scale.linear()
+								.range([0, width])
+								.domain([xmin, xmax]);
+
+							var y = d3.scale.linear()
+								.range([height, 0])
+								.domain([ymin, ymax]);
+
+							// we create the axis
+							var xAxis = d3.svg.axis()
+								.scale(x)
+								.tickSize(-height)
+								.tickPadding(10)	
+								.tickSubdivide(true)	
+								.orient("bottom");	
+
+							var yAxis = d3.svg.axis()
+								.scale(y)
+								.tickPadding(10)
+								.tickSize(-width)
+								.tickSubdivide(true)	
+								.orient("left");
+
+							// function to analyse data and create line
+							var line = d3.svg.line()
+								.x(function(d) { return x(d.x); })
+								.y(function(d) { return y(d.y); });
+
+							// function to zoom
+
+							var zoom = d3.behavior.zoom()
+								.x(x)
+								.y(y)
+								.scaleExtent([1, 10])
+								.on("zoom", zoomed);	
+
+							// function tooltip
+							var tip = d3.tip()
+								.attr('class', 'd3-tip')
+								.offset([-10, 0])
+								.html(function(d) {
+									var distance = Math.round(d.y);
+
+									if (distance in dic_dist_node){
+										return "<strong>Node:</strong> " + dic_dist_node[distance] ;
+									}
+									else if (distance == 0){
+										return "Initial node";
+									}
+									else {
+										return "Error";
+									}
+								});
+
+
+							// We create the SVG
+							var svg = d3.select("#rendercharts").append("svg")
+								.call(zoom)
+								.call(tip)
+								.attr("width", width + margin.left + margin.right)
+								.attr("height", height + margin.top + margin.bottom)
+								.append("g")
+									.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+							// We append the x axis
+							svg.append("g")
+								.attr("class", "x axis")
+								.attr("transform", "translate(0," + height + ")")
+								.call(xAxis);
+
+							// We append the y axis
+							svg.append("g")
+								.attr("class", "y axis")
+								.call(yAxis);
+
+							// We append the clip path
+
+							svg.append("clipPath")
+								.attr("id", "clip")
+								.append("rect")
+								.attr("width", width)
+								.attr("height", height);
+
+							// We append the lines
+
+							var color = d3.scale.category20();
+
+							var lines_color = [];
+							for (var vehicle = 0; vehicle < json_data.data.length; vehicle++) {
+
+								var color_line = color(Math.floor((Math.random()*20)+1));
+								lines_color.push(color_line);
+								dataPoints = json_data.data[vehicle].dataPoints;
+								svg.append("path")
+									.datum(dataPoints)
+									.attr("class", "line")
+									.attr("clip-path", "url(#clip)")
+									.attr("d", line)
+									.style('stroke', color_line);
+
+							}
+
+
+							var points = svg.selectAll('.dots')
+								.data(d3.entries(json_data.data))
+								.enter()
+								.append("g")
+									.attr("class", "dots")
+									.attr("clip-path", "url(#clip)")
+									.attr('fill', function(d,i){ 	
+										return lines_color[i];
+									});	
+
+							points.selectAll('.dot')
+								.data(function(d, index){ 		
+									return d.value.dataPoints
+								})
+								.enter()
+									.append('circle')
+									.attr('class','dot')
+									.attr("r", 2.5)	
+									.on('mouseover', function(d, i) {
+										tip.show(d,i);
+										addMarker(d);
+									})
+									.on('mouseout', function(d) {
+										tip.hide(d,i);
+										deleteMarkers(d);
+									})
+									.attr("transform", function(d) { 
+										return "translate(" + x(d.x) + "," + y(d.y) + ")"; }
+									);
+
+
+
+							//************************************************************
+							// Zoom specific updates
+							//************************************************************
+							function zoomed() {
+								svg.select(".x.axis").call(xAxis);
+								svg.select(".y.axis").call(yAxis);   
+								svg.selectAll('path.line').attr('d', line);  
+								points.selectAll('circle').attr("transform", function(d) { 
+									return "translate(" + x(d.x) + "," + y(d.y) + ")"; }
+								);  
+														 
+							}
+
 					});
 				}
 			});				

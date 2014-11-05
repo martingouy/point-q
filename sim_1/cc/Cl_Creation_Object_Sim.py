@@ -9,6 +9,9 @@ import Cl_Global_Functions
 import List_Explicit_Values
 import Cl_Creation_Network
 import Global_Functions_Network
+import File_names_network_model
+import File_Sim_Name_Module_Files
+import Cl_Demand_Variation_Algo_Actuate
 
 class Creation_Object_Sim:
 	"""class constructing the the simulation object to be implemented """
@@ -443,6 +446,31 @@ class Creation_Object_Sim:
 		
 		#we indicate the network the new types of the employed ctrl
 		netw_network.set_li_employed_ctrl_types(val_lis_types_ctrl)
+		
+		#the dict with the parameters of the demand variation
+		dict_key_id_lk_value_param_dem_variation=Global_Functions_Network.\
+		fct_read_file_fi_demand_param_variation(name_file_to_read=val_name_data_folder+"/"+\
+		File_names_network_model.val_fi_demand_param_variation,nb_comment_lines=1)
+		
+		#if demand variation is asscoiated with entry links
+		if dict_key_id_lk_value_param_dem_variation!={}:
+		
+			dict_id_lk_value_type_demand_variation_algo=Global_Functions_Network.fct_reading_fi_id_entry_lk_type_algo_when_demand_variat(\
+			val_name_file_to_read=File_Sim_Name_Module_Files.val_name_folder_with_demand_variat_param_files+"/"+\
+			File_Sim_Name_Module_Files.val_name_file_lk_id_demand_variat_algo_type_category,nb_comment_lines=1)
+			
+			di_id_entry_links_with_varying_dem={}
+			for p in dict_id_lk_value_type_demand_variation_algo.keys():
+				di_id_entry_links_with_varying_dem[p]=[dict_key_id_lk_value_param_dem_variation[p][0][0],dict_id_lk_value_type_demand_variation_algo[p]]
+				
+			netw_network.set_di_entry_links_with_varying_demands(di_id_entry_links_with_varying_dem)
+			
+			for v in dict_id_lk_value_type_demand_variation_algo.keys():
+				
+				dem_act_obj=Cl_Demand_Variation_Algo_Actuate.Demand_Variation_Algo_Actuate(\
+				dict_key_id_lk_value_param_dem_variation[v])
+				
+				netw_network.get_di_entry_links_to_network()[v].set_demand_variation_actuate_obj(dem_act_obj)
 		
 		#creation of an control actuate object
 		#control_act_obj=creat_netw_obj.fct_creat_control_actuat_obj(\

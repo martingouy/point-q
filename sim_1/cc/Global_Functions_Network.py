@@ -1063,6 +1063,24 @@ def fct_reading_fi_id_node_type_control(val_name_file_to_read,nb_comment_lines):
 	return [di_rep,di_rep_with_turn_ratios_estim]
 
 #*****************************************************************************************************************************************************************************************
+#function reading file with the entrylink id and the type of the algo to employ when demand varies
+#it returns a dict, key=id entry lk, value=type algo
+def fct_reading_fi_id_entry_lk_type_algo_when_demand_variat(val_name_file_to_read,nb_comment_lines):
+
+	file=open(val_name_file_to_read,"r")
+	di_rep={}
+	
+	ind=0
+	
+	for i in file.readlines():
+		ind+=1
+		if ind>nb_comment_lines:
+			a=i.rsplit()
+			di_rep[eval(a[0])]=eval(a[1])
+			
+	return di_rep		
+
+#*****************************************************************************************************************************************************************************************
 #function reading file with the parameters of FT control. It returns a dictionary: key = id node, 
 #value=[..., [id stage to actuate at step i, actuation duration, cycle duration],...]
 def fct_reading_file_parameters_FT_control(name_file_to_read,nb_comment_lines):
@@ -1800,7 +1818,59 @@ def fct_read_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_read,nb_comment
 			a=i.rsplit()
 			di_rep[eval(a[0])]=eval(a[1])
 	return di_rep
+#*****************************************************************************************************************************************************************************************
+#fct read the file with the parameters of the demand variation 
+#it returns a dict, key=id entry link, value=[...,[durat demand variat, parameter],...]
+def fct_read_file_fi_demand_param_variation_1(name_file_to_read,nb_comment_lines):
 
+	
+	di_rep={}
+	file=open(name_file_to_read,"r")
+	
+	ind=0
+	for i in file.readlines():
+		ind+=1
+		if ind>nb_comment_lines:
+			a=i.rsplit()
+			di_rep[int(eval(a[0]))]=[]
+			for j in a[1:]:
+				di_rep[eval(a[0])].append(eval(j))
+	return di_rep
+
+#*****************************************************************************************************************************************************************************************
+#fct read the file with the parameters of the demand variation 
+#it returns a dict, key=id entry link, value=[...,[durat demand variat, parameter],...]
+def fct_read_file_fi_demand_param_variation(name_file_to_read,nb_comment_lines):
+
+	
+	di_rep={}
+	file=open(name_file_to_read,"r")
+	
+	ind=0
+	for i in file.readlines():
+		
+		ind+=1
+		if ind>nb_comment_lines:
+			a=i.rsplit()
+			
+			nb_f=round(len(a[1:])/2)
+			
+			di_rep[int(eval(a[0]))]=[]
+			indice_init=1
+			pas=2
+			
+			
+			for k in range(nb_f):
+				
+				li_1=[]
+				for j in a[indice_init:indice_init+pas]:
+					
+					li_1.append(eval(j))
+				di_rep[eval(a[0])].append(li_1)
+				indice_init=indice_init+pas
+				
+				
+	return di_rep
 
 #*****************************************************************************************************************************************************************************************
 #method returning a dictionary, key=id link, value=dict, key=id phase associated with link, 
@@ -3120,6 +3190,39 @@ li_phrases=["id node (1 colm), id phase  affected (2-3 colm), id affecting phase
 def fct_write_file_fi_rout_type_entry_lk_mixed_manag(name_file_to_write,li_valeurs,\
 li_phrases=["id lk (1st column), rout. type (2nd column) 1: od and given path, 2: od and dynam computed path"]):
 
+	file=open(name_file_to_write,"w")
+	
+	for i in li_phrases:
+		file.write("%s\t \n"%(i))
+		
+	for j in li_valeurs:
+		
+		file.write("%d\t %d  \n"%(j[0],j[1]))
+	
+	file.close()
+	
+#*****************************************************************************************************************************************************************************************
+#fct write the file with the parameters of the demand variation
+def fct_write_fi_demand_param_variation(name_file_to_write,li_valeurs,\
+li_phrases=["id entry lk (1st column), t_duration first variation (2nd column), demand parameter first variation (3rd column), t_duration second variation (4thcolumn),...   "]):
+
+	file=open(name_file_to_write,"w")
+	
+	for i in li_phrases:
+		file.write("%s\t \n"%(i))
+		
+	for j in li_valeurs:
+		for m in j:
+			file.write("%.3f\t"%(m))
+		file.write("\n")
+			
+	file.close()
+		
+#*****************************************************************************************************************************************************************************************
+#method write the file with the type of algo to employ when demand variate
+def fct_write_fi_lk_id_dem_var_algo_type_category(name_file_to_write,li_valeurs,\
+li_phrases=["id entry lk (1st column), type algo demand variate to employ (2nd column)"]):
+	
 	file=open(name_file_to_write,"w")
 	
 	for i in li_phrases:
@@ -5344,7 +5447,7 @@ val_li_valeurs=[
 #print(di_rep)
 
 #we write file fi_phase_interference.txt
-val_li_valeurs=[[1,1,18,1,2,0.5],[1,1,2,1,18,0.75],[2,2,20,2,3,0.5],[2,2,3,2,20,0.75],[3,3,22,3,4,0.5],[3,3,4,3,22,0.75]]
+#val_li_valeurs=[[1,1,18,1,2,0.5],[1,1,2,1,18,0.75],[2,2,20,2,3,0.5],[2,2,3,2,20,0.75],[3,3,22,3,4,0.5],[3,3,4,3,22,0.75]]
 
 #fct_write_file_fi_phase_interference(name_file_to_write=File_names_network_model.name_file_phase_interference,li_valeurs=val_li_valeurs,\
 #li_phrases=["id node (1 colm), id phase  affected (2-3 colm), id affecting phase (4-5 colm), param affected phase (6 colm)"])
@@ -5381,6 +5484,23 @@ list_valeurs_fi_id_nd_type_ctrl_cat=[
 #3:\"type_control_MP\" , 10: \``type_control_FA _no red clear\‘’,11:\"type_control_FA_Max_Green\" ,12: \``type_control_FA _with_red lrear\",1\
 #3:\"type_control_MP_Practical \‘’,(3rd colm): control category indicates if the ctrl is updated accroding to flows or not, sensor_requirement for controls requiring sensor monitoring (FA,FAmax green),\
 #without_sensor_requirement for controls not requiring sensors (FT, MP, etc),(4th column): 1 if turn ratios are going to be estimated with the employed control, 0 otherwise"],list_valeurs=list_valeurs_fi_id_nd_type_ctrl_cat)
+
+#ecriture fichier fi_demand_param_variation
+#li_valeurs_fi_demand_param_variation=[\
+#[1, 20, 0.05, 30, 0.2,20,0.039],\
+#[5,20, 0.05, 30, 0.2,20,0.063],\
+#]
+
+#fct_write_fi_demand_param_variation(name_file_to_write=File_names_network_model.val_fi_demand_param_variation,li_valeurs=li_valeurs_fi_demand_param_variation)
+
+#di=fct_read_file_fi_demand_param_variation(name_file_to_read=File_names_network_model.val_fi_demand_param_variation,nb_comment_lines=1)
+#print(di)
+
+#li_valeurs_ty_algo_demand_var=[\
+#[1,1],\
+#[5,1]
+#]
+#fct_write_fi_lk_id_dem_var_algo_type_category(name_file_to_write=File_Sim_Name_Module_Files.val_name_file_lk_id_demand_variat_algo_type_category,li_valeurs=li_valeurs_ty_algo_demand_var)
 
 #*********************************************************************************************************************************************************************************************************************************************************************
 

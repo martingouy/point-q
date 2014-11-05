@@ -10,7 +10,7 @@ TYPE_REASON_EVENT_HEV_FLOW_CHANGES={"demand_intensity_variation":1,\
 class Ev_veh_flow_changes(Cl_Event.Event):
 
 	def __init__(self,val_ev_t,val_id_intersection_node=None,val_di_rp_mat_next_period={},val_di_mat_cum_rp_next_period={},\
-	val_reason_event=None):
+	val_id_entry_lk_with_varying_demand=None,val_ty_algo_computing_current_demand=-1,val_reason_event=None):
 	
 		gl_funct_obj=Cl_Global_Functions.Global_Functions()
 		
@@ -30,6 +30,15 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 		#key=id entry-internal link, value=[...,[val cum rout prb, dest nd],...]
 		self._di_mat_cum_rp_next_period=val_di_mat_cum_rp_next_period
 		
+		#the id of the entry link with varying demand
+		self._id_entry_lk_with_varying_demand=val_id_entry_lk_with_varying_demand
+		
+		#the list with the param of the fct calculating the demand of the related entry link 
+		#self._li_param_fct_calcul_demand_variation=val_li_param_fct_calcul_demand_variation
+		
+		#the type of the algorithm computing the current demand, when demand variation
+		self._ty_algo_computing_current_demand=val_ty_algo_computing_current_demand
+		
 		
 		#the reason of the event (this variable will have a value from the dict TYPE_REASON_EVENT_HEV_FLOW_CHANGES)
 		self._reason_event=val_reason_event
@@ -42,7 +51,7 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 	
 #*****************************************************************************************************************************************************************************************
 	#method returning the diction with the new values of the rout prob
-	def getdi_rp_mat_next_period(self):
+	def get_di_rp_mat_next_period(self):
 		return self._di_rp_mat_next_period
 
 #*****************************************************************************************************************************************************************************************
@@ -54,6 +63,20 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 	#method returning the reason fro this event
 	def get_reason_event(self):
 		return self._reason_event
+#*****************************************************************************************************************************************************************************************
+	#method returning the id of the entry link with varying demand
+	def get_id_entry_lk_with_varying_demand(self):
+		return self._id_entry_lk_with_varying_demand
+
+#*****************************************************************************************************************************************************************************************
+	#method returning the list with the param of the fct calculating the demand of the related entry link 
+	#def get_li_param_fct_calcul_demand_variation(self):
+		#return self._li_param_fct_calcul_demand_variation
+#*****************************************************************************************************************************************************************************************
+	#method returning the type of the algorithm computing the current demand
+	def get_ty_algo_computing_current_demand(self):
+		return self._ty_algo_computing_current_demand
+
 #*****************************************************************************************************************************************************************************************
 	#method modifying the intersection node id
 	def set_id_intersection_node(self,n_v):
@@ -79,6 +102,20 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 	#method modifying the reason fro this event
 	def set_reason_event(self,n_v):
 		self._reason_event=n_v
+#*****************************************************************************************************************************************************************************************
+	#method modifying the id of the entry link with varying demand
+	def set_id_entry_lk_with_varying_demand(self,n_v):
+		self._id_entry_lk_with_varying_demand=n_v
+
+#*****************************************************************************************************************************************************************************************
+	#method modifying the list with the param of the fct calculating the demand of the related entry link 
+	#def set_li_param_fct_calcul_demand_variation(self,n_v):
+		#self._li_param_fct_calcul_demand_variation=n_v
+#*****************************************************************************************************************************************************************************************
+	#method modifying the type of the algorithm computing the current demand
+	def set_ty_algo_computing_current_demand(self,n_v):
+		self._ty_algo_computing_current_demand=n_v
+
 #*****************************************************************************************************************************************************************************************
 	#method creating a dict, key=in input link, value=[...,[cum rout prob value, id dest link],...]
 	#val_di_cum_rp= dict, key=id phase, value=cum rout prob
@@ -488,6 +525,47 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 		return di_rp_rep
 					
 #*****************************************************************************************************************************************************************************************
+	#method treating the case when the demand parameter of the entry link varies
+	def fct_treat_case_demand_variation(self,val_network,val_lis_ev,val_file_recording_event_db):
+
+		
+		
+		#calcul the demand param
+		#rep=[ demand parameter_1,type algo to employ next decision]
+		rep=val_network.get_di_entry_links_to_network()[self._id_entry_lk_with_varying_demand].get_demand_variation_actuate_obj().\
+		fct_select_appropriate_algo_demand_variat(va_type_algo_to_employ=self._ty_algo_computing_current_demand)
+		
+		
+		
+		#update the demand parameter of the related  entry link
+		val_network.get_di_entry_links_to_network()[self._id_entry_lk_with_varying_demand].set_lis_parameters_fct_creating_demand_entry_link(\
+		[rep[0]])
+		
+		#update the param employed by the algo computing the demand
+		
+		
+		
+		#eventual next uodate of the demand variation
+		if val_network.get_di_entry_links_to_network()[self._id_entry_lk_with_varying_demand].get_demand_variation_actuate_obj().\
+		get_li_param_algo_given_timeanddem_param_entire_sim()!=[]:
+		
+			te=(self._event_time+val_network.get_di_entry_links_to_network()[self._id_entry_lk_with_varying_demand].get_demand_variation_actuate_obj().\
+			get_li_param_algo_given_timeanddem_param_entire_sim()[0][0])
+			
+			ev_next_dem_update=Ev_veh_flow_changes(val_ev_t=te,\
+			val_id_entry_lk_with_varying_demand=self._id_entry_lk_with_varying_demand,val_ty_algo_computing_current_demand=rep[1],\
+			val_reason_event=TYPE_REASON_EVENT_HEV_FLOW_CHANGES["demand_intensity_variation"])
+			
+			ev_next_dem_update.fct_insertion_even_in_event_list(event_list=val_lis_ev,\
+			message="IN CL_EV_VEH_Flow_changes fct_treat_case_demand_variation NEXT VEH APPEARANCE EVENT HAS TIME < TIME FIRST EVENT IN THE LIST")
+			
+		record_db_obj=Cl_Record_Database.Record_Database(\
+		val_file_db=val_file_recording_event_db,\
+		val_ev_time=self._event_time,val_ev_type=self._event_type,val_id_veh_entry_link=self._id_entry_lk_with_varying_demand)
+
+		record_db_obj.fct_write_object_in_db_file()	
+
+#*****************************************************************************************************************************************************************************************
 	#method treating this event if it is called for updating  rout prob
 	def fct_treat_case_modif_turn_ratios_val(self,val_network,val_dict_turn_prob, val_dict_cum_turn_prob,val_file_recording_event_db):
 	
@@ -654,6 +732,13 @@ class Ev_veh_flow_changes(Cl_Event.Event):
 				
 				self.fct_treat_case_estimated_values_turn_ratios_veh_final_dest_initial_defined(\
 				val_network=val_netwrk,val_prec_round=val_precis_round,val_li_ev=val_li_event,val_file_recording_event_db=file_recording_event_db)
+				
+		#if the reason of this event is the demand variation
+		elif self._reason_event==\
+		TYPE_REASON_EVENT_HEV_FLOW_CHANGES["demand_intensity_variation"]:
+			
+		
+			self.fct_treat_case_demand_variation(val_network=val_netwrk,val_lis_ev=val_li_event,val_file_recording_event_db=file_recording_event_db)
 
 	
 #*****************************************************************************************************************************************************************************************

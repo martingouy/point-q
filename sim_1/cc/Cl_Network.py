@@ -16,7 +16,8 @@ class Network:
 	val_li_employed_ctrl_types=[],val_di_id_intersections_with_estim_turn_ratios={},val_dict_id_nds_with_entry_links=None,\
 	val_di_intersections_with_var_turn_ratios={},\
 	val_di_intersections_with_var_cum_turn_ratios={},val_di_inters_periods_with_var_turn_ratios={},\
-	val_di_intersections_with_non_empty_init_que_state={}):
+	val_di_intersections_with_non_empty_init_que_state={},\
+	val_di_entry_links_with_varying_demands={}):
 	
 	
 		#the id of the network
@@ -91,6 +92,10 @@ class Network:
 		#the dict with the init state if the related itnersections
 		#dict, key=id node, value=dict, key=id phase, value=nb veh
 		self._di_intersections_with_non_empty_init_que_state=val_di_intersections_with_non_empty_init_que_state
+		
+		#the dict with the id of the entry links with varying demands, key=id link,
+		# value=[duree after the begin of the sim at which demand changes, type algo demand variation]
+		self._di_entry_links_with_varying_demands=val_di_entry_links_with_varying_demands
 		
 		
 	
@@ -193,6 +198,11 @@ class Network:
 	#method returning the  dict with the init state if the related itnersections
 	def get_di_intersections_with_non_empty_init_que_state(self):
 		return self._di_intersections_with_non_empty_init_que_state
+#*****************************************************************************************************************************************************************************************
+	#method returning the dict with the id of the entry links with varying demands
+	def get_di_entry_links_with_varying_demands(self):
+		return self._di_entry_links_with_varying_demands
+
 #*****************************************************************************************************************************************************************************************
 
 	#method modifying  the id of the network
@@ -315,6 +325,11 @@ class Network:
 	#method modifying the  dict with the init state if the related itnersections
 	def set_di_intersections_with_non_empty_init_que_state(self,n_v):
 		self._di_intersections_with_non_empty_init_que_state=n_v
+#*****************************************************************************************************************************************************************************************
+	#method modifying the dict with the id of the entry links with varying demands
+	def set_di_entry_links_with_varying_demands(self,n_v):
+		self._di_entry_links_with_varying_demands=n_v
+
 #*****************************************************************************************************************************************************************************************
 	#method modifying the dict with the id of prior.-minor phases
 	#def set_di_key_id_int_value_id_prior_phase_value_li_id_minor_phases(self,n_v):

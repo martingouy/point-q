@@ -13,7 +13,7 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 	def __init__(self,val_id_lnk=-1,val_li_id_output_links_from_lnk=[],val_set_vehicle_que=None,val_length_lnk=-1,\
 	val_capacity_lnk=-1,val_id_head_intersection_nd=-1,val_li_id_sublks=[],val_fct_creating_demand_entry_link=None,\
 	val_lis_parameters_fct_creating_demand_entry_link=[],val_type_entry_link=1,val_li_output_lks_queues=None,\
-	val_type_routing_entry_lk_when_mixed_management=-1):
+	val_type_routing_entry_lk_when_mixed_management=-1,val_demand_variation_actuate_obj=None):
 	
 		Cl_Network_Link.Network_Link.__init__(self,val_id_nwlink=val_id_lnk,val_li_id_output_links_from_nwlink=val_li_id_output_links_from_lnk,\
 		val_set_vehicle_queue_nwlink=val_set_vehicle_que,val_length_nwlink=val_length_lnk,val_capacity_nwlink=val_capacity_lnk,\
@@ -23,12 +23,20 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 		#the function generating the demand of the entry link (nb veh /time unit)
 		self._fct_creating_demand_entry_link=val_fct_creating_demand_entry_link
 		
+		
+		
 		#the list of the parameters of the function creating the demand
 		self._lis_parameters_fct_creating_demand_entry_link=val_lis_parameters_fct_creating_demand_entry_link 
 		
 		#the type of the routing  of an entry link when a mixed rout management is employed
 		self._type_routing_entry_lk_when_mixed_management=val_type_routing_entry_lk_when_mixed_management
 		
+		
+		#the list with the param of the demand  when the time and demand variate, val_li_param_when_demand_variate=[....,[t,demand param],...]
+		#self._li_param_when_demand_variate=val_li_param_when_demand_variate
+		
+		#an object for selecting the algorthm computing the demand 
+		self._demand_variation_actuate_obj=val_demand_variation_actuate_obj
 		
 		
 		#the number of vehicles appeared at this entry link, initialised at zero and updated after every new vehicle appearance
@@ -56,6 +64,16 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 		return self._type_routing_entry_lk_when_mixed_management
 
 #*****************************************************************************************************************************************************************************************
+	#method returning the list with the param of the demand  when the time and demand variate
+	#def get_li_param_when_demand_variate(self):
+		#return self._li_param_when_demand_variate
+
+#*****************************************************************************************************************************************************************************************
+	#method returning the object for selecting the algorthm computing the demand 
+	def get_demand_variation_actuate_obj(self):
+		return self._demand_variation_actuate_obj
+
+#*****************************************************************************************************************************************************************************************
 	#method returning the type  of the entry link
 	#def get_type_entry_link(self):
 		#return self._type_entry_link
@@ -81,6 +99,16 @@ class Network_Entry_Link(Cl_Network_Link.Network_Link):
 	#method modifying the type of the routing  of an entry link when a mixed rout management is employed
 	def set_type_routing_entry_lk_when_mixed_management(self,n_v):
 		self._type_routing_entry_lk_when_mixed_management=n_v
+
+#*****************************************************************************************************************************************************************************************
+	#method modifying the list with the param of the demand  when the time and demand variate
+	#def set_li_param_when_demand_variate(self,n_v):
+		#self._li_param_when_demand_variate=n_v
+
+#*****************************************************************************************************************************************************************************************
+	#method modifying the object for selecting the algorthm computing the demand 
+	def set_demand_variation_actuate_obj(self,n_v):
+		self._demand_variation_actuate_obj=n_v
 
 #*****************************************************************************************************************************************************************************************
 	#method creating the demand of the entry link
