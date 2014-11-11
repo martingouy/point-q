@@ -46,6 +46,14 @@ body {
   vertical-align: top;
 }
 
+#left_tree_3 {
+  display: inline-block;
+  height: 400px;
+  width: 170px;
+  overflow: auto;
+  vertical-align: top;
+}
+
 #right_tree {
   vertical-align: top;
   display: inline-block;

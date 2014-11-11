@@ -41,6 +41,18 @@ def ajax(request):
 			except:
 				return HttpResponse('False')
 
+		elif request.POST.get("action", "") == 'stage_actuation':
+			nodes_plotted = json.loads(request.POST.get("nodes_plotted", ""))
+			sim_name = request.COOKIES['sim_name']
+			dic_node_stage_actuation = {}
+
+			for node in nodes_plotted:
+				# which network is associated with the simulation
+				query_1 = 'SELECT ev_time, int_ctrl_mat FROM \'' + str(sim_name) + '\' WHERE ev_type = 3 AND id_inter = '+ str(node)
+				stage_actuation_node = tools_data.query_sql_debug([query_1], True, 'pointq_db')
+				dic_node_stage_actuation[str(node)] = stage_actuation_node
+
+			return HttpResponse(json.dumps(dic_node_stage_actuation))
 
 	else:
 		if request.GET.get('action', '') == 'listsim':
@@ -330,11 +342,18 @@ def upload_xml(request):
     	context = RequestContext(request, {'form': form, 'form2': form2, 'status': status})
 	return HttpResponse(template.render(context))
 
-def testzone(request):
+def vehtraj(request):
 	try:
 		if request.COOKIES['sim_name'] in tools_sql.list_sim_db():
 
 			sim_name = request.COOKIES['sim_name']
+
+			# we create maxtimesim
+			sim_name = request.COOKIES['sim_name']
+			query = 'SELECT MAX(ev_time) AS max_time FROM ' + sim_name
+			output = tools_data.query_sql([query], True, 'pointq_db')
+			maxtimesim = int(round(output[0]['max_time']))
+
 			# which network is associated with the simulation
 			query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
 			associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
@@ -348,7 +367,7 @@ def testzone(request):
 			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 
 			template = loader.get_template('pointqanalysis/vehicle_traj.html')
-		    	context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network})
+		    	context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim})
 
 		    	return HttpResponse(template.render(context))
 		else:

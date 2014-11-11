@@ -30,7 +30,7 @@
 	}
 	 
 	.axis .axis-label {
-		font-size: 14px;
+		font-size: 10px;
 	}
 	 
 	.line {
@@ -77,6 +77,11 @@
 		top: 100%;
 		left: 0;
 	}
+
+	#input_tmin, #input_tmax {
+		display: inline-block;
+		width: 20%;
+	}
 </style>
 
 {% endblock %}
@@ -97,36 +102,60 @@
 		</div>
 		<div id="map-canvas"></div>
 	</div>
-	<div id = "rendercharts">
-	</div>
 	<div id="step2">
-		<div id="VT_routes">
-			<h2>Available routes</h2>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Number of vehicles:</th>
-						<th>Display:</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+		<div id="switch"> 
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-default" name="routes">
+					<input type="radio" name="options" > Routes
+				</label>
+				<label class="btn btn-default active" name="graph">
+					<input type="radio" name="options" > Graph
+				</label>
+			</div>
 		</div>
-		<div id="VT_parameters">
-			<h2>Parameters</h2>
-
-			<div class="form-group">
-				<label for="id_route_analyse"># of the route to analyse: </label>
-				<input type="text" class="form-control" id="id_route_analyse" placeholder="#">
+		<div id="routes">
+			<div id="VT_routes">
+				<h2>Available routes</h2>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Number of vehicles:</th>
+							<th>Display:</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
 			</div>
-			<div class="form-group">
-				<label for="max_nb_veh">Max number of vehicles: </label>
-				<input type="text" class="form-control" id="mx_nb_veh" placeholder="Max number of vehicles">
-			</div>
-			<button id = "btn_submit" type="submit" class="btn btn-default">Submit</button>
+			<div id="VT_parameters">
+				<h2>Parameters</h2>
 
+				<div class="form-group">
+					<label for="id_route_analyse"># of the route to analyse: </label>
+					<input type="text" class="form-control" id="id_route_analyse" placeholder="#">
+				</div>
+				<div class="form-group">
+					<label for="max_nb_veh">Max number of vehicles: </label>
+					<input type="text" class="form-control" id="mx_nb_veh" placeholder="Max number of vehicles">
+				</div>
+				<div class="form-group">
+					<label >Time selection: </label>
+					<input type="text" class="form-control" id="input_tmin" placeholder="Tmin">
+					<input type="text" class="form-control" id="input_tmax" placeholder="Tmax">
+				</div>
+				<button id = "btn_submit" type="submit" class="btn btn-default">Submit</button>
+
+			</div>
+		</div>
+
+		<div id = "rendercharts">
+			<div id='left_tree_3'>
+				<p>	
+					<h2>Options:</h2>
+					<button id = "btn_origin_link" type="button" class="btn btn-default" name='stage_actu'>Hide/Show stage act.</button>
+				</p>
+			</div>
 		</div>
 	</div>
 
@@ -135,7 +164,7 @@
 {% block javascript %} 
 	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script type="text/javascript"  src="{% static 'pointqanalysis/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript"  src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/canvasjs.min.js' %}"></script>	
 	<script src="http://d3js.org/d3.v3.js"></script>
 	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
@@ -144,6 +173,7 @@
 		// GLOBAL VARIABLES
 		var geojson = JSON.parse('{{ geojson|safe}}');
 		var topjson = JSON.parse('{{ topjson|safe}}');
+		var maxtimesim = parseInt({{ maxtimesim }});
 
 		var map; 
 		var indicator;
@@ -157,7 +187,9 @@
 	<script type="text/javascript"  src="{% static 'pointqanalysis/js/vehicle.traj.map.js' %}"></script>
 	<script type="text/javascript">
 		$(function() {
+
 			initialize();
+
 			$('#step2').hide();
 			$('#btn_origin_link').click(function(){
 				$(this).text('Click on the map');
@@ -170,11 +202,49 @@
 				indicator = 'second_link';
 			});
 
+			// manage the switch button
+			$('#switch label').click(function(){
+				if ($('#switch label[name=routes]').hasClass('active')) {
+					$('#routes').hide();
+					$('#rendercharts').show();
+				}
+				else {
+					$('#routes').show();
+					$('#rendercharts').hide();
+				}
+			});
+
+			// manage the show/hide stage actuation button
+			var display_stage_actuation = true;
+			$('button[name=stage_actu]').click(function() {
+				if (display_stage_actuation == true){
+					$('.node_actuation').hide();
+					display_stage_actuation = false;
+				}
+				else {
+					$('.node_actuation').show();
+					display_stage_actuation = true;
+				}
+	
+			});
+
+		//*********************************************************************************************************************************************************
+		//*********************************************************************************************************************************************************
+		//             							CALCULATE AVAILABLE ROUTES
+		//*********************************************************************************************************************************************************
+		//*********************************************************************************************************************************************************
+
 			$('#btn_continue').click(function(){
 				if (ori_dest_links[0] && ori_dest_links[1]){
 
 					$('#btn_continue').button('loading');
+					$('svg').remove();
 					$('#step2').hide();
+
+					// we fill tmin and tmax
+
+					$('#input_tmin').val(0);
+					$('#input_tmax').val(maxtimesim);
 
 					// we create an asyncronous ajax query
 					$.getJSON('../pointqanalysis/ajax?action=list_vehicle_traj', {'ori_link': ori_dest_links[0] , 'dest_link': ori_dest_links[1] }, function(data) {
@@ -195,6 +265,9 @@
 
 						// We show step2 div
 						$('#step2').show();
+						$('#left_tree_3').hide();
+						$('#switch').hide();
+						$('#routes').show();
 
 						$('html, body').animate({
 							scrollTop: $("#btn_continue").offset().top
@@ -224,14 +297,30 @@
 				}
 			});
 
+		//*********************************************************************************************************************************************************
+		//*********************************************************************************************************************************************************
+		//             							PLOT VEHICLES TRAJECTORIES
+		//*********************************************************************************************************************************************************
+		//*********************************************************************************************************************************************************
+
 			$("#btn_submit").click(function() {
 
 				// if fields are filled
-				if ($('#id_route_analyse').val() && $('#mx_nb_veh').val()){
+				if ($('#id_route_analyse').val() && $('#mx_nb_veh').val() && parseInt($('#input_tmin').val()) >= 0 && parseInt($('#input_tmin').val()) < parseInt($('#input_tmax').val()) && parseInt($('#input_tmax').val()) <= maxtimesim){
+
+					$('svg').remove();
+					$('#switch').show();
+					$('#routes').hide();
+					$('#rendercharts').show();
+					$('#left_tree_3').show();
+					$('#switch label[name=graph]').addClass( "active" );
+					$('#switch label[name=routes]').removeClass( "active" );
 
 					// we gather data
 					var max_nb_veh = $('#mx_nb_veh').val();
 					var id_route_analyse = $('#id_route_analyse').val();
+					var tmin_analysis = parseInt($('#input_tmin').val());
+					var tmax_analysis = parseInt($('#input_tmax').val());
 					var intersections = JSON.stringify(routes[id_route_analyse][2]);
 					var links = JSON.stringify(routes[id_route_analyse][0]);
 					var vehicles = JSON.stringify(routes[id_route_analyse][1]);
@@ -250,29 +339,36 @@
 							var json_plot = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': {'text': "Vehicles Trajectory"}, 'axisX': {'title': "Time (s)"}, 'axisY': {'title': "Traveled distance (m)"}, 'data': []};
 
 							// we iterate over the vehicles:
-							for (var i = 0; i < vehicles.length && i < max_nb_veh; i++) {
+							var nb_plotted_veh = 0;
+							for (var i = 0; i < vehicles.length && nb_plotted_veh < max_nb_veh; i++) {
 
 								// We create the JSON for the vehicle
-								var temp_json = {'type': "line", 'dataPoints': []};
 								var vehicle = vehicles[i];
-								var y_init = 0;
 
-								// We iterate over the links
-								for (var j = 0; j < links.length; j++){
+								if (dic_veh[vehicle][links[0]]['t_entry'] >= tmin_analysis && dic_veh[vehicle][links[links.length - 1]]['t_entry'] <= tmax_analysis) {
+									var temp_json = {'type': "line", 'dataPoints': []};
+									var y_init = 0;
 
-									var link = links[j];
+									// We iterate over the links
+									for (var j = 0; j < links.length; j++){
 
-									// we check if the link is an internal link
-									if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
-										var x_entry = dic_veh[vehicle][link]['t_entry'];
-										var x_exit = dic_veh[vehicle][link]['t_exit'];
-										var length = parseFloat(dic_length[link.toString()]);
-										temp_json.dataPoints.push({'x': x_entry, 'y': y_init});
-										temp_json.dataPoints.push({'x': x_exit, 'y': y_init + length});
-										y_init += length;
+										var link = links[j];
+
+										// we check if the link is an internal link
+										if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
+											var x_entry = dic_veh[vehicle][link]['t_entry'];
+											var x_exit = dic_veh[vehicle][link]['t_exit'];
+											if (x_entry > tmin_analysis && x_exit < tmax_analysis) {
+												var length = parseFloat(dic_length[link.toString()]);
+												temp_json.dataPoints.push({'x': x_entry, 'y': y_init});
+												temp_json.dataPoints.push({'x': x_exit, 'y': y_init + length});
+												y_init += length;
+											}
+										}
 									}
+									json_plot.data.push(temp_json);
+									nb_plotted_veh = nb_plotted_veh + 1;
 								}
-								json_plot.data.push(temp_json);
 							}
 
 						//*****************************************************************************************
@@ -282,7 +378,7 @@
 
 							// we create a list of the links that will be plotted:
 							var links_plotted = [];
-							var nodes_plotted = routes[id_route_analyse][2];
+							var nodes_plotted = routes[id_route_analyse][2].slice();
 							var index_not_plotted = [];
 							// We iterate over the links
 							for (var j = 0; j < links.length; j++){
@@ -304,17 +400,60 @@
 							}
 
 							var dic_dist_node = {};
+							var dic_node_dist = {};
 							var temp_length = 0;
 
 							for (var i = 0; i < links_plotted.length; i++) {
 								temp_length += parseFloat(dic_length[links_plotted[i]]);
 								dic_dist_node[Math.round(temp_length).toString()] = nodes_plotted[i];
+								dic_node_dist[nodes_plotted[i]] = Math.round(temp_length).toString();
 							}
 
 
 							$('html, body').animate({
 								scrollTop: $("#btn_submit").offset().top
 							}, 1000);
+
+						//*****************************************************************************************
+						// We gather data to plot the stage actuation for each node
+						//*****************************************************************************************
+
+						// we create a dictionary with the path associated with each node
+
+						var dic_node_stage = {};
+
+						for (var i = 0; i < nodes_plotted.length - 1; i++) {
+							dic_node_stage[nodes_plotted[i]] = [links_plotted[i], links_plotted[i + 1]];
+						}
+
+						$.post('../pointqanalysis/ajax', {'nodes_plotted': JSON.stringify(nodes_plotted) , 'action': 'stage_actuation'}, function(data) {
+							var dic_stage_actuation = JSON.parse(data);
+							var data_stage_actuation = [];
+
+							for (var i = 0; i < nodes_plotted.length - 1; i++) {
+								var node = nodes_plotted[i];
+								var y = dic_node_dist[node];
+								var line = [];
+								var stage = '(' + dic_node_stage[node][0] + ', ' + dic_node_stage[node][1] + ')';
+
+								for (var j = 0; j < dic_stage_actuation[node].length - 1; j++) {
+									var point_1 = dic_stage_actuation[node][j];
+									var point_2 = dic_stage_actuation[node][j + 1];
+									var color = 'green';
+									var re1 = new RegExp('\\(', 'g');
+									var re2 = new RegExp('\\)', 'g');
+									var ctrl = point_1.int_ctrl_mat.replace(re1, '"(');
+									ctrl = ctrl.replace(re2, ')"');
+
+									// we determine the color (actuated of not)
+									if (JSON.parse(ctrl)[stage]  == 0) {
+										color = 'red';
+									}
+
+									line.push({'color' : color, 'points': [{'x': point_1.ev_time, 'y': y}, {'x': point_2.ev_time, 'y': y}]});
+								}
+								data_stage_actuation.push(line);
+							}
 
 						//*****************************************************************************************
 						// We create the interface between D3 and the Google map
@@ -381,7 +520,7 @@
 							// Let's start with the margins, width, height of the plot:
 
 							var margin = {top: 20, right: 20, bottom: 30, left: 50},
-								width = 960 - margin.left - margin.right,
+								width = 900 - margin.left - margin.right,
 								height = 500 - margin.top - margin.bottom;
 
 							// Now we define the scale functions (range + domain):
@@ -397,6 +536,13 @@
 									y_values.push(dataPoints[point].y);
 								}
 							}
+
+							// if no data to plot
+							if (x_values.length == 0){
+								x_values.push(100);
+								y_values.push(100);
+							}
+
 							var xmin = Math.min.apply(Math, x_values);
 							var xmax = Math.max.apply(Math, x_values) * 1.1;
 							var ymin = Math.min.apply(Math, y_values);
@@ -472,10 +618,28 @@
 								.attr("transform", "translate(0," + height + ")")
 								.call(xAxis);
 
+							// Add the text label for the x axis
+							svg.append("g")
+								.attr("class", "x axis")
+								.append("text")
+									.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
+									.style("text-anchor", "middle")
+									.text("Time [s]");
+
 							// We append the y axis
 							svg.append("g")
 								.attr("class", "y axis")
 								.call(yAxis);
+
+							svg.append('g')
+								.attr("class", "y axis")
+								.append("text")
+									.attr("transform", "rotate(-90)")
+									.attr("y", - 4 - margin.left)
+									.attr("x",0 - (height / 2))
+									.attr("dy", "1em")
+									.style("text-anchor", "middle")
+									.text("Distance [s]");
 
 							// We append the clip path
 
@@ -535,6 +699,37 @@
 										return "translate(" + x(d.x) + "," + y(d.y) + ")"; }
 									);
 
+							var node_actuation = svg.selectAll('.node_actuation')
+								.data(data_stage_actuation)
+								.enter()
+								.append('g')
+									.attr("class", "node_actuation")
+									.attr("clip-path", "url(#clip)");
+
+							var node_actuation_lines = node_actuation.selectAll('.node_actuation_lines')
+								.data(function(d){
+									return d;
+								})
+								.enter()
+								.append("svg:line")
+									.attr("x1", function(d, index){
+										return x(d.points[0].x);
+									})
+									.attr("y1", function(d, index){
+										return y(parseInt(d.points[0].y));
+									})
+									.attr("x2", function(d, index){
+										return x(d.points[1].x);
+									})
+									.attr("y2", function(d, index){
+										return y(parseInt(d.points[1].y));
+									})
+									.style("stroke", function(d,index){
+										return d.color;
+									})
+									.style("stroke-width", "2.5px")
+									.style("stroke-opacity", "0.5");
+
 
 
 							//************************************************************
@@ -546,9 +741,22 @@
 								svg.selectAll('path.line').attr('d', line);  
 								points.selectAll('circle').attr("transform", function(d) { 
 									return "translate(" + x(d.x) + "," + y(d.y) + ")"; }
-								);  
-														 
+								)
+								node_actuation.selectAll('line').attr("x1", function(d, index){
+									return x(d.points[0].x);
+								});
+								node_actuation.selectAll('line').attr("y1", function(d, index){
+									return y(parseInt(d.points[0].y));
+								});
+								node_actuation.selectAll('line').attr("x2", function(d, index){
+									return x(d.points[1].x);
+								});
+								node_actuation.selectAll('line').attr("y2", function(d, index){
+									return y(parseInt(d.points[1].y));
+								});					 
 							}
+
+						});		
 
 					});
 				}
