@@ -4,15 +4,13 @@ from django.template import RequestContext, loader
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-from forms import Form_upload_fil,  Form_upload_xml , Form_delete_xml
+from .forms import Form_upload_fil,  Form_upload_xml , Form_delete_xml
 from django.db import connections
 from django.conf import settings
 import json
 import os
 import re
-import tools_data
-import tools_json
-import tools_sql
+from tools import tools_data, tools_json, tools_sql
 
 
 
@@ -24,22 +22,24 @@ import tools_sql
 def ajax(request):
 	if request.method == 'POST':
 		if request.POST.get("action", "") == 'veh_trajectory':
-			vehicles = json.loads(request.POST.get("vehicles", ""))
-			nb_veh = json.loads(request.POST.get("nb_veh", ""))
 			links = json.loads(request.POST.get("links", ""))
-			intersections = json.loads(request.POST.get("intersections", ""))
+			max_nb_veh = json.loads(request.POST.get("max_nb_veh", ""))
+			id_route_analyse = json.loads(request.POST.get("id_route_analyse", ""))
+			tmin_analysis = json.loads(request.POST.get("tmin_analysis", ""))
+			tmax_analysis = json.loads(request.POST.get("tmax_analysis", ""))
 
 			# First we calculate the length of each link
-			try:
-				sim_name = request.COOKIES['sim_name']
-				# which network is associated with the simulation
-				query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
-				associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
-				lengths = tools_sql.length_links(links, associated_network)
+			#try:
+			sim_name = request.COOKIES['sim_name']
+			# which network is associated with the simulation
+			query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
+			associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
+			
+			result = tools_sql.plot_vehicle_traj(links[0], links[len(links) - 1], tmin_analysis, tmax_analysis, id_route_analyse, max_nb_veh, sim_name, "pointq_db", associated_network)
 
-				return HttpResponse(json.dumps(lengths))
-			except:
-				return HttpResponse('False')
+			return HttpResponse(json.dumps(result))
+			#except:
+			#	return HttpResponse('False')
 
 		elif request.POST.get("action", "") == 'stage_actuation':
 			nodes_plotted = json.loads(request.POST.get("nodes_plotted", ""))
@@ -56,7 +56,7 @@ def ajax(request):
 
 	else:
 		if request.GET.get('action', '') == 'listsim':
-			xml = tools_sql.list_sim_db()
+			xml = tools_sql.list_sim_db()[0]
 			return HttpResponse(xml)
 
 		elif request.GET.get('action', '') == 'deltable':
@@ -86,9 +86,9 @@ def ajax(request):
 			sim_name = request.COOKIES['sim_name']
 			answer = tools_sql.list_vehicle_traj(ori_link, dest_link, sim_name, 'pointq_db')
 			dic_routes = answer[0]
-			dic_veh = answer[1]
+			time =  answer[1]
 			output = [[list(x), dic_routes[x][0], dic_routes[x][1]] for x in  dic_routes.keys()]
-			json_output = json.dumps({"dic_veh" : dic_veh, 'routes': output})
+			json_output = json.dumps({'routes': output, 'time': time})
 			return HttpResponse(json_output, content_type="application/json")
 
 		elif request.GET.get('action', '') == 'generate_json_plot':
@@ -214,9 +214,9 @@ def ajax(request):
 		
 
 def analysis(request):
-	# First step : create a list of the available links:
+	#First step : create a list of the available links:
 	try:
-		if request.COOKIES['sim_name'] in tools_sql.list_sim_db():
+		if request.COOKIES['sim_name'] in tools_sql.list_sim_db()[1]:
 
 			# we create maxtimesim
 			sim_name = request.COOKIES['sim_name']
@@ -236,9 +236,9 @@ def analysis(request):
 			query_3 = 'SELECT topjson FROM index_network WHERE name = \'' + str(associated_network) + '\''
 			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 			template = loader.get_template('pointqanalysis/index.html')
-		    	context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network, 'topjson':topjson_associated_network})
+			context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network, 'topjson':topjson_associated_network})
 
-		    	return HttpResponse(template.render(context))
+			return HttpResponse(template.render(context))
 		else:
 			return HttpResponseRedirect(reverse('pointqanalysis:simulations'))
 			
@@ -250,42 +250,41 @@ def simul_manag(request):
 	# If we receive a POST request : the form has been submitted
 	if request.method == 'POST':
 
-	    form = Form_upload_fil(request.POST, request.FILES)
+		form = Form_upload_fil(request.POST, request.FILES)
 
-	    # if the form is valid (no error)
-	    if form.is_valid() and form.is_multipart():
+		# if the form is valid (no error)
+		if form.is_valid() and form.is_multipart():
+			name_simul = form.cleaned_data['name_simul']
+			name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul)
+			name_network = form.cleaned_data['name_network']
 
-		name_simul = form.cleaned_data['name_simul']
-		name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul)
-		name_network = form.cleaned_data['name_network']
+			# we save the upload
+			tools_data.save_file(request.FILES['simul_txt_db'], name_simul , '/upload/txt_db', '.txt')
+			status = 'Thanks for uploading the text database'
 
-		# we save the upload
-		tools_data.save_file(request.FILES['simul_txt_db'], name_simul , '/upload/txt_db', '.txt')
-		status = 'Thanks for uploading the text database'
+			# we convert the db
+			tools_sql.treat_simul_db(name_simul , '/upload/txt_db')
 
-		# we convert the db
-		tools_sql.treat_simul_db(name_simul , '/upload/txt_db')
+			# we create the table index_network if it's not created
+			query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text)'
+			tools_data.query_sql([query_1], False, 'network_db')
 
-		# we create the table index_network if it's not created
-		query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text)'
-		tools_data.query_sql([query_1], False, 'network_db')
+			# we insert a new row in index_network
+			query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\')'
+			tools_data.query_sql([query_2], False, 'network_db')
 
-		# we insert a new row in index_network
-		query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\')'
-		tools_data.query_sql([query_2], False, 'network_db')
+			# we delete the upload
+			os.remove(settings.MEDIA_ROOT + '/upload/txt_db/' + str(name_simul) + '.txt')
 
-		# we delete the upload
-		os.remove(settings.MEDIA_ROOT + '/upload/txt_db/' + str(name_simul) + '.txt')
-
-	    else:
-		status = ''
+		else:
+			status = ''
 	# Else: the request is type GET: we print the form
 	else:
 		form = Form_upload_fil()
 		status =''
 
 	template = loader.get_template('pointqanalysis/upload.html')
-    	context = RequestContext(request, {'form': form, 'status':status, 'upload_xml': reverse('pointqanalysis:upload_xml')})
+	context = RequestContext(request, {'form': form, 'status':status, 'upload_xml': reverse('pointqanalysis:upload_xml')})
 	return HttpResponse(template.render(context))
 
 def upload_xml(request):
@@ -339,12 +338,12 @@ def upload_xml(request):
 		form2 = Form_delete_xml()
 
 	template = loader.get_template('pointqanalysis/uploadxml.html')
-    	context = RequestContext(request, {'form': form, 'form2': form2, 'status': status})
+	context = RequestContext(request, {'form': form, 'form2': form2, 'status': status})
 	return HttpResponse(template.render(context))
 
 def vehtraj(request):
 	try:
-		if request.COOKIES['sim_name'] in tools_sql.list_sim_db():
+		if request.COOKIES['sim_name'] in tools_sql.list_sim_db()[1]:
 
 			sim_name = request.COOKIES['sim_name']
 
@@ -367,11 +366,12 @@ def vehtraj(request):
 			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 
 			template = loader.get_template('pointqanalysis/vehicle_traj.html')
-		    	context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim})
+			context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim})
 
-		    	return HttpResponse(template.render(context))
+			return HttpResponse(template.render(context))
 		else:
 			return HttpResponseRedirect(reverse('pointqanalysis:simulations'))
+
 			
 	except:
 		return HttpResponseRedirect(reverse('pointqanalysis:simulations'))

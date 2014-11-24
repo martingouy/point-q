@@ -1,5 +1,5 @@
 from django import forms
-import tools_data
+from .tools import tools_data
 
 def validate_file_extension(value):
 	if not value.name.endswith('.txt'):

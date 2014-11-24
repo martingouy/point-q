@@ -248,7 +248,7 @@
 
 					// we create an asyncronous ajax query
 					$.getJSON('../pointqanalysis/ajax?action=list_vehicle_traj', {'ori_link': ori_dest_links[0] , 'dest_link': ori_dest_links[1] }, function(data) {
-						dic_veh = data.dic_veh;
+						//dic_veh = data.dic_veh;
 						routes = data.routes;
 						var table = '<tbody>';
 						for (var i = 0; i < routes.length; i++) {
@@ -327,87 +327,56 @@
 					var action = "veh_trajectory";
 
 					// we create the AJAX request
-					$.post('../pointqanalysis/ajax', {'vehicles': vehicles, 'nb_veh': max_nb_veh, 'links': links, 'intersections': intersections, 'action':action}, function(data) {
+					$.post('../pointqanalysis/ajax', {'links': links, 'max_nb_veh': max_nb_veh ,'id_route_analyse':id_route_analyse,'tmin_analysis': tmin_analysis, 'tmax_analysis': tmax_analysis, 'action':action}, function(data) {
 						//*****************************************************************************************
 						// We treat the data we receive
 						//*****************************************************************************************
-							var dic_length = JSON.parse(data);
-							var links = routes[id_route_analyse][0];
-							var vehicles = routes[id_route_analyse][1];
+							var data_plot = JSON.parse(data);
+							var json_plot = data_plot.json;
+							var dic_dist_node = data_plot.dic_dist_node;
+							var dic_node_dist = data_plot.dic_node_dist;
+							var nodes_plotted = data_plot.nodes_plotted;
+							var links_plotted = data_plot.links_plotted;
+							
+							console.log(json_plot);
 
-							// we start building the JSON for the plot
-							var json_plot = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': {'text': "Vehicles Trajectory"}, 'axisX': {'title': "Time (s)"}, 'axisY': {'title': "Traveled distance (m)"}, 'data': []};
-
-							// we iterate over the vehicles:
-							var nb_plotted_veh = 0;
-							for (var i = 0; i < vehicles.length && nb_plotted_veh < max_nb_veh; i++) {
-
-								// We create the JSON for the vehicle
-								var vehicle = vehicles[i];
-
-								if (dic_veh[vehicle][links[0]]['t_entry'] >= tmin_analysis && dic_veh[vehicle][links[links.length - 1]]['t_entry'] <= tmax_analysis) {
-									var temp_json = {'type': "line", 'dataPoints': []};
-									var y_init = 0;
-
-									// We iterate over the links
-									for (var j = 0; j < links.length; j++){
-
-										var link = links[j];
-
-										// we check if the link is an internal link
-										if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
-											var x_entry = dic_veh[vehicle][link]['t_entry'];
-											var x_exit = dic_veh[vehicle][link]['t_exit'];
-											if (x_entry > tmin_analysis && x_exit < tmax_analysis) {
-												var length = parseFloat(dic_length[link.toString()]);
-												temp_json.dataPoints.push({'x': x_entry, 'y': y_init});
-												temp_json.dataPoints.push({'x': x_exit, 'y': y_init + length});
-												y_init += length;
-											}
-										}
-									}
-									json_plot.data.push(temp_json);
-									nb_plotted_veh = nb_plotted_veh + 1;
-								}
-							}
-
-						//*****************************************************************************************
-						// We want to create a dictionary:  key: distance / value: corresponding node for the tooltip
-						//*****************************************************************************************
+						// //*****************************************************************************************
+						// // We want to create a dictionary:  key: distance / value: corresponding node for the tooltip
+						// //*****************************************************************************************
 
 
-							// we create a list of the links that will be plotted:
-							var links_plotted = [];
-							var nodes_plotted = routes[id_route_analyse][2].slice();
-							var index_not_plotted = [];
-							// We iterate over the links
-							for (var j = 0; j < links.length; j++){
+						// 	// we create a list of the links that will be plotted:
+						// 	var links_plotted = [];
+						// 	var nodes_plotted = routes[id_route_analyse][2].slice();
+						// 	var index_not_plotted = [];
+						// 	// We iterate over the links
+						// 	for (var j = 0; j < links.length; j++){
 
-								var link = links[j];
-								var vehicle = vehicles[0];
+						// 		var link = links[j];
+						// 		var vehicle = vehicles[0];
 
-								// we check if the link is an internal link
-								if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
-									links_plotted.push(link);
-								}
-								else{
-									index_not_plotted.push(j);
-								}
-							}
+						// 		// we check if the link is an internal link
+						// 		if ( 't_entry' in dic_veh[vehicle][link] && 't_exit' in dic_veh[vehicle][link]){
+						// 			links_plotted.push(link);
+						// 		}
+						// 		else{
+						// 			index_not_plotted.push(j);
+						// 		}
+						// 	}
 
-							if (index_not_plotted.indexOf(0) != -1) {
-								nodes_plotted.splice(0, 1);
-							}
+						// 	if (index_not_plotted.indexOf(0) != -1) {
+						// 		nodes_plotted.splice(0, 1);
+						// 	}
 
-							var dic_dist_node = {};
-							var dic_node_dist = {};
-							var temp_length = 0;
+						// 	var dic_dist_node = {};
+						// 	var dic_node_dist = {};
+						// 	var temp_length = 0;
 
-							for (var i = 0; i < links_plotted.length; i++) {
-								temp_length += parseFloat(dic_length[links_plotted[i]]);
-								dic_dist_node[Math.round(temp_length).toString()] = nodes_plotted[i];
-								dic_node_dist[nodes_plotted[i]] = Math.round(temp_length).toString();
-							}
+						// 	for (var i = 0; i < links_plotted.length; i++) {
+						// 		temp_length += parseFloat(dic_length[links_plotted[i]]);
+						// 		dic_dist_node[Math.round(temp_length).toString()] = nodes_plotted[i];
+						// 		dic_node_dist[nodes_plotted[i]] = Math.round(temp_length).toString();
+						// 	}
 
 
 							$('html, body').animate({
@@ -639,7 +608,7 @@
 									.attr("x",0 - (height / 2))
 									.attr("dy", "1em")
 									.style("text-anchor", "middle")
-									.text("Distance [s]");
+									.text("Distance [m]");
 
 							// We append the clip path
 

@@ -2,7 +2,7 @@
 ###                                       JSON FUNCTIONS														   ###
 ###################################################################################################################
 
-import tools_data
+from tools import tools_data
 import geojson
 import json
 from xml.dom import minidom
@@ -167,8 +167,8 @@ def xml2topjson(name_network):
 		for t in s.getElementsByTagName('input'):
 			link_outs[int(t.attributes['link_id'].value)]=[int(u.attributes['link_id'].value) for u in s.getElementsByTagName('output')]
 
-	json_output='{"NodeList":['+', '.join(['{"id":"' + str(k) + '", "inputs":"'+str(v[0])+'", "outputs":"' + str(v[1])+ '"}' for k,v in nodes.iteritems()])+ \
-    '], "LinkList":['+', '.join(['{"link_id":"' + str(k) + '", "outputs":"' + str(v)+ '"}' for k,v in link_outs.iteritems() if k!=-1])+']}'
+	json_output='{"NodeList":['+', '.join(['{"id":"' + str(k) + '", "inputs":"'+str(v[0])+'", "outputs":"' + str(v[1])+ '"}' for k,v in nodes.items()])+ \
+    '], "LinkList":['+', '.join(['{"link_id":"' + str(k) + '", "outputs":"' + str(v)+ '"}' for k,v in link_outs.items() if k!=-1])+']}'
 
 
 	return json_output
