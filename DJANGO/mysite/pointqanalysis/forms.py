@@ -29,6 +29,7 @@ class Form_upload_fil (forms.Form):
 		self.fields['name_network'] = forms.ChoiceField(choices=get_my_choices())
 
 	name_simul = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name Simulation', 'class': 'form-control'}))
+	description_simul = forms.CharField(max_length=140, widget=forms.Textarea(attrs={'placeholder': 'Description Simulation', 'class': 'form-control', 'rows': 4}))
 	simul_txt_db = forms.FileField(validators=[validate_file_extension])
     
 class Form_upload_xml (forms.Form):

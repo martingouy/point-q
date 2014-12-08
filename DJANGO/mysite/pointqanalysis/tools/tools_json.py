@@ -9,20 +9,44 @@ from xml.dom import minidom
 from django.conf import settings
 
 def json_get_output_links(node):
-    to_return = {'links': 'sam'}
-    return to_return
+	to_return = {'links': 'sam'}
+	return to_return
 
-def json_plot_flow(link, t_start, t_end, granul, sim_name):
+def json_list_simulations():
+	# We want to generate a json containing the list of all simulations, their associated network and their description
+	query = 'SELECT name_simul, desc_simul, name_network, date_simul FROM index_simul_network'
+	output = tools_data.query_sql([query], True, 'network_db')
+	json_output = []
+	if output:
+		for simul in output:
+			json_simul = {'name': simul['name_simul'], 'description': simul['desc_simul'], 'associatedNetwork': simul['name_network'], 'date': simul['date_simul']}
+			json_output.append(json_simul)
+	return json.dumps(json_output)
+
+def json_plot_flow(link, t_start, t_end, granul, sim_name, topjson):
 	# granularity sanity check
 	if t_end - t_start >= granul :
 
 		# number of iteration
 		iter = int((t_end - t_start) / granul)
 
+		# we check if the link is an exit link
+		topjson = json.loads(topjson)
+		topjson_list_links = topjson["LinkList"]
+		is_exit = False
+
+		for link_json in topjson_list_links:
+			if link_json["link_id"] == str(link) and link_json["outputs"] == "[-1]":
+				is_exit = True
+
+		column = 'c_link'
+		if is_exit:
+			column = "c_loc_link"
+
 		# we start to iterate to create dataPoints
 		dataPoints = []
 		for i in range(iter):
-			query = 'SELECT COUNT(ev_time) FROM ' + sim_name + ' WHERE c_link = ' + str(link) + ' AND ev_type =4 AND ev_time >= ' + str(t_start + i  * granul) + ' AND ev_time < ' + str(t_start + (i  + 1) * granul)
+			query = 'SELECT COUNT(ev_time) FROM ' + sim_name + ' WHERE '+ column +' = ' + str(link) + ' AND ev_type =4 AND ev_time >= ' + str(t_start + i  * granul) + ' AND ev_time < ' + str(t_start + (i  + 1) * granul)
 			output = tools_data.query_sql([query], True, 'pointq_db')
 			dataPoints.append({'y': float(output[0]['COUNT(ev_time)']), 'label': '['+ str(t_start + i * granul) + '-' + str(t_start + (i  + 1) * granul) + ']'})
 		#print(dataPoints)

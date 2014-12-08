@@ -2,8 +2,47 @@
 {% load staticfiles %}
 {% block title %}Simulations{% endblock %}
 
+{% block css %} 
+	<link href="{% static 'pointqanalysis/css/jquery.dynatable.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block container %} 
-	<div id = 'left_tree'>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="linkoccupancyModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="queueModalLabel">Delete</h4>
+				</div>
+				<div class="modal-body">
+					Please confirm that you want to delete the simulation from the database
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary confirm_delete">DELETE</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="margin-bottom: 100px">
+		<h2>Available simulations:</h2>
+		<!-- <ul class="no_puce">
+		</ul> -->
+
+		<table id="table_simul" class="table table-bordered">
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Date</th>
+				<th>Associated Network</th>
+				<th>Select</th>
+				<th>Delete</th>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div>
 		<h2>Upload a simulation:</h2>
 		{% if status != '' %}
 			<div id='status'>
@@ -25,6 +64,11 @@
 				{{ form.name_simul }}
 			</div>
 			<div class="form-group">
+				<label for="id_description_simul">Description Simulation:</label>
+				{{ form.description_simul.errors }}
+				{{ form.description_simul }}
+			</div>
+			<div class="form-group">
 				<label for="id_simul_txt_db">Select Simulation:</label>
 				{{ form.simul_txt_db.errors }}
 				{{ form.simul_txt_db }}
@@ -41,16 +85,12 @@
 			<a href= {{upload_xml}} class="zoombox" >Click here to upload /delete networks</a><br />
 		</p>
 	</div>
-	<div id = 'right_tree'>
-		<h2>Available simulations:</h2>
-		<ul class="no_puce">
-		</ul>
-	</div>
 {% endblock %}
 
 {% block javascript %} 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="{% static 'pointqanalysis/js/zoombox.js' %}"></script>
+	<script type="text/javascript" src="{% static 'pointqanalysis/js/jquery.dynatable.js' %}"></script>
 	<script type="text/javascript"  src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
@@ -63,93 +103,116 @@
 		</script>
 	{% endif %}
 	<script type="text/javascript">
-		// function : create a request
-		$(function() {
-			function makeRequest(url, fct_treat) {
+		// // function : create a request
+		// $(function() {
+		// 	function makeRequest(url, fct_treat) {
 
-				var httpRequest = new XMLHttpRequest();
+		// 		var httpRequest = new XMLHttpRequest();
 
-				if (httpRequest.overrideMimeType) {
-					httpRequest.overrideMimeType('text/xml');
-				}
+		// 		if (httpRequest.overrideMimeType) {
+		// 			httpRequest.overrideMimeType('text/xml');
+		// 		}
 
-				if (!httpRequest) {
-					return false;
-				}
+		// 		if (!httpRequest) {
+		// 			return false;
+		// 		}
 
-				if (fct_treat == 'avail_simul') {
-					httpRequest.onreadystatechange = function() { 
-						// we wait until the answer is fully received
-						if (httpRequest.readyState == 4){
-							avail_simul(httpRequest);
-						}
-					};
-				}
-				else if (fct_treat == 'del_table') {
-					httpRequest.onreadystatechange = function() {
-						// we wait until the answer is fully received
-						if (httpRequest.readyState == 4){
+		// 		if (fct_treat == 'avail_simul') {
+		// 			httpRequest.onreadystatechange = function() { 
+		// 				// we wait until the answer is fully received
+		// 				if (httpRequest.readyState == 4){
+		// 					avail_simul(httpRequest);
+		// 				}
+		// 			};
+		// 		}
+		// 		else if (fct_treat == 'del_table') {
+		// 			httpRequest.onreadystatechange = function() {
+		// 				// we wait until the answer is fully received
+		// 				if (httpRequest.readyState == 4){
 
-							$('#right_tree ul li').remove();
-							makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
-						}
-					};
-				}
+		// 					$('#right_tree ul li').remove();
+		// 					makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
+		// 				}
+		// 			};
+		// 		}
 
-				else if (fct_treat == 'redirect') {
-					httpRequest.onreadystatechange = function() {
-						// we wait until the answer is fully received
-						if (httpRequest.readyState == 4){
+		// 		else if (fct_treat == 'redirect') {
+		// 			httpRequest.onreadystatechange = function() {
+		// 				// we wait until the answer is fully received
+		// 				if (httpRequest.readyState == 4){
 
-							// we redirect to the correct location
-							window.location.replace(httpRequest.response);
+		// 					// we redirect to the correct location
+		// 					window.location.replace(httpRequest.response);
 
-						}
-					};
-				}
+		// 				}
+		// 			};
+		// 		}
 				
-				httpRequest.open('GET', url, true);
-				httpRequest.send(null);
+		// 		httpRequest.open('GET', url, true);
+		// 		httpRequest.send(null);
+		// 	}
+
+		// 	// function: display the list of available simulations
+
+		// 	function avail_simul(httpRequest) {
+		// 		var xmldoc = httpRequest.responseXML;
+		// 		var list_sim = xmldoc.getElementsByTagName('sim');
+
+		// 		for (var i = 0; i < list_sim.length; i++) {
+		// 			var sim_id = list_sim[i].firstChild.data;
+		// 			var xml_li = '<li> <img src = " {% static 'pointqanalysis/images/choose.png' %} " sim = "' + sim_id+ '" alt = "choose"><img src = " {% static 'pointqanalysis/images/close.png' %} " sim = "' + sim_id+ '" alt = "close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + sim_id + '</li>';
+
+		// 			$('#right_tree ul').append(xml_li);
+
+		// 			$('img[sim = "' + sim_id + '"][alt = "close" ]').click(function(event){
+		// 				makeRequest('../pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
+		// 			});
+		// 			$('img[sim = "' + sim_id + '"][alt = "choose" ]').click(function(event){
+		// 				makeRequest('../pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
+		// 				makeRequest('../pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
+		// 			});
+
+		// 		}
+		// 	}
+
+		// 	makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
+		// });
+		
+		var json_simulations = '{{ json_simulations|safe }}';
+		json_simulations = JSON.parse(json_simulations);
+
+		for (var i = 0; i < json_simulations.length; i++) {
+			json_simulations[i]['select'] = "<button type='button' class='btn btn-default btn-xs analyse'>Analyse</button>";
+			json_simulations[i]['delete'] = "<button type='button' class='btn btn-default btn-xs delete'>Delete</button>";
+		}
+
+		$('#table_simul').dynatable({
+			dataset: {
+				records: json_simulations
 			}
-
-			// function: display the list of available simulations
-
-			function avail_simul(httpRequest) {
-				var xmldoc = httpRequest.responseXML;
-				var list_sim = xmldoc.getElementsByTagName('sim');
-
-				for (var i = 0; i < list_sim.length; i++) {
-					var sim_id = list_sim[i].firstChild.data;
-					var xml_li = '<li> <img src = " {% static 'pointqanalysis/images/choose.png' %} " sim = "' + sim_id+ '" alt = "choose"><img src = " {% static 'pointqanalysis/images/close.png' %} " sim = "' + sim_id+ '" alt = "close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + sim_id + '</li>';
-
-					$('#right_tree ul').append(xml_li);
-
-					$('img[sim = "' + sim_id + '"][alt = "close" ]').click(function(event){
-						makeRequest('../pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
-					});
-					$('img[sim = "' + sim_id + '"][alt = "choose" ]').click(function(event){
-						makeRequest('../pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
-						makeRequest('../pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
-					});
-
-				}
-			}
-
-			makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
 		});
+
+		$('.analyse').click(function(){
+			var sim_selected = $(this).parents().eq(1).children(":first").text();
+			$.ajax('../pointqanalysis/ajax?action=set_cookie&sim_name=' + sim_selected);
+			$.ajax('../pointqanalysis/ajax?action=redirect&redirection=analysis').done(function(url){
+				window.location.replace(url);
+			});
+		});
+
+		var simu_2_delete = '';
+		$('.delete').click(function(){
+			simu_2_delete = $(this).parents().eq(1).children(":first").text();
+			$('#deleteModal').modal();
+			$('.confirm_delete').click(function(event){
+				event.stopPropagation();
+				console.log("Click");
+				$.ajax('../pointqanalysis/ajax?action=deltable&table_name=' + simu_2_delete).done(function(){
+					location.reload();
+				});
+
+			});
+		});
+
 	</script>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-

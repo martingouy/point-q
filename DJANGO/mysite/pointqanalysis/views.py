@@ -10,6 +10,7 @@ from django.conf import settings
 import json
 import os
 import re
+import time
 from tools import tools_data, tools_json, tools_sql
 
 
@@ -29,17 +30,17 @@ def ajax(request):
 			tmax_analysis = json.loads(request.POST.get("tmax_analysis", ""))
 
 			# First we calculate the length of each link
-			#try:
-			sim_name = request.COOKIES['sim_name']
-			# which network is associated with the simulation
-			query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
-			associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
-			
-			result = tools_sql.plot_vehicle_traj(links[0], links[len(links) - 1], tmin_analysis, tmax_analysis, id_route_analyse, max_nb_veh, sim_name, "pointq_db", associated_network)
+			try:
+				sim_name = request.COOKIES['sim_name']
+				# which network is associated with the simulation
+				query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
+				associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
+				
+				result = tools_sql.plot_vehicle_traj(links[0], links[len(links) - 1], tmin_analysis, tmax_analysis, id_route_analyse, max_nb_veh, sim_name, "pointq_db", associated_network)
 
-			return HttpResponse(json.dumps(result))
-			#except:
-			#	return HttpResponse('False')
+				return HttpResponse(json.dumps(result))
+			except:
+				return HttpResponse('False')
 
 		elif request.POST.get("action", "") == 'stage_actuation':
 			nodes_plotted = json.loads(request.POST.get("nodes_plotted", ""))
@@ -104,8 +105,16 @@ def ajax(request):
 				list_links = links.split('-')
 				data = []
 
+				# which network is associated with the simulation
+				query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
+				associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
+
+				# get the top_json associated with the simulation
+				query_2 = 'SELECT topjson FROM index_network WHERE name = \'' + str(associated_network) + '\''
+				topjson = tools_data.query_sql([query_2], True, 'network_db')[0]['topjson']
+
 				for link_id in list_links:
-					data.append(tools_json.json_plot_flow(link_id, t_start, t_end, granul, sim_name))
+					data.append(tools_json.json_plot_flow(link_id, t_start, t_end, granul, sim_name, topjson))
 
 				title = {'text': 'Flows'}
 				axisX = {'title': "Time interval [s]", 'titleFontWeight': "lighter", 'titleFontSize': '17'}
@@ -236,7 +245,7 @@ def analysis(request):
 			query_3 = 'SELECT topjson FROM index_network WHERE name = \'' + str(associated_network) + '\''
 			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 			template = loader.get_template('pointqanalysis/index.html')
-			context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network, 'topjson':topjson_associated_network})
+			context = RequestContext(request, {'maxtimesim': maxtimesim, 'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'sim_name': sim_name})
 
 			return HttpResponse(template.render(context))
 		else:
@@ -256,7 +265,9 @@ def simul_manag(request):
 		if form.is_valid() and form.is_multipart():
 			name_simul = form.cleaned_data['name_simul']
 			name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul)
+			desc_simul = form.cleaned_data['description_simul']
 			name_network = form.cleaned_data['name_network']
+			date = time.strftime("%m/%d/%Y")
 
 			# we save the upload
 			tools_data.save_file(request.FILES['simul_txt_db'], name_simul , '/upload/txt_db', '.txt')
@@ -266,25 +277,29 @@ def simul_manag(request):
 			tools_sql.treat_simul_db(name_simul , '/upload/txt_db')
 
 			# we create the table index_network if it's not created
-			query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text)'
+			query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text, desc_simul text, date_simul text)'
 			tools_data.query_sql([query_1], False, 'network_db')
 
 			# we insert a new row in index_network
-			query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\')'
+			query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\',\'' + desc_simul + '\',\'' + date + '\')'
 			tools_data.query_sql([query_2], False, 'network_db')
 
 			# we delete the upload
 			os.remove(settings.MEDIA_ROOT + '/upload/txt_db/' + str(name_simul) + '.txt')
 
+			json_simulations = tools_json.json_list_simulations()
+
 		else:
 			status = ''
+			json_simulations = tools_json.json_list_simulations()
 	# Else: the request is type GET: we print the form
 	else:
 		form = Form_upload_fil()
 		status =''
+		json_simulations = tools_json.json_list_simulations()
 
 	template = loader.get_template('pointqanalysis/upload.html')
-	context = RequestContext(request, {'form': form, 'status':status, 'upload_xml': reverse('pointqanalysis:upload_xml')})
+	context = RequestContext(request, {'form': form, 'status':status,'json_simulations': json_simulations, 'upload_xml': reverse('pointqanalysis:upload_xml')})
 	return HttpResponse(template.render(context))
 
 def upload_xml(request):
@@ -366,7 +381,7 @@ def vehtraj(request):
 			topjson_associated_network = tools_data.query_sql([query_3], True, 'network_db')[0]['topjson']
 
 			template = loader.get_template('pointqanalysis/vehicle_traj.html')
-			context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim})
+			context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim, 'sim_name': sim_name})
 
 			return HttpResponse(template.render(context))
 		else:
