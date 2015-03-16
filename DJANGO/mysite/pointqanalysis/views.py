@@ -1,22 +1,22 @@
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import Form_upload_fil,  Form_upload_xml , Form_delete_xml
-from django.db import connections
 from django.conf import settings
 import json
 import os
 import re
 import time
+import sqlite3
+import gzip
+from pointqanalysis.tasks import birdeye, birdeye_micro
 from tools import tools_data, tools_json, tools_sql
 
 
 
 ###################################################################################################################
-###                                                                    VIEWS													   ###
+###                                                                    VIEWS					   			   ###
 ###################################################################################################################
 
 @csrf_exempt
@@ -56,13 +56,34 @@ def ajax(request):
 			return HttpResponse(json.dumps(dic_node_stage_actuation))
 
 	else:
-		if request.GET.get('action', '') == 'listsim':
-			xml = tools_sql.list_sim_db()[0]
-			return HttpResponse(xml)
 
-		elif request.GET.get('action', '') == 'deltable':
+		if request.GET.get('action', '') == 'deltable':
 			table = request.GET.get('table_name', '')
 			return HttpResponse(tools_sql.deltable(table))
+
+		elif request.GET.get('action', '') == 'bird_traj':
+			try : 
+				sim_name = request.COOKIES['sim_name']
+				conn = sqlite3.connect(os.path.join(settings.BASE_DIR, 'network_db.sqlite3'))
+				c = conn.cursor()
+				c.execute('SELECT bird_traj, bird_occupation FROM index_simul_network WHERE name_simul = \'' + sim_name + '\'')
+				result = c.fetchone()
+				vehicles = result[0]
+				occupation = result[1]
+				conn.close()
+				if vehicles == 'False' or occupation == 'False':
+					bird_traj = '{"vehicles":false, "occupation": false}'
+				else:
+					bird_traj = '{"vehicles":' + vehicles + ', "occupation": ' + occupation + '}'
+
+				bird_traj = bird_traj.encode('utf-8')
+				bird_traj = gzip.compress(bird_traj)
+			except:
+				bird_traj = 'Error while querying the database'
+
+			response = HttpResponse(bird_traj)
+			response['Content-Encoding'] = 'gzip'
+			return response
 
 		elif request.GET.get('action', '') == 'set_cookie':
 			sim_name = request.GET.get('sim_name', '')
@@ -216,8 +237,6 @@ def ajax(request):
 				answer = {'zoomEnabled': 'true', 'exportEnabled': 'true', 'title': title, 'axisX': axisX, 'axisY': axisY, 'data': data}
 				return HttpResponse(json.dumps(answer, indent=4), content_type="application/json")
 
-
-
 		else:
 			return False
 		
@@ -225,7 +244,7 @@ def ajax(request):
 def analysis(request):
 	#First step : create a list of the available links:
 	try:
-		if request.COOKIES['sim_name'] in tools_sql.list_sim_db()[1]:
+		if request.COOKIES['sim_name'].lower() in tools_sql.list_sim_db():
 
 			# we create maxtimesim
 			sim_name = request.COOKIES['sim_name']
@@ -264,7 +283,7 @@ def simul_manag(request):
 		# if the form is valid (no error)
 		if form.is_valid() and form.is_multipart():
 			name_simul = form.cleaned_data['name_simul']
-			name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul)
+			name_simul = re.sub('[^a-zA-Z0-9]', '_', name_simul).lower()
 			desc_simul = form.cleaned_data['description_simul']
 			name_network = form.cleaned_data['name_network']
 			date = time.strftime("%m/%d/%Y")
@@ -277,15 +296,19 @@ def simul_manag(request):
 			tools_sql.treat_simul_db(name_simul , '/upload/txt_db')
 
 			# we create the table index_network if it's not created
-			query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text, desc_simul text, date_simul text)'
+			query_1 = 'CREATE TABLE index_simul_network (name_simul text, name_network text, desc_simul text, date_simul text, bird_occupation text, bird_traj text)'
 			tools_data.query_sql([query_1], False, 'network_db')
 
 			# we insert a new row in index_network
-			query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\',\'' + desc_simul + '\',\'' + date + '\')'
+			query_2 = 'INSERT INTO index_simul_network VALUES (\'' + name_simul + '\',\'' + name_network+ '\',\'' + desc_simul + '\',\'' + date+ '\' ,\'False\',\'False\')'
 			tools_data.query_sql([query_2], False, 'network_db')
 
 			# we delete the upload
 			os.remove(settings.MEDIA_ROOT + '/upload/txt_db/' + str(name_simul) + '.txt')
+
+			# we create the aynchronous request for the birdeye view
+			birdeye.delay(name_network, name_simul)
+			birdeye_micro.delay(name_network, name_simul)
 
 			json_simulations = tools_json.json_list_simulations()
 
@@ -358,7 +381,7 @@ def upload_xml(request):
 
 def vehtraj(request):
 	try:
-		if request.COOKIES['sim_name'] in tools_sql.list_sim_db()[1]:
+		if request.COOKIES['sim_name'].lower() in tools_sql.list_sim_db():
 
 			sim_name = request.COOKIES['sim_name']
 
@@ -382,6 +405,44 @@ def vehtraj(request):
 
 			template = loader.get_template('pointqanalysis/vehicle_traj.html')
 			context = RequestContext(request, {'geojson': geojson_associated_network, 'topjson':topjson_associated_network, 'maxtimesim':maxtimesim, 'sim_name': sim_name})
+
+			return HttpResponse(template.render(context))
+		else:
+			return HttpResponseRedirect(reverse('pointqanalysis:simulations'))
+
+			
+	except:
+		return HttpResponseRedirect(reverse('pointqanalysis:simulations'))
+
+def dashboard(request):
+	try:
+		if request.COOKIES['sim_name'].lower() in tools_sql.list_sim_db():
+
+			sim_name = request.COOKIES['sim_name'].lower()
+
+			# we create maxtimesim
+			sim_name = request.COOKIES['sim_name']
+			query = 'SELECT MAX(ev_time) AS max_time FROM ' + sim_name
+			output = tools_data.query_sql([query], True, 'pointq_db')
+			maxtimesim = int(round(output[0]['max_time']))
+
+			# which network is associated with the simulation
+			query_1 = 'SELECT name_network FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
+			associated_network = tools_data.query_sql([query_1], True, 'network_db')[0]['name_network']
+
+			# we load the geojson of the associated network
+			query_2 = 'SELECT geojson FROM index_network WHERE name = \'' + str(associated_network) + '\''
+			geojson_associated_network = tools_data.query_sql([query_2], True, 'network_db')[0]['geojson']
+
+			# # we load the birdeye json
+			# query_4 = 'SELECT bird_occupation FROM index_simul_network WHERE name_simul = \'' + str(sim_name) + '\''
+			# json_birdeye = tools_data.query_sql([query_4], True, 'network_db')[0]['bird_occupation']
+
+			# if json_birdeye == 'False':
+			# 	json_birdeye = True
+
+			template = loader.get_template('pointqanalysis/dashboard.html')
+			context = RequestContext(request, {'geojson': geojson_associated_network, 'maxtimesim':maxtimesim, 'sim_name': sim_name})
 
 			return HttpResponse(template.render(context))
 		else:

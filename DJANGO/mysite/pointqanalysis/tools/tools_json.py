@@ -19,7 +19,7 @@ def json_list_simulations():
 	json_output = []
 	if output:
 		for simul in output:
-			json_simul = {'name': simul['name_simul'], 'description': simul['desc_simul'], 'associatedNetwork': simul['name_network'], 'date': simul['date_simul']}
+			json_simul = {'name': simul['name_simul'], 'description': simul['desc_simul'].replace('\r\n', '\\r\\n'), 'associatedNetwork': simul['name_network'], 'date': simul['date_simul']}
 			json_output.append(json_simul)
 	return json.dumps(json_output)
 

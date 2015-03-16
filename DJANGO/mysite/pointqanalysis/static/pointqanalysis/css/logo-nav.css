@@ -69,6 +69,12 @@ body {
   width: 70%;
 }
 
+#map-container {
+  display: inline-block;
+  height : 450px;
+  width: 70%;
+}
+
 #status {
   background-color: #B5E655;
   margin-bottom: 30px;
@@ -135,3 +141,10 @@ body {
   vertical-align: top;
 }
 
+#time-display {
+  position: relative;
+  top: 510px;
+  left: 50px;
+  z-index: 2;
+  font-size: 45px; 
+}

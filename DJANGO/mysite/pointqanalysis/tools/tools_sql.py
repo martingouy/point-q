@@ -3,7 +3,6 @@
 ###################################################################################################################
 
 import sqlite3
-from lxml import etree
 from tools import tools_data, tools_json
 import csv
 from django.conf import settings
@@ -12,8 +11,7 @@ import json
 import time
 
 def list_sim_db():
-	# we create the xml doc to store the list
-	root = etree.Element('root')
+
 	list_sim_name = []
 
 	# connection database
@@ -21,14 +19,11 @@ def list_sim_db():
 	
 	query_answer = tools_data.query_sql([query], True, 'pointq_db')
 	for line in query_answer:
-		sim = etree.Element('sim')
-		sim.text = line['name']
-		root.append(sim)
 		list_sim_name.append(line['name'])
 
         #return xml
-	xml = etree.tostring(root)
-	return [xml, list_sim_name]
+
+	return list_sim_name
 
 def deltable(table_name):
 	# connection database
@@ -44,7 +39,7 @@ def treat_simul_db(name, path):
 	name = str(name).lower()
 
 	# We create the table
-	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, id_inter text, int_ctrl_mat text, veh_id int, c_link int, queue text, time_entry real, entry_id int, time_exit int, c_loc_link int)')
+	cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, id_inter text, int_ctrl_mat text, veh_id int, c_link int, queue text, time_entry real, entry_id int, time_exit int, c_loc_link int, t_arrival_c_link real, t_start_departure real, t_leave real, t_arrival_queue)')
 	#cursor.execute('CREATE TABLE ' + name + ' (ev_time real, ev_type int, veh_id int, c_link int, queue text)')
 	conn.commit()
 
@@ -52,14 +47,14 @@ def treat_simul_db(name, path):
 	with open('%s/%s' % (settings.MEDIA_ROOT + str(path), str(name) + '.txt'), 'rt') as file:
 		reader = csv.reader(file)
 		for row in reader:
-			if len(row)==11:
+			if len(row)==15:
 				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[2] + " ," + row[3] + " ,'" + row[4] + "')")
-				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[3] + "',"+ row[4] + " ," + row[5] + " ,'" + row[6] + "' ," + row[7] + " ," + row[8] + " ," + row[9] + " ," + row[10] + ")")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[3] + "',"+ row[4] + " ," + row[5] + " ,'" + row[6] + "' ," + row[7] + " ," + row[8] + " ," + row[9] + " ," + row[10]  + " ," + row[11] + " ," + row[12] + " ," + row[13] + " ," + row[14] + ")")
 			else:
 				#There's a typo in Jenny's Docs: Column 25 contains the id of the link associated with the current event. Due to 0-based indexing, it appears at 24 here
 				#NOTE that there's a difference between Column 25 (id of link associated with current event) and Column 15(id of link where the vehicle is currently located)
 				#cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ," + row[11] + " ," + row[24] + " ,'" + row[18] + "')")
-				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[8] + "',"+ row[11] + " ," + row[24] + " ,'" + row[18] + "' ," + row[12] + " ," + row[13] + " ," + row[23] + " ," + row[14] + ")")
+				cursor.execute("INSERT INTO " + name + " VALUES (" + row[0] + " ," + row[1] + " ,'" + row[2] + "' ,'" + row[8] + "',"+ row[11] + " ," + row[24] + " ,'" + row[18] + "' ," + row[12] + " ," + row[13] + " ," + row[23] + " ," + row[14] + " ," + row[15] + " ," + row[16] + " ," + row[17] + " ," + row[19] +")")
 		conn.commit()
 
 	conn.close()

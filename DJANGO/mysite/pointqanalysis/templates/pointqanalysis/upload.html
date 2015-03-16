@@ -97,88 +97,44 @@
 			$('a.zoombox').zoombox({width: 900, height: 500});
 		});
 	</script>
+
 	{% if status != '' %}
 		<script type="text/javascript">
 			$( "#status" ).fadeOut(10000);
 		</script>
 	{% endif %}
+	
 	<script type="text/javascript">
-		// // function : create a request
-		// $(function() {
-		// 	function makeRequest(url, fct_treat) {
 
-		// 		var httpRequest = new XMLHttpRequest();
+		/*
+		*  Escape newline chars for being transmitted with JSON over the wire
+		*/
+		function escapeNewLineChars(valueToEscape) {
+			if (valueToEscape != null && valueToEscape != "") {
+				return valueToEscape.replace(/\n/g, "\\n");
+				console.log('Cool');
+			}
+			else {
+				console.log('not_cool');
+				return valueToEscape;
+			}
+		}
 
-		// 		if (httpRequest.overrideMimeType) {
-		// 			httpRequest.overrideMimeType('text/xml');
-		// 		}
-
-		// 		if (!httpRequest) {
-		// 			return false;
-		// 		}
-
-		// 		if (fct_treat == 'avail_simul') {
-		// 			httpRequest.onreadystatechange = function() { 
-		// 				// we wait until the answer is fully received
-		// 				if (httpRequest.readyState == 4){
-		// 					avail_simul(httpRequest);
-		// 				}
-		// 			};
-		// 		}
-		// 		else if (fct_treat == 'del_table') {
-		// 			httpRequest.onreadystatechange = function() {
-		// 				// we wait until the answer is fully received
-		// 				if (httpRequest.readyState == 4){
-
-		// 					$('#right_tree ul li').remove();
-		// 					makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
-		// 				}
-		// 			};
-		// 		}
-
-		// 		else if (fct_treat == 'redirect') {
-		// 			httpRequest.onreadystatechange = function() {
-		// 				// we wait until the answer is fully received
-		// 				if (httpRequest.readyState == 4){
-
-		// 					// we redirect to the correct location
-		// 					window.location.replace(httpRequest.response);
-
-		// 				}
-		// 			};
-		// 		}
-				
-		// 		httpRequest.open('GET', url, true);
-		// 		httpRequest.send(null);
-		// 	}
-
-		// 	// function: display the list of available simulations
-
-		// 	function avail_simul(httpRequest) {
-		// 		var xmldoc = httpRequest.responseXML;
-		// 		var list_sim = xmldoc.getElementsByTagName('sim');
-
-		// 		for (var i = 0; i < list_sim.length; i++) {
-		// 			var sim_id = list_sim[i].firstChild.data;
-		// 			var xml_li = '<li> <img src = " {% static 'pointqanalysis/images/choose.png' %} " sim = "' + sim_id+ '" alt = "choose"><img src = " {% static 'pointqanalysis/images/close.png' %} " sim = "' + sim_id+ '" alt = "close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + sim_id + '</li>';
-
-		// 			$('#right_tree ul').append(xml_li);
-
-		// 			$('img[sim = "' + sim_id + '"][alt = "close" ]').click(function(event){
-		// 				makeRequest('../pointqanalysis/ajax?action=deltable&table_name=' + event.target.getAttribute('sim'), 'del_table');
-		// 			});
-		// 			$('img[sim = "' + sim_id + '"][alt = "choose" ]').click(function(event){
-		// 				makeRequest('../pointqanalysis/ajax?action=set_cookie&sim_name=' + event.target.getAttribute('sim'), '');
-		// 				makeRequest('../pointqanalysis/ajax?action=redirect&redirection=analysis', 'redirect');
-		// 			});
-
-		// 		}
-		// 	}
-
-		// 	makeRequest('../pointqanalysis/ajax?action=listsim', 'avail_simul');
-		// });
+		/*
+		*  Converts \n newline chars into <br> chars s.t. they are visible
+		*  inside HTML
+		*/
+		function convertToHTMLVisibleNewline(value) {
+			if (value != null && value != "") {
+				return value.replace(/\n/g, "<br/>");
+			} 
+			else {
+				return value;
+			}
+		}
 		
 		var json_simulations = '{{ json_simulations|safe }}';
+		console.log(json_simulations);
 		json_simulations = JSON.parse(json_simulations);
 
 		for (var i = 0; i < json_simulations.length; i++) {
@@ -192,7 +148,7 @@
 			}
 		});
 
-		$('.analyse').click(function(){
+		$('table').on('click', '.analyse',function(){
 			var sim_selected = $(this).parents().eq(1).children(":first").text();
 			$.ajax('../pointqanalysis/ajax?action=set_cookie&sim_name=' + sim_selected);
 			$.ajax('../pointqanalysis/ajax?action=redirect&redirection=analysis').done(function(url){
@@ -201,7 +157,7 @@
 		});
 
 		var simu_2_delete = '';
-		$('.delete').click(function(){
+		$('table').on('click', '.delete',function(){
 			simu_2_delete = $(this).parents().eq(1).children(":first").text();
 			$('#deleteModal').modal();
 			$('.confirm_delete').click(function(event){
