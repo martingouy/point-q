@@ -94,8 +94,11 @@ var dash_interface = function(options) {
 				birdeye.simu_time_step = 1;
 			}
 			else if (id == "radio_s3") {
+				birdeye.pause();
+				birdeye.simu_time = Math.round(birdeye.simu_time / 10) * 10;
 				birdeye.timestep = 0.1;
 				birdeye.simu_time_step = 10;
+				birdeye.play();
 			}
 		});
 
