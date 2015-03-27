@@ -55,35 +55,39 @@ def ajax(request):
 
 			return HttpResponse(json.dumps(dic_node_stage_actuation))
 
-	else:
-
-		if request.GET.get('action', '') == 'deltable':
-			table = request.GET.get('table_name', '')
-			return HttpResponse(tools_sql.deltable(table))
-
-		elif request.GET.get('action', '') == 'bird_traj':
+		elif request.POST.get('action', '') == 'bird_traj':
 			try : 
 				sim_name = request.COOKIES['sim_name']
+				conf = json.loads(request.POST.get("conf", ""))
+
 				conn = sqlite3.connect(os.path.join(settings.BASE_DIR, 'network_db.sqlite3'))
 				c = conn.cursor()
-				c.execute('SELECT bird_traj, bird_occupation FROM index_simul_network WHERE name_simul = \'' + sim_name + '\'')
+				c.execute('SELECT bird_occupation FROM index_simul_network WHERE name_simul = \'' + sim_name + '\'')
 				result = c.fetchone()
-				vehicles = result[0]
-				occupation = result[1]
+				occupation = result[0]
+				vehicles = tools_json.birdeye_filter(sim_name, conf)
+
 				conn.close()
 				if vehicles == 'False' or occupation == 'False':
 					bird_traj = '{"vehicles":false, "occupation": false}'
 				else:
-					bird_traj = '{"vehicles":' + vehicles + ', "occupation": ' + occupation + '}'
+					bird_traj = '{"vehicles":' + json.dumps(vehicles) + ', "occupation": ' + occupation + '}'
 
 				bird_traj = bird_traj.encode('utf-8')
 				bird_traj = gzip.compress(bird_traj)
 			except:
 				bird_traj = 'Error while querying the database'
+				bird_traj = gzip.compress(bird_traj)
 
 			response = HttpResponse(bird_traj)
 			response['Content-Encoding'] = 'gzip'
 			return response
+
+	else:
+
+		if request.GET.get('action', '') == 'deltable':
+			table = request.GET.get('table_name', '')
+			return HttpResponse(tools_sql.deltable(table))
 
 		elif request.GET.get('action', '') == 'set_cookie':
 			sim_name = request.GET.get('sim_name', '')

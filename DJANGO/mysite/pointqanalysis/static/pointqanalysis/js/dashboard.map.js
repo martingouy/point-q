@@ -95,6 +95,14 @@ var GMAP = function(id_div, geojson, node_marker) {
 			}
 		},
 
+		reset_colors: function() {
+			map.data.forEach(function(feature){
+				if (feature.getGeometry().getType() == 'LineString'){
+					map.data.overrideStyle(feature, {strokeColor: 'blue', zIndex: google.maps.Marker.MAX_ZINDEX+1, strokeOpacity: .8});
+				}
+			});
+		},
+
 		dmap: map
 	};
 }

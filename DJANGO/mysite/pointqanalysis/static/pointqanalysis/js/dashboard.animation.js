@@ -12,11 +12,15 @@ window.requestAnimFrame = (function(){
 window.birdeye = window.birdeye || {};
 
 birdeye.init = function() {
-	birdeye.simu_time = 0;
+	birdeye.end_time = 0;
+	birdeye.start_time = 0;
+	birdeye.simu_time = birdeye.start_time;
 	birdeye.simu_time_step = 1.0;
 	birdeye.timestep = 0.1;
 	birdeye.linkColor = ["#b5ff12", "#bce510", "#c3cb0e", "#cab10c", "#d1970a", "#d87d08", "#df6306", "#e64904", "#ed2f02", "#f41500", "#ff0000"];
-	birdeye.list_vehicles = history_vehicle.list_vehicles.slice();
+	birdeye.json_birdeye = {};
+	birdeye.history_vehicle = {'list_vehicles': []};
+	birdeye.list_vehicles = birdeye.history_vehicle.list_vehicles.slice();
 	birdeye.myLayer = new WebGLLayer(map.dmap);
 	birdeye.dataJson = {"type": "FeatureCollection", "features":[]};
 	birdeye.myLayer.loadData(birdeye.dataJson);
@@ -38,14 +42,29 @@ birdeye.pause = function() {
 };
 
 birdeye.restart = function() {
-	birdeye.simu_time = 0;
-	birdeye.list_vehicles = history_vehicle.list_vehicles.slice();
+	birdeye.simu_time = birdeye.start_time;
+	birdeye.list_vehicles = birdeye.history_vehicle.list_vehicles.slice();
 	birdeye.play();
 };
 
 birdeye.goto = function(time) {
-	birdeye.list_vehicles = history_vehicle.list_vehicles.slice();
+	birdeye.list_vehicles = birdeye.history_vehicle.list_vehicles.slice();
 	birdeye.simu_time = time;
+};
+
+birdeye.modifnewsimu = function(options) {
+	birdeye.end_time = options.end_time;
+	birdeye.start_time = options.start_time;
+	birdeye.json_birdeye = options.json_birdeye;
+	birdeye.history_vehicle = options.history_vehicle;
+	birdeye.list_vehicles = birdeye.history_vehicle.list_vehicles.slice();
+	birdeye.simu_time = birdeye.start_time;
+}; 
+
+birdeye.clearmarkers = function() {
+	birdeye.myLayer.features_.points.floats = [];
+	birdeye.myLayer.features_.points.count = 0;
+	birdeye.myLayer.scheduleUpdate();
 };
 
 
@@ -56,7 +75,7 @@ birdeye.core = {
 		birdeye._delta = (birdeye.now - birdeye._then) / 1000; // Converts to seconds (optional)
 
 		if (birdeye._delta >= birdeye.timestep){
-			if (birdeye.simu_time >= maxtimesim) {
+			if (birdeye.simu_time >= birdeye.end_time) {
 				birdeye.pause();
 			}
 			else {
@@ -64,9 +83,9 @@ birdeye.core = {
 
 				var moment_2_display = moment(dash_int.get_moment_origin()).add(birdeye.simu_time,'s');
 				dash_int.display_time(moment_2_display);
-				dash_int.progressBar.go(parseInt(birdeye.simu_time / maxtimesim * 100));
+				dash_int.progressBar.go(parseInt((birdeye.simu_time - birdeye.start_time) / (birdeye.end_time - birdeye.start_time) * 100));
 
-            	birdeye.core.posVeh(history_vehicle, birdeye.simu_time, map);
+            	birdeye.core.posVeh(birdeye.history_vehicle, birdeye.simu_time, map);
 
             	var time_truncated = birdeye.simu_time | 0;
 
@@ -88,12 +107,11 @@ birdeye.core = {
 
 	posVeh : function(history, t, map) {
 		// We iterate over the vehicles to know which ones are in the network at time t
-
  		var geojson_2_draw = {"type": "FeatureCollection", "features":[]};
-		for (var j = 0; j < birdeye.list_vehicles.length; j++){ 
-
-			veh_id = birdeye.list_vehicles[j];
+		for (var j = 0; j < birdeye.list_vehicles.length; j++){
+			var veh_id = birdeye.list_vehicles[j];
 			var vehicle = history[veh_id];
+
 			// First step: is the vehicle in the network ?
 			if (vehicle.t_en_netw <= t && t <= vehicle.t_ex_netw) {
 				try{
@@ -153,7 +171,7 @@ birdeye.core = {
 	},
 
 	sortByColor : function(time) {
-		var history = json_birdeye[time.toString()];
+		var history = birdeye.json_birdeye[time.toString()];
 		var sorted_by_color = {'0': [], '10':[], '20':[], '30': [], '40':[], '50':[], '60': [], '70':[], '80':[],  '90':[], '100':[]};
 
 		for (var link in history) {

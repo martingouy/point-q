@@ -65,7 +65,11 @@ class VehicleTrajectory:
                 dic_temp_link = array_light[index_link - 1]
                 dic_temp_link["t_arrival_queue"] = t_arrival_queue
                 dic_temp_link["t_start_departure"] = t_start_departure
-                dic_temp_link["t_leave"] = t_leave              
+                dic_temp_link["t_leave"] = t_leave    
+
+        # We add the exit link
+        exit_link = self.veh_history[-1][1]
+        array_light.append({"link": exit_link})
 
         return array_light
 

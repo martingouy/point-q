@@ -6,60 +6,106 @@
 {% block container %} 
 	<div id="step1">
 		<div id='left_tree' style="height: 600px">
-			<h2>Network Occupancy</h2>
-			<h3>Controls</h3>
-			<button type="button" class="btn btn-default play">Play</button>
-			<button type="button" class="btn btn-default pause">Pause</button>
-			<button type="button" class="btn btn-default restart">Restart</button><br /><br />
-			<div class="btn-group" data-toggle="buttons">
-				<label class="btn btn-default radio_speed">
-					<input type="radio" id="radio_s1" autocomplete="off" > X1
-				</label>
-				<label class="btn btn-default active radio_speed">
-					<input type="radio" id="radio_s2" autocomplete="off" checked> X10
-				</label>
-				<label class="btn btn-default radio_speed">
-					<input type="radio" id="radio_s3" autocomplete="off"> X100
-				</label>
+			<div id="control">
+				<h2>Network Occupancy</h2>
+				<p id="new_visu" style="text-decoration: underline; cursor:pointer;"> Configure new visualization </p>
+				<h3>Controls</h3>
+				<button type="button" class="btn btn-default play">Play</button>
+				<button type="button" class="btn btn-default pause">Pause</button>
+				<button type="button" class="btn btn-default restart">Restart</button><br /><br />
+				<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-default radio_speed">
+						<input type="radio" id="radio_s1" autocomplete="off" > X1
+					</label>
+					<label class="btn btn-default active radio_speed">
+						<input type="radio" id="radio_s2" autocomplete="off" checked> X10
+					</label>
+					<label class="btn btn-default radio_speed">
+						<input type="radio" id="radio_s3" autocomplete="off"> X100
+					</label>
+				</div>
+				<h3>Jump to: </h3>
+				<p><b>Start Time</b> = <span id='start_time'> 00h00min00s </span></p> 
+				<p><b>End Time</b> = <span id='end_time'> 00h00min00s </span></p> 
+				<form class="form-inline jump" style="display: inline-block">
+					<div class="input-group">
+						<input type="text" class="form-control" id="field_time_simu_h" placeholder="hh" style="width:45px">
+						<div class="input-group-addon">h</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control" id="field_time_simu_m" placeholder="mm" style="width:45px">
+						<div class="input-group-addon">m</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control" id="field_time_simu_s" placeholder="ss" style="width:45px">
+						<div class="input-group-addon">s</div>
+					</div>
+				</form>
+				<button type="text" class="btn btn-primary btn-jump">Jump</button>
+
+				<h3>Legend: </h3>
+				<p>Occupancy [%]</p>
+				<img src="{% static 'pointqanalysis/images/gradient.png' %}" style="opacity: 0.8"/>
 			</div>
-			<h3>Set Time Origin</h3>
-			<form class="form-inline time_origin" style="display: inline-block">
-				<div class="input-group">
-					<input type="text" class="form-control" id="set_origin_h" placeholder="hh" style="width:45px">
-					<div class="input-group-addon">h</div>
-				</div>
-				<div class="input-group">
-					<input type="text" class="form-control" id="set_origin_m" placeholder="mm" style="width:45px">
-					<div class="input-group-addon">m</div>
-				</div>
-				<div class="input-group">
-					<input type="text" class="form-control" id="set_origin_s" placeholder="ss" style="width:45px">
-					<div class="input-group-addon">s</div>
-				</div>
-			</form>
-			<button type="text" class="btn btn-primary set_time_origin">Set</button>
 
-			<h3>Jump to: </h3>
-			<p><b>End Time</b> = <span id='end_time'> 00h00min00s </span></p> 
-			<form class="form-inline jump" style="display: inline-block">
-				<div class="input-group">
-					<input type="text" class="form-control" id="field_time_simu_h" placeholder="hh" style="width:45px">
-					<div class="input-group-addon">h</div>
-				</div>
-				<div class="input-group">
-					<input type="text" class="form-control" id="field_time_simu_m" placeholder="mm" style="width:45px">
-					<div class="input-group-addon">m</div>
-				</div>
-				<div class="input-group">
-					<input type="text" class="form-control" id="field_time_simu_s" placeholder="ss" style="width:45px">
-					<div class="input-group-addon">s</div>
-				</div>
-			</form>
-			<button type="text" class="btn btn-primary btn-jump">Jump</button>
+			<div id="param">
+				<h2><img src="{% static 'pointqanalysis/images/circle_close.png' %}" id='close_config'/> Configuration</h2>
+				<h3>Time Selection</h3>
 
-			<h3>Legend: </h3>
-			<p>Occupancy [%]</p>
-			<img src="{% static 'pointqanalysis/images/gradient.png' %}" style="opacity: 0.8"/>
+				<form class="form-inline time_origin" style="display: inline-block">
+					<div class="input-group">
+						<input type="text" class="form-control" id="set_t_start" placeholder="t_start" style="width:60px">
+						<div class="input-group-addon">t_start</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control" id="set_t_end" placeholder="t_end" style="width:60px">
+						<div class="input-group-addon">t_end</div>
+					</div>
+				</form>
+
+				<h3>Set Time Origin</h3>
+				<form class="form-inline time_origin" style="display: inline-block">
+					<div class="input-group">
+						<input type="text" class="form-control" id="set_origin_h" placeholder="hh" style="width:45px">
+						<div class="input-group-addon">h</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control" id="set_origin_m" placeholder="mm" style="width:45px">
+						<div class="input-group-addon">m</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control" id="set_origin_s" placeholder="ss" style="width:45px">
+						<div class="input-group-addon">s</div>
+					</div>
+				</form>
+				<h3>Filters</h3>
+
+				<div class="btn-group filters" data-toggle="buttons">
+					<label class="btn btn-default radio_filter active">
+						<input type="radio" id="f_none" autocomplete="off" checked> No Filter
+					</label>
+					<label class="btn btn-default radio_filter">
+						<input type="radio" id="f_path" autocomplete="off" > Filter by Path
+					</label>
+					<label class="btn btn-default radio_filter">
+						<input type="radio" id="f_od" autocomplete="off" checked> Filter by OD
+					</label>
+				</div>
+				<br /><br />
+				<div id = 'btn_path'>
+					<span id="new_path" style="color: #2ecc71; cursor: pointer; margin-right: 15px">
+						<img src="{% static 'pointqanalysis/images/plus.png' %}" style="height:16px; width: 16px"/> New path
+					</span>
+					<span id="save_path" style="color: #3498db; cursor: pointer">
+						<img src="{% static 'pointqanalysis/images/save.png' %}" style="height:16px; width: 16px"/>Save path
+					</span><br />
+				</div>
+
+				<div id='f_links'></div>
+				<br /><br /><button type="text" class="btn btn-primary generate">Generate</button>
+				
+			</div>
+
 		</div>
 		<div id="map-container">
 			<div class="loader">Loading...</div>
@@ -94,29 +140,14 @@
 		// GLOBAL VARIABLES
 		var geojson = JSON.parse('{{ geojson|safe}}');
 		var node_marker = '{% static 'pointqanalysis/images/marker_dashboard.png' %}';
+		var ref_img = '{% static 'pointqanalysis/images/' %}';
 		var sim_name = '{{ sim_name }}';
 		var maxtimesim = parseInt({{ maxtimesim }});
+		var map, dash_int;
 
-		var history_vehicle, map, dash_int, json_birdeye;
-
-		$.getJSON( "../pointqanalysis/ajax?action=bird_traj", function( data ) {
-			$('.loader').remove();
-			history_vehicle  = data.vehicles;
-			json_birdeye = data.occupation;
-
-			if (history_vehicle && json_birdeye) {
-				map = new GMAP('map-canvas', geojson, node_marker);
-				dash_int = new dash_interface({"maxtimesim": maxtimesim});
-
-				birdeye.init();
-			}
-			else {
-				$('#step1').empty();
-				$('#step1').append('<h1> The data for this analysis isn\'t ready yet, please come back in few minutes');
-			}
-		});
-
-
+		map = new GMAP('map-canvas', geojson, node_marker);
+		dash_int = new dash_interface({"maxtimesim": maxtimesim});
+		birdeye.init();
 
 	</script>
 

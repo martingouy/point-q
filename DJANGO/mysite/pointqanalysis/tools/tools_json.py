@@ -2,11 +2,14 @@
 ###                                       JSON FUNCTIONS														   ###
 ###################################################################################################################
 
-from tools import tools_data
-import geojson
-import json
 from xml.dom import minidom
 from django.conf import settings
+from tools import tools_data
+import geojson
+import os
+import json
+import sqlite3
+
 
 def json_get_output_links(node):
 	to_return = {'links': 'sam'}
@@ -196,4 +199,116 @@ def xml2topjson(name_network):
 
 
 	return json_output
+
+def birdeye_filter(sim_name, conf):
+
+	# Load the configuration parameters
+	type_filter = conf['filter']
+	paths = conf['paths']
+	t_start = conf['t_start']
+	t_end = conf['t_end']
+	ods = conf['ods']
+
+	# Connection to DB to get the birdeye data to filter
+	conn = sqlite3.connect(os.path.join(settings.BASE_DIR, 'network_db.sqlite3'))
+	c = conn.cursor()
+	c.execute('SELECT bird_traj FROM index_simul_network WHERE name_simul = \'' + sim_name + '\'')
+	data = c.fetchone()[0]
+	conn.close()
+
+	if data == 'False':
+		return 'False'
+
+	data = json.loads(data)
+
+
+	def issublist(sublist, list_full):
+		# is path a sublist of path_veh ?
+		for i, link in enumerate(list_full):
+			if link == sublist[0]:
+				try:
+					if list_full[i: i + len(sublist)] == sublist:
+						return True
+					else:
+						pass
+				except:
+					pass
+		return False
+
+	# We want to build the list of the vehicles that went through the path
+	def filter_path(record):
+		filtered_veh = []
+
+		for vehicle, hist_veh in record.items():
+			try:
+				path_veh = [str(x['link']) for x in hist_veh['hist']]
+
+				for path in paths:
+					if issublist(path, path_veh):
+						filtered_veh.append(vehicle)
+						break
+			except:
+				pass
+
+		return {key: value for (key, value) in record.items() if key in filtered_veh}
+
+	def filter_od(record):
+		filtered_veh = []
+
+		for vehicle, hist_veh in record.items():
+			for od in ods:
+				origin = od[0]
+				destination = od[1]
+				if str(hist_veh['hist'][0]['link']) ==  origin and str(hist_veh['hist'][len(hist_veh['hist']) - 1]['link']) == destination:
+					filtered_veh.append(vehicle)
+					break
+				
+		return {key: value for (key, value) in record.items() if key in filtered_veh}
+
+	def filter_time(record):
+
+		filtered_veh = []
+		list_veh = record['list_vehicles']
+
+		for vehicle in list_veh:
+			t_entry_network = record[vehicle]['t_en_netw']
+			t_exit_network = record[vehicle]['t_ex_netw']
+
+			if t_exit_network < t_start:
+				pass
+
+			elif t_entry_network > t_end:
+				break
+
+			elif t_start <= t_entry_network and t_entry_network < t_end:
+				filtered_veh.append(vehicle)
+
+		return {key: value for (key, value) in record.items() if key in filtered_veh}
+
+	time_filtered = filter_time(data)
+
+	if type_filter == 'none':
+		time_filtered['list_vehicles']  = [int(x) for x in time_filtered.keys()]
+		time_filtered['list_vehicles'].sort()
+		return time_filtered
+
+	elif type_filter == 'path':
+		path_filtered = filter_path(time_filtered)
+		path_filtered['list_vehicles']  = [int(x) for x in path_filtered.keys()]
+		path_filtered['list_vehicles'].sort()
+		return path_filtered
+
+	elif type_filter == 'od':
+		od_filtered = filter_od(time_filtered)
+		od_filtered['list_vehicles']  = [int(x) for x in od_filtered.keys()]
+		od_filtered['list_vehicles'].sort()
+		return od_filtered
+	
+
+	return 1
+
+
+
+
+
 
