@@ -8,7 +8,7 @@
     
     <title>Website: Further information &mdash; Documentation Point Q 0.1 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,26 +24,30 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Documentation Point Q 0.1 documentation" href="../index.html" />
+    <link rel="next" title="Documentation" href="005.doc.html" />
     <link rel="prev" title="Third Step: Analyze the results" href="003.third.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="005.doc.html" title="Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="003.third.html" title="Third Step: Analyze the results"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="website-further-information">
 <h1>Website: Further information<a class="headerlink" href="#website-further-information" title="Permalink to this headline">¶</a></h1>
@@ -75,15 +79,19 @@
 <h2>Design Choices<a class="headerlink" href="#design-choices" title="Permalink to this headline">¶</a></h2>
 <img alt="../_images/MVT.jpg" src="../_images/MVT.jpg" />
 <p>The recommended schema for a Django application is called <a class="reference external" href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names/">MVT</a> (Model/View/Template). However, for our application we decided to get rid of the Model part by connecting directly to the database.</p>
-<p>Advantages:</p>
+<div class="section" id="advantages">
+<h3>Advantages:<a class="headerlink" href="#advantages" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>In our case, we put a lot of strain on the databases. Using the Model layer would slow a lot our website</li>
 <li>We have much more liberty with the requests</li>
 </ul>
-<p>Inconvenient:</p>
+</div>
+<div class="section" id="inconvenient">
+<h3>Inconvenient:<a class="headerlink" href="#inconvenient" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Security</li>
 </ul>
+</div>
 </div>
 <div class="section" id="deployment">
 <h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
@@ -95,13 +103,17 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Website: Further information</a><ul>
 <li><a class="reference internal" href="#framework">Framework</a></li>
-<li><a class="reference internal" href="#design-choices">Design Choices</a></li>
+<li><a class="reference internal" href="#design-choices">Design Choices</a><ul>
+<li><a class="reference internal" href="#advantages">Advantages:</a></li>
+<li><a class="reference internal" href="#inconvenient">Inconvenient:</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#deployment">Deployment</a></li>
 </ul>
 </li>
@@ -110,12 +122,17 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="003.third.html"
                         title="previous chapter">Third Step: Analyze the results</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/src/004.website.advanced.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <h4>Next topic</h4>
+  <p class="topless"><a href="005.doc.html"
+                        title="next chapter">Documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src/004.website.advanced.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -132,21 +149,24 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="005.doc.html" title="Documentation"
+             >next</a> |</li>
+        <li class="right" >
           <a href="003.third.html" title="Third Step: Analyze the results"
              >previous</a> |</li>
-        <li><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation Point Q 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Martin Gouy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

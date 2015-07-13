@@ -28,11 +28,13 @@ Design Choices
 The recommended schema for a Django application is called `MVT <https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names/>`_ (Model/View/Template). However, for our application we decided to get rid of the Model part by connecting directly to the database.
 
 Advantages:
+-----------
 
 * In our case, we put a lot of strain on the databases. Using the Model layer would slow a lot our website
 * We have much more liberty with the requests
 
 Inconvenient:
+-------------
 
 * Security
 
